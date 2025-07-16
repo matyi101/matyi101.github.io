@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAMA DMBOK Chapter 1: Interactive Mock Exam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .correct {
+            background-color: #dcfce7 !important; /* green-100 */
+            border-color: #22c55e !important; /* green-500 */
+            color: #166534; /* green-800 */
+        }
+        .incorrect {
+            background-color: #fee2e2 !important; /* red-100 */
+            border-color: #ef4444 !important; /* red-500 */
+            color: #991b1b; /* red-800 */
+        }
+        .selected {
+             border-color: #3b82f6; /* blue-500 */
+             background-color: #dbeafe; /* blue-100 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex items-center justify-center min-h-screen p-4">
+
+    <div id="quiz-container" class="w-full max-w-3xl bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+        <!-- Quiz Header -->
+        <div class="mb-6">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">DAMA DMBOK: Chapter 1 Exam</h1>
+            <p class="text-slate-500 mt-1">Test your knowledge of Data Management fundamentals.</p>
+        </div>
+
+        <!-- Progress and Score -->
+        <div id="progress-score-container" class="mb-6">
+            <div class="flex justify-between items-center mb-2 text-sm font-medium text-slate-600">
+                <p>Question <span id="question-number">1</span> of <span id="total-questions">50</span></p>
+                <p>Score: <span id="score">0</span></p>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- Quiz Content -->
+        <div id="quiz-content">
+            <h2 id="question" class="text-lg font-semibold text-slate-800 mb-5 leading-relaxed">Question text will be loaded here.</h2>
+            <div id="options" class="grid grid-cols-1 gap-4">
+                <!-- Options will be dynamically inserted here -->
+            </div>
+            <div id="feedback" class="mt-4 text-sm font-medium p-3 rounded-lg hidden"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div id="navigation" class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <button id="show-answer-btn" class="w-full sm:w-auto option-btn bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300">Show Answer</button>
+            <div class="flex w-full sm:w-auto gap-4">
+                <button id="prev-btn" class="w-1/2 sm:w-auto option-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                <button id="next-btn" class="w-1/2 sm:w-auto option-btn bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-container" class="text-center hidden">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">Quiz Complete!</h2>
+            <p class="text-lg text-slate-600 mb-2">Your final score is:</p>
+            <p class="text-5xl font-extrabold text-blue-600 mb-6" id="final-score"></p>
+            <p class="text-slate-500 mb-6" id="score-summary"></p>
+            <button id="restart-btn" class="option-btn bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 text-lg">Restart Quiz</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Quiz Data ---
+        const questions = [
+            { question: "What is the definition of Data Management provided in the DMBOK?", options: ["The process of supervising IT staff and managing technology assets.", "The development, execution, and supervision of plans, policies, programs, and practices that deliver, control, protect, and enhance the value of data and information assets.", "The exclusive act of database administration and performance tuning.", "The creation of new software applications to generate business revenue."], correctAnswer: 1, explanation: "Chapter 1 defines Data Management as 'the development, execution, and supervision of plans, policies, programs, and practices that deliver, control, protect, and enhance the value of data and information assets throughout their lifecycles.'" },
+            { question: "A Data Management Professional is defined as someone who:", options: ["Only works in a highly technical role, such as a database administrator.", "Only works in a strategic business role, such as a Data Steward.", "Works in any facet of data management to meet strategic organizational goals.", "Is primarily responsible for the financial accounting of data assets."], correctAnswer: 2, explanation: "The DMBOK defines a Data Management Professional as 'any person who works in any facet of data management... to meet strategic organizational goals.'" },
+            { question: "Data management requires a shared responsibility between which two groups?", options: ["Sales and Marketing", "Legal and Human Resources", "Business and Information Technology", "Senior Executives and Junior Staff"], correctAnswer: 2, explanation: "Responsibility for managing data must be shared between business and information technology roles." },
+            { question: "According to the text, data is both an interpretation of the objects it represents and:", options: ["A simple, straightforward fact.", "An object that must be interpreted.", "A digital-only format.", "A form of currency."], correctAnswer: 1, explanation: "The text states, 'Data is both an interpretation of the objects it represents and an object that must be interpreted.' This highlights the need for context." },
+            { question: "What is the term for the data used to manage and use other data, providing necessary context?", options: ["Transactional Data", "Master Data", "Reference Data", "Metadata"], correctAnswer: 3, explanation: "Metadata is data about data. It provides the context needed to understand and manage other data." },
+            { question: "The text states that data is widely recognized as a vital enterprise asset. What is the definition of an asset?", options: ["Any physical resource owned by the company.", "An economic resource that can be owned or controlled and that holds or produces value.", "A liability that must be managed to reduce risk.", "A piece of software used for business operations."], correctAnswer: 1, explanation: "An asset is an economic resource that can be owned or controlled and that holds or produces value." },
+            { question: "What does it mean for an organization to be 'data-driven'?", options: ["It has the most advanced technology and the largest volume of data.", "It makes decisions based on gut feelings but validates them with data later.", "It uses event triggers and applies analytics to gain actionable insight for decision-making.", "It only hires employees with a degree in data science."], correctAnswer: 2, explanation: "Being data-driven includes the recognition that data must be managed efficiently and used to make more effective decisions through analytics." },
+            { question: "Which of the following is a unique property of data as an asset compared to physical or financial assets?", options: ["It wears out over time with repeated use.", "It can only be in one place at one time.", "It is not consumed when it is used.", "Its value is always easy to calculate and fixed."], correctAnswer: 2, explanation: "A key unique property of data is that it is not consumed when used, allowing it to be leveraged by multiple people and processes simultaneously." },
+            { question: "One of the key Data Management Principles states that the value of data can and should be expressed in what terms?", options: ["Technical", "Abstract", "Economic", "Operational"], correctAnswer: 2, explanation: "The principle states: 'The value of data can and should be expressed in economic terms' to help organizations make better decisions about their data." },
+            { question: "According to the Data Management Principles, managing data primarily means managing what aspect of data?", options: ["Its volume", "Its velocity", "Its format", "Its quality"], correctAnswer: 3, explanation: "The principle 'Managing data means managing the quality of data' highlights that ensuring data is fit for purpose is a primary goal." },
+            { question: "Which principle highlights that a single team cannot manage all of an organization's data and that collaboration is required?", options: ["Data management is lifecycle management.", "Data management is cross-functional.", "Data management requires an enterprise perspective.", "Data management requirements must drive IT decisions."], correctAnswer: 1, explanation: "The principle 'Data management is cross-functional' emphasizes that it requires a range of skills and expertise, and a single team cannot manage all data." },
+            { question: "The principle 'Data management requires an enterprise perspective' implies that:", options: ["Data management should only be handled by the IT department.", "Data management is most effective when applied across the entire organization, not just in local applications.", "Each department should have its own separate data management strategy.", "Data only has value within the department that creates it."], correctAnswer: 1, explanation: "This principle means data management must be applied across the enterprise to be as effective as possible, moving across business verticals." },
+            { question: "Why does effective data management require leadership commitment?", options: ["Because data management is solely a top-down executive function.", "To secure funding for the most expensive technologies available.", "Because it involves a complex set of processes requiring coordination, collaboration, and vision.", "To ensure that only leaders have access to the organization's data."], correctAnswer: 2, explanation: "Effective data management requires leadership commitment to provide the vision and purpose necessary to coordinate the complex set of processes involved." },
+            { question: "What is a primary challenge in data valuation?", options: ["The value of data is standardized across all industries.", "The value of data is contextual and often temporal.", "There are too many tools available for calculating data value.", "Data has no real economic value."], correctAnswer: 1, explanation: "A primary challenge is that the value of data is contextual (what is valuable to one organization may not be to another) and temporal (value can change over time)." },
+            { question: "Experts estimate that organizations spend what percentage of revenue handling data quality issues?", options: ["1-3%", "5-8%", "10-30%", "Over 50%"], correctAnswer: 2, explanation: "The DMBOK states that experts think organizations spend between 10-30% of revenue handling data quality issues." },
+            { question: "Which of the following is listed as a benefit of high-quality data?", options: ["Increased organizational conflict.", "Reduced risk and increased revenue.", "Lower job satisfaction.", "Slower innovation cycles."], correctAnswer: 1, explanation: "Benefits of high quality data include reduced risk, increased revenue, higher productivity, and improved customer experience." },
+            { question: "The data lifecycle is based on which other lifecycle concept?", options: ["The software development lifecycle.", "The product lifecycle.", "The employee lifecycle.", "The financial accounting lifecycle."], correctAnswer: 1, explanation: "The data lifecycle is based on the product lifecycle, including phases like creation, use, maintenance, and disposal." },
+            { question: "What are the most critical points in the data lifecycle?", options: ["Storage and disposal.", "Enhancement and maintenance.", "Creation and usage.", "Planning and design."], correctAnswer: 2, explanation: "Creation and usage are the most critical points because data is valuable only when it is consumed or applied, and its initial creation determines its potential quality." },
+            { question: "What does the acronym ROT stand for in the context of data management?", options: ["Real-time, Operational, Transactional.", "Redundant, Obsolete, Trivial.", "Rules, Operations, Technology.", "Risk, Opportunity, Threat."], correctAnswer: 1, explanation: "ROT stands for data that is Redundant, Obsolete, or Trivial, which should be minimized in lifecycle management." },
+            { question: "Which statement best describes the relationship between data management and information technology?", options: ["Managing technology is the same as managing data.", "Technology should always drive an organization's decisions about data.", "Data requirements aligned with business strategy should drive decisions about technology.", "Data management is a subset of information technology management."], correctAnswer: 2, explanation: "A key principle is that data requirements aligned with business strategy should drive technology decisions, not the other way around." },
+            { question: "The advocacy for the role of a Chief Data Officer (CDO) stems from the recognition that:", options: ["Data management is solely an IT-driven function.", "Successful data management must be business-driven.", "Organizations have too much data to manage.", "The CIO needs an assistant for data-related tasks."], correctAnswer: 1, explanation: "The CDO role stems from recognizing that successful data management must be business-driven, rather than IT-driven, to leverage data assets strategically." },
+            { question: "What is a data strategy?", options: ["A detailed technical plan for database implementation.", "A set of choices and decisions that chart a high-level course of action to achieve high-level goals.", "A list of all the data an organization possesses.", "A document that only focuses on regulatory compliance."], correctAnswer: 1, explanation: "A data strategy is a high-level course of action to use information to competitive advantage and support enterprise goals." },
+            { question: "Which of the following is NOT a typical component of a data management strategy?", options: ["A compelling vision for data management.", "A list of specific software vendors to use.", "Guiding principles, values, and management perspectives.", "A prioritized program of work with scope boundaries."], correctAnswer: 1, explanation: "A data management strategy is high-level and principle-based; it does not typically include a list of specific software vendors." },
+            { question: "The Strategic Alignment Model by Henderson and Venkatraman describes the relationship between business strategy, IT strategy, and what other two domains?", options: ["Financial processes and marketing campaigns.", "Organizational infrastructure and processes, and IT infrastructure and processes.", "Human resources and legal compliance.", "Product development and customer service."], correctAnswer: 1, explanation: "The four domains of the Strategic Alignment Model are business strategy, IT strategy, organizational infrastructure and processes, and IT infrastructure and processes." },
+            { question: "In the DAMA Wheel framework, what is the significance of placing Data Governance at the center?", options: ["It is the least important function.", "It is the last function to be implemented.", "It is required for consistency and balance between all other data management functions.", "It is only relevant for large, global organizations."], correctAnswer: 2, explanation: "Data Governance is at the center of the DAMA Wheel because it is required for consistency within and balance between the other data management functions." },
+            { question: "The DAMA Environmental Factors hexagon provides a key for reading the DMBOK context diagrams. What is at the center of the hexagon?", options: ["Technology", "People", "Process", "Goals & Principles"], correctAnswer: 3, explanation: "Goals & Principles are at the center of the Environmental Factors hexagon, as they provide guidance for all other elements." },
+            { question: "The Knowledge Area Context Diagrams in the DMBOK are based on what type of business process diagram?", options: ["Flowchart", "Gantt Chart", "SIPOC (Suppliers, Inputs, Processes, Outputs, and Consumers)", "Fishbone Diagram"], correctAnswer: 2, explanation: "The Context Diagrams are based on the concept of a SIPOC diagram, which is used for product management." },
+            { question: "In Peter Aiken's DMBOK Pyramid framework, which function provides the foundational support for activities like Data Quality and Metadata?", options: ["Advanced Practices (Analytics, Big Data)", "Data Governance", "Data Integration & Interoperability", "Data Warehousing"], correctAnswer: 1, explanation: "In Aiken's pyramid, Data Governance is at the base, providing the structural support for other functions like Data Quality, Metadata, and Architecture." },
+            { question: "What is the primary purpose of a data management framework?", options: ["To provide a rigid, unchangeable set of rules for all organizations.", "To help understand data management comprehensively and see relationships between its component parts.", "To serve as a marketing tool for data management software.", "To replace the need for data management professionals."], correctAnswer: 1, explanation: "A framework helps to understand data management comprehensively and see the relationships between its interdependent functions." },
+            { question: "According to the text, what is the primary purpose of the DAMA-DMBOK guide?", options: ["To serve as a textbook for university computer science courses.", "To provide a functional framework for implementing enterprise data management practices and establish a common vocabulary.", "To certify software vendors for data management tools.", "To create a new set of international laws for data handling."], correctAnswer: 1, explanation: "The DMBOK's purpose is to provide a functional framework and a common vocabulary for data management professionals." },
+            { question: "Which of the following is NOT one of the eleven Knowledge Areas depicted on the DAMA Wheel?", options: ["Data Architecture", "Data Quality", "Software Development", "Metadata Management"], correctAnswer: 2, explanation: "Software Development is not one of the eleven Knowledge Areas on the DAMA Wheel. The others are." },
+            { question: "The concept of the data lifecycle suggests that data should be managed from:", options: ["Creation to usage only.", "Storage to disposal only.", "Creation/acquisition to disposal.", "Planning to implementation only."], correctAnswer: 2, explanation: "The data lifecycle covers the entire lifespan of data, from its creation or acquisition all the way through to its disposal." },
+            { question: "What is a key difference between data and other assets like physical equipment?", options: ["Data is tangible.", "Data is easy to reproduce if lost or destroyed.", "Data can be used by multiple people at the same time.", "Data has a fixed, unchangeable value."], correctAnswer: 2, explanation: "Unlike a physical asset, the same data can be used by multiple people simultaneously, which is one of its unique properties." },
+            { question: "A data management strategy must come from an understanding of the data needs inherent in the:", options: ["IT department's budget.", "Business strategy.", "Latest technology trends.", "Competitors' activities."], correctAnswer: 1, explanation: "A data strategy must derive from the business strategy to ensure it supports what the organization needs to achieve." },
+            { question: "The Amsterdam Information Model introduces a middle layer between Strategy and Operations focused on:", options: ["Marketing and Sales", "Human Resources", "Structure and Tactics (Architecture & Planning).", "Legal and Compliance"], correctAnswer: 2, explanation: "The Amsterdam Information Model recognizes a middle layer of tactics, which includes architecture and planning, bridging strategy and operations." },
+            { question: "In the DAMA Context Diagram, activities are classified into four phases. Which of the following is NOT one of those phases?", options: ["Plan (P)", "Develop (D)", "Execute (E)", "Control (C)"], correctAnswer: 2, explanation: "The four phases in a DAMA Context Diagram are Plan (P), Develop (D), Operate (O), and Control (C). Execute (E) is not one of them." },
+            { question: "Aiken's DMBOK Pyramid suggests a logical progression. What function is shown as dependent on Data Quality, Metadata, and Architecture?", options: ["Data Storage & Operations", "Data Governance", "Data Integration & Interoperability", "Advanced Practices"], correctAnswer: 1, explanation: "In Aiken's pyramid, Data Governance is at the bottom, supporting Data Architecture, Data Quality, and Metadata. These in turn support higher-level functions." },
+            { question: "The 'DAMA Data Management Framework Evolved' (Figure 9) shows that Business Intelligence / Analytics have dependencies on:", options: ["Only Master Data.", "Only Data Governance.", "All other data management functions.", "Only Data Quality and Data Design."], correctAnswer: 2, explanation: "Figure 9 shows that BI/Analytics are at the top, dependent on all the foundational and intermediate layers below them, including Data Governance, Data Quality, and Data Warehousing." },
+            { question: "Which of the following best describes the relationship between Data Governance and Data Management?", options: ["They are the same thing.", "Data Management provides oversight for Data Governance execution.", "Data Governance provides oversight for Data Management execution.", "They are completely separate and unrelated functions."], correctAnswer: 2, explanation: "Data Governance provides the oversight ('ensuring data is managed') for the execution work done by Data Management ('managing data to achieve goals')." },
+            { question: "The text mentions that data is both an interpretation and an object that must be interpreted. This implies that data requires what to be meaningful?", options: ["A high-speed network.", "The latest software.", "Context.", "A large storage capacity."], correctAnswer: 2, explanation: "For data to be meaningful, it requires context. This context is often provided by metadata." },
+            { question: "What is a common consequence of poor quality data mentioned in the text?", options: ["Increased job satisfaction.", "Reduced compliance costs.", "Scrap and rework.", "Faster innovation."], correctAnswer: 2, explanation: "The costs of poor quality data include scrap and rework, organizational inefficiencies, and customer dissatisfaction." },
+            { question: "The data lifecycle includes processes that create or obtain data, those that move, transform, and store it, and those that:", options: ["Only analyze it.", "Only secure it.", "Use or apply it, as well as dispose of it.", "Only report on it."], correctAnswer: 2, explanation: "The data lifecycle covers all phases, including creation, storage, use, enhancement, and eventual disposal." },
+            { question: "Data lineage is defined as:", options: ["The age of a dataset.", "The family of databases a dataset belongs to.", "The pathway along which data moves from its point of origin to its point of usage.", "The number of times a dataset has been copied."], correctAnswer: 2, explanation: "Data lineage is the pathway data follows, including its origin, movement, and transformations." },
+            { question: "What is a key deliverable from strategic planning for data management?", options: ["A list of all employees in the IT department.", "A Data Management Charter.", "A new software application.", "A detailed budget for the next 10 years."], correctAnswer: 1, explanation: "Deliverables from strategic planning include a Data Management Charter, Scope Statement, and Implementation Roadmap." },
+            { question: "The DAMA Environmental Factors hexagon puts Goals & Principles at the center because they:", options: ["Are the least important aspect of data management.", "Provide guidance for how people should execute activities and use tools.", "Are only relevant for technical staff.", "Are determined solely by external regulators."], correctAnswer: 1, explanation: "Goals & Principles are central because they guide how people, processes, and technology should be applied for successful data management." },
+            { question: "What does the 'Data Management is cross-functional' principle imply for an organization?", options: ["Only the finance department should manage financial data.", "Data management requires collaboration between people with a range of technical and non-technical skills.", "IT is solely responsible for all data.", "Each function should manage its data in isolation."], correctAnswer: 1, explanation: "This principle means that effective data management requires a diverse range of skills and collaboration across different business and IT functions." },
+            { question: "The text emphasizes that an organization's best opportunities for organic growth lie in what?", options: ["Acquiring smaller companies.", "Reducing its workforce.", "Data.", "Expanding its physical office space."], correctAnswer: 2, explanation: "The Leader's Data Manifesto is cited, stating that the 'best opportunities for organic growth lie in data.'" },
+            { question: "In the Strategic Alignment Model, what is at the center, connecting the business and IT domains?", options: ["People and Culture", "Information and Data", "Projects and Programs", "Risk and Compliance"], correctAnswer: 1, explanation: "Information and Data are at the center of the Strategic Alignment Model, bridging the Business and IT strategies and operations." },
+            { question: "According to the DMBOK, what is a primary goal of data management?", options: ["To capture as much data as possible, regardless of its quality.", "To ensure data can be used effectively to add value to the enterprise.", "To replace all business processes with automated systems.", "To keep all data forever, never disposing of it."], correctAnswer: 1, explanation: "One of the primary goals listed is to ensure data can be used effectively to add value to the enterprise." },
+            { question: "The text describes the DAMA Wheel as having one Knowledge Area at the center and the others balanced around it. This visual representation emphasizes that:", options: ["All knowledge areas are completely independent of each other.", "The central function is less important than the outer ones.", "The knowledge areas are all necessary parts of a mature data management function.", "An organization must implement all knowledge areas simultaneously."], correctAnswer: 2, explanation: "The DAMA Wheel shows that all the Knowledge Areas are necessary parts of a mature data management function, and they must be balanced." }
+        ];
+
+        // --- DOM Elements ---
+        const quizContainer = document.getElementById('quiz-container');
+        const progressScoreContainer = document.getElementById('progress-score-container');
+        const quizContent = document.getElementById('quiz-content');
+        const resultsContainer = document.getElementById('results-container');
+        const navigation = document.getElementById('navigation');
+        
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const feedbackEl = document.getElementById('feedback');
+        
+        const questionNumberEl = document.getElementById('question-number');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const scoreEl = document.getElementById('score');
+        const progressBarEl = document.getElementById('progress-bar');
+        
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const showAnswerBtn = document.getElementById('show-answer-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // --- Quiz State ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+
+        // --- Functions ---
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            resultsContainer.classList.add('hidden');
+            progressScoreContainer.classList.remove('hidden');
+            quizContent.classList.remove('hidden');
+            navigation.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionEl.textContent = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
+            
+            optionsEl.innerHTML = '';
+            feedbackEl.classList.add('hidden');
+            feedbackEl.textContent = '';
+
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-btn', 'w-full', 'text-left', 'p-4', 'border', 'border-slate-300', 'rounded-lg', 'bg-slate-50', 'hover:bg-slate-100', 'disabled:cursor-not-allowed', 'disabled:opacity-70');
+                button.dataset.index = index;
+                button.onclick = () => selectAnswer(index);
+                optionsEl.appendChild(button);
+            });
+            
+            updateProgress();
+            updateNavigation();
+            restoreAnswerState();
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; // Already answered
+
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            const currentQuestion = questions[currentQuestionIndex];
+            const isCorrect = selectedIndex === currentQuestion.correctAnswer;
+
+            if (isCorrect) {
+                score++;
+            }
+            
+            showFeedback(isCorrect, currentQuestion.explanation);
+            highlightAnswers();
+            disableOptions();
+            updateProgress();
+        }
+        
+        function showFeedback(isCorrect, explanation) {
+            feedbackEl.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackEl.textContent = 'Correct! ' + explanation;
+                feedbackEl.classList.remove('bg-red-100', 'text-red-700');
+                feedbackEl.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                feedbackEl.textContent = 'Incorrect. ' + explanation;
+                feedbackEl.classList.remove('bg-green-100', 'text-green-700');
+                feedbackEl.classList.add('bg-red-100', 'text-red-700');
+            }
+        }
+
+        function highlightAnswers() {
+            const currentQuestion = questions[currentQuestionIndex];
+            const selectedIndex = userAnswers[currentQuestionIndex];
+            
+            Array.from(optionsEl.children).forEach((btn, index) => {
+                if (index === currentQuestion.correctAnswer) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    btn.classList.add('incorrect');
+                }
+            });
+        }
+
+        function restoreAnswerState() {
+             if (userAnswers[currentQuestionIndex] !== null) {
+                const currentQuestion = questions[currentQuestionIndex];
+                const isCorrect = userAnswers[currentQuestionIndex] === currentQuestion.correctAnswer;
+                showFeedback(isCorrect, currentQuestion.explanation);
+                highlightAnswers();
+                disableOptions();
+             }
+        }
+
+        function disableOptions() {
+            Array.from(optionsEl.children).forEach(btn => {
+                btn.disabled = true;
+            });
+            showAnswerBtn.disabled = true;
+        }
+
+        function updateProgress() {
+            questionNumberEl.textContent = currentQuestionIndex + 1;
+            totalQuestionsEl.textContent = questions.length;
+            scoreEl.textContent = score;
+            const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBarEl.style.width = `${progressPercentage}%`;
+        }
+
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? 'Finish' : 'Next';
+            showAnswerBtn.disabled = userAnswers[currentQuestionIndex] !== null;
+        }
+
+        function showResults() {
+            progressScoreContainer.classList.add('hidden');
+            quizContent.classList.add('hidden');
+            navigation.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+
+            const percentage = ((score / questions.length) * 100).toFixed(1);
+            document.getElementById('final-score').textContent = `${percentage}%`;
+            document.getElementById('score-summary').textContent = `You answered ${score} out of ${questions.length} questions correctly.`;
+        }
+        
+        // --- Event Listeners ---
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        });
+        
+        showAnswerBtn.addEventListener('click', () => {
+             if (userAnswers[currentQuestionIndex] === null) {
+                const currentQuestion = questions[currentQuestionIndex];
+                userAnswers[currentQuestionIndex] = -1; // Mark as "shown" but not answered by user
+                showFeedback(false, currentQuestion.explanation); // Show explanation
+                highlightAnswers();
+                disableOptions();
+             }
+        });
+
+        restartBtn.addEventListener('click', startQuiz);
+
+        // --- Initial Load ---
+        startQuiz();
+
+    </script>
+</body>
+</html>
