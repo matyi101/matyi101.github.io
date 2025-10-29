@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Foundations Practice Test</title>
+    <!-- 1. Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 2. Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 3. Set Inter as the default font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom style for checked radio button label */
+        input[type="radio"]:checked + label {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #eff6ff; /* blue-50 */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex items-center justify-center p-4">
+
+    <!-- Main Application Container -->
+    <main class="bg-white w-full max-w-3xl rounded-xl shadow-2xl p-6 md:p-10 transition-all duration-300">
+
+        <!-- ===== View 1: Selection Screen ===== -->
+        <div id="selection-screen">
+            <h1 class="text-3xl font-bold text-center text-blue-700 mb-2">IT Foundations Practice Test</h1>
+            <p class="text-center text-slate-600 mb-8">Choose a test set to begin. Each set contains 25 questions.</p>
+            <div class="flex flex-col space-y-4">
+                <button onclick="selectSet('set1')" class="w-full text-lg font-semibold bg-blue-600 text-white py-4 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-transform hover:scale-105">
+                    Practice Test 1: Core Concepts
+                </button>
+                <button onclick="selectSet('set2')" class="w-full text-lg font-semibold bg-blue-600 text-white py-4 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-transform hover:scale-105">
+                    Practice Test 2: Hardware & Software
+                </button>
+                <button onclick="selectSet('set3')" class="w-full text-lg font-semibold bg-blue-600 text-white py-4 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-transform hover:scale-105">
+                    Practice Test 3: Networking & Security
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== View 2: Test Screen (Hidden by default) ===== -->
+        <div id="test-screen" class="hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="test-title" class="text-2xl font-bold text-blue-700">Practice Test</h2>
+                <div id="progress-text" class="text-lg font-semibold text-slate-500">Question 1 / 25</div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="mb-8">
+                <p id="question-text" class="text-xl font-semibold leading-relaxed mb-6">
+                    What is the primary function of a CPU?
+                </p>
+                <div id="options-container" class="space-y-3">
+                    <!-- Options will be dynamically injected here -->
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between items-center">
+                <button id="prev-btn" onclick="prevQuestion()" class="text-lg font-semibold bg-slate-200 text-slate-700 py-2 px-6 rounded-lg hover:bg-slate-300 transition-colors">
+                    Previous
+                </button>
+                <button id="next-btn" onclick="nextQuestion()" class="text-lg font-semibold bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                    Next
+                </button>
+                <button id="submit-btn" onclick="submitTest()" class="hidden text-lg font-semibold bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors">
+                    Submit Test
+                </button>
+            </div>
+        </div>
+        
+        <!-- ===== View 3: Results Screen (Hidden by default) ===== -->
+        <div id="results-screen" class="hidden">
+            <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Test Results</h1>
+            
+            <!-- Score Summary -->
+            <div id="score-summary" class="text-center mb-8">
+                <!-- Score will be injected here -->
+            </div>
+
+            <!-- Review Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Review Your Answers</h2>
+                <div id="results-content" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                    <!-- Review items will be injected here -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-center">
+                <button onclick="goHome()" class="text-lg font-semibold bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors">
+                    Back to Home
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- 1. DATA: All Questions ---
+        const allQuestionSets = {
+            set1: [
+                {
+                    question: "What does CPU stand for?",
+                    options: ["Central Processing Unit", "Computer Personal Unit", "Central Power Unit", "Core Processing Unit"],
+                    answer: "Central Processing Unit"
+                },
+                {
+                    question: "Which of the following is volatile memory?",
+                    options: ["SSD", "HDD", "RAM", "ROM"],
+                    answer: "RAM"
+                },
+                {
+                    question: "What is the main function of an Operating System (OS)?",
+                    options: ["To browse the internet", "To manage hardware and software resources", "To create documents", "To protect against viruses"],
+                    answer: "To manage hardware and software resources"
+                },
+                {
+                    question: "Which device is used to connect a computer to a network?",
+                    options: ["Modem", "Router", "RAM", "NIC (Network Interface Card)"],
+                    answer: "NIC (Network Interface Card)"
+                },
+                {
+                    question: "What does 'HTTP' stand for?",
+                    options: ["HyperText Transfer Protocol", "HyperText Transmission Protocol", "Hyperlink Transfer Protocol", "HyperText Transfer Profile"],
+                    answer: "HyperText Transfer Protocol"
+                },
+                {
+                    question: "A collection of related data is called a...",
+                    options: ["File", "Database", "Register", "Cache"],
+                    answer: "Database"
+                },
+                {
+                    question: "What is 'malware' short for?",
+                    options: ["Malicious Hardware", "Malicious Software", "Malevolent Software", "Multi-functional Ware"],
+                    answer: "Malicious Software"
+                },
+                {
+                    question: "Which of these is NOT an output device?",
+                    options: ["Monitor", "Printer", "Keyboard", "Speakers"],
+                    answer: "Keyboard"
+                },
+                {
+                    question: "What does 'LAN' stand for?",
+                    options: ["Local Area Network", "Large Area Network", "Long Area Network", "Local Access Network"],
+                    answer: "Local Area Network"
+                },
+                {
+                    question: "In computing, what does 'GUI' stand for?",
+                    options: ["Graphical User Interface", "General User Interaction", "Gaming User Interface", "Global User Identifier"],
+                    answer: "Graphical User Interface"
+                },
+                {
+                    question: "Which component is often called the 'brain' of the computer?",
+                    options: ["RAM", "Motherboard", "CPU", "Hard Drive"],
+                    answer: "CPU"
+                },
+                {
+                    question: "What is the smallest unit of data in a computer?",
+                    options: ["Byte", "Bit", "Nibble", "Megabyte"],
+                    answer: "Bit"
+                },
+                {
+                    question: "How many bits are in one byte?",
+                    options: ["4", "8", "16", "32"],
+                    answer: "8"
+                },
+                {
+                    question: "Which software is designed to prevent, detect, and remove malware?",
+                    options: ["Firewall", "Antivirus", "Operating System", "Browser"],
+                    answer: "Antivirus"
+                },
+                {
+                    question: "What does 'URL' stand for?",
+                    options: ["Universal Resource Locator", "Uniform Resource Locator", "Universal Resource Link", "Uniform Resource Link"],
+                    answer: "Uniform Resource Locator"
+                },
+                {
+                    question: "Which of the following is an example of an application software?",
+                    options: ["Windows 10", "Linux", "Microsoft Word", "Device Driver"],
+                    answer: "Microsoft Word"
+                },
+                {
+                    question: "What is 'phishing'?",
+                    options: ["A type of computer virus", "A method of fishing for compliments", "A fraudulent attempt to obtain sensitive information", "A hardware component failure"],
+                    answer: "A fraudulent attempt to obtain sensitive information"
+                },
+                {
+                    question: "What technology allows wireless communication over short distances?",
+                    options: ["Bluetooth", "WAN", "LAN", "DSL"],
+                    answer: "Bluetooth"
+                },
+                {
+                    question: "The physical components of a computer are called...",
+                    options: ["Software", "Hardware", "Firmware", "Shareware"],
+                    answer: "Hardware"
+                },
+                {
+                    question: "What does 'SaaS' stand for in cloud computing?",
+                    options: ["Software as a Service", "System as a Service", "Security as a Service", "Service and Software"],
+                    answer: "Software as a Service"
+                },
+                {
+                    question: "What is a 'bug' in computing?",
+                    options: ["An insect", "A security feature", "An error or flaw in a computer program", "A type of malware"],
+                    answer: "An error or flaw in a computer program"
+                },
+                {
+                    question: "What does DNS stand for?",
+                    options: ["Domain Name System", "Digital Network Service", "Domain Naming Standard", "Data Network System"],
+                    answer: "Domain Name System"
+                },
+                {
+                    question: "Which of these is a programming language?",
+                    options: ["HTML", "HTTP", "Python", "SQL"],
+                    answer: "Python"
+                },
+                {
+                    question: "What does SSD stand for?",
+                    options: ["Solid State Drive", "Software Storage Device", "Secure Socket Drive", "System Storage Disk"],
+                    answer: "Solid State Drive"
+                },
+                {
+                    question: "What is an 'IP Address'?",
+                    options: ["A physical address for your computer", "A unique string of numbers that identifies a device on a network", "A name for a website", "A type of internet connection"],
+                    answer: "A unique string of numbers that identifies a device on a network"
+                }
+            ],
+            set2: [
+                {
+                    question: "What is the function of RAM?",
+                    options: ["Long-term storage", "Temporary storage for running applications and data", "Processing instructions", "Connecting to the internet"],
+                    answer: "Temporary storage for running applications and data"
+                },
+                {
+                    question: "Which of the following is NOT an operating system?",
+                    options: ["macOS", "Microsoft Office", "Linux", "Android"],
+                    answer: "Microsoft Office"
+                },
+                {
+                    question: "What is the main circuit board in a computer called?",
+                    options: ["CPU", "RAM", "Motherboard", "PSU"],
+                    answer: "Motherboard"
+                },
+                {
+                    question: "Which company developed the Windows operating system?",
+                    options: ["Apple", "IBM", "Microsoft", "Google"],
+                    answer: "Microsoft"
+                },
+                {
+                    question: "What does 'ROM' stand for?",
+                    options: ["Read-Only Memory", "Random-Only Memory", "Run-Only Memory", "Readable-Only Memory"],
+                    answer: "Read-Only Memory"
+                },
+                {
+                    question: "What type of software is a web browser (like Chrome or Firefox)?",
+                    options: ["System Software", "Application Software", "Malware", "Firmware"],
+                    answer: "Application Software"
+                },
+                {
+                    question: "A hard disk drive (HDD) is an example of...",
+                    options: ["Primary storage", "Volatile memory", "Secondary storage", "Input device"],
+                    answer: "Secondary storage"
+                },
+                {
+                    question: "What does a 'compiler' do?",
+                    options: ["Converts high-level programming code into machine code", "Runs the operating system", "Connects to the internet", "Designs graphical interfaces"],
+                    answer: "Converts high-level programming code into machine code"
+                },
+                {
+                    question: "Which of these is an input device?",
+                    options: ["Monitor", "Projector", "Mouse", "Printer"],
+                    answer: "Mouse"
+                },
+                {
+                    question: "The 'Cloud' in cloud computing refers to...",
+                    options: ["The weather", "A type of storage device", "A large, physical computer", "A network of remote servers hosted on the internet"],
+                    answer: "A network of remote servers hosted on the internet"
+                },
+                {
+                    question: "What is 'Open Source' software?",
+                    options: ["Software that is free to use", "Software that only runs on Linux", "Software with source code that is available to the public", "Software that has not been completed"],
+                    answer: "Software with source code that is available to the public"
+                },
+                {
+                    question: "Which part of the computer performs arithmetic and logical operations?",
+                    options: ["ALU (Arithmetic Logic Unit)", "RAM", "Control Unit", "Cache"],
+                    answer: "ALU (Arithmetic Logic Unit)"
+                },
+                {
+                    question: "What is the binary number system?",
+                    options: ["A system that uses 10 digits (0-9)", "A system that uses 2 digits (0 and 1)", "A system that uses 16 digits (0-9, A-F)", "A system used for text only"],
+                    answer: "A system that uses 2 digits (0 and 1)"
+                },
+                {
+                    question: "What is firmware?",
+                    options: ["A very secure type of software", "Software that is permanently stored on a hardware device", "A type of business software", "A computer virus"],
+                    answer: "Software that is permanently stored on a hardware device"
+                },
+                {
+                    question: "What does 'PSU' stand for?",
+                    options: ["Power Supply Unit", "Primary Storage Unit", "Processing System Unit", "Peripheral Support Unit"],
+                    answer: "Power Supply Unit"
+                },
+                {
+                    question: "Which of these provides the fastest data access?",
+                    options: ["RAM", "SSD", "HDD", "CPU Cache"],
+                    answer: "CPU Cache"
+                },
+                {
+                    question: "What is the purpose of an 'Algorithm'?",
+                    options: ["To store data", "A type of programming language", "A step-by-step procedure for solving a problem", "A hardware component"],
+                    answer: "A step-by-step procedure for solving a problem"
+                },
+                {
+                    question: "What is 'Shareware'?",
+                    options: ["Software that is free", "Software distributed for free on a trial basis", "Software that is shared on a network", "Open source software"],
+                    answer: "Software distributed for free on a trial basis"
+                },
+                {
+                    question: "A... is a set of rules that governs communication between computers.",
+                    options: ["Protocol", "Program", "Processor", "Port"],
+                    answer: "Protocol"
+                },
+                {
+                    question: "Which of these is NOT a type of computer hardware?",
+                    options: ["Keyboard", "CPU", "Java", "Monitor"],
+                    answer: "Java"
+                },
+                {
+                    question: "What does 'VGA' stand for in computer graphics?",
+                    options: ["Video Graphics Array", "Visual Graphics Adapter", "Video Gaming Adapter", "Very Good Array"],
+                    answer: "Video Graphics Array"
+                },
+                {
+                    question: "What is the file extension for a typical web page?",
+                    options: [".txt", ".doc", ".html", ".exe"],
+                    answer: ".html"
+                },
+                {
+                    question: "What is 'System Software'?",
+                    options: ["Software like web browsers and word processors", "Software designed to operate and control the computer hardware", "Software for creating presentations", "Software that is free to download"],
+                    answer: "Software designed to operate and control the computer hardware"
+                },
+                {
+                    question: "What does 'I/O' stand for?",
+                    options: ["Input/Output", "Internet/Offline", "Internal/Operating", "Integrated/Operating"],
+                    answer: "Input/Output"
+                },
+                {
+                    question: "Which of these is a non-volatile storage device?",
+                    options: ["RAM", "CPU Cache", "SSD", "Registers"],
+                    answer: "SSD"
+                }
+            ],
+            set3: [
+                {
+                    question: "What does 'Wi-Fi' stand for?",
+                    options: ["Wireless Fidelity", "Wireless Internet", "Wireless File-sharing", "It's not an acronym"],
+                    answer: "It's not an acronym"
+                },
+                {
+                    question: "What is a 'Firewall' in computer networks?",
+                    options: ["A physical wall to prevent fires", "A network security system that monitors and controls traffic", "A type of computer virus", "A part of the operating system"],
+                    answer: "A network security system that monitors and controls traffic"
+                },
+                {
+                    question: "What does 'WAN' stand for?",
+                    options: ["Wide Area Network", "Wireless Access Network", "Wired Area Network", "Whole Area Network"],
+                    answer: "Wide Area Network"
+                },
+                {
+                    question: "Which protocol is used for sending email?",
+                    options: ["HTTP", "FTP", "SMTP", "POP3"],
+                    answer: "SMTP"
+                },
+                {
+                    question: "What does 'SQL' stand for?",
+                    options: ["Structured Query Language", "Simple Query Language", "Standard Query Language", "System Query Language"],
+                    answer: "Structured Query Language"
+                },
+                {
+                    question: "A... is a program that replicates itself and spreads to other computers.",
+                    options: ["Bug", "Virus", "Cookie", "Cache"],
+                    answer: "Virus"
+                },
+                {
+                    question: "What is the function of a 'Router'?",
+                    options: ["To store data", "To connect to the internet", "To forward data packets between computer networks", "To display web pages"],
+                    answer: "To forward data packets between computer networks"
+                },
+                {
+                    question: "What does 'HTTPS' stand for?",
+                    options: ["HyperText Transfer Protocol Secure", "HyperText Transfer Protocol Standard", "Hyperlink Transfer Protocol Secure", "HyperText Transmission Protocol Secure"],
+                    answer: "HyperText Transfer Protocol Secure"
+                },
+                {
+                    question: "What is 'Ethernet'?",
+                    options: ["A type of wireless connection", "A family of wired computer networking technologies", "A type of internet service provider", "A security protocol"],
+                    answer: "A family of wired computer networking technologies"
+                },
+                {
+                    question: "What is 'Encryption'?",
+                    options: ["The process of converting data into a secret code", "The process of deleting data", "The process of backing up data", "The process of finding errors in code"],
+                    answer: "The process of converting data into a secret code"
+                },
+                {
+                    question: "What is 'IoT'?",
+                    options: ["Internet of Things", "Internet over Technology", "International Office of Technology", "Input/Output Transfer"],
+                    answer: "Internet of Things"
+                },
+                {
+                    question: "Which of these is NOT a web browser?",
+                    options: ["Google Chrome", "Mozilla Firefox", "Adobe Photoshop", "Microsoft Edge"],
+                    answer: "Adobe Photoshop"
+                },
+                {
+                    question: "What is a 'Trojan' in cybersecurity?",
+                    options: ["A strong antivirus program", "A security certificate", "Malware disguised as legitimate software", "A type of network hardware"],
+                    answer: "Malware disguised as legitimate software"
+                },
+                {
+                    question: "What does 'FTP' stand for?",
+                    options: ["File Transfer Protocol", "File Transmission Protocol", "Fast Transfer Protocol", "File Transfer Program"],
+                    answer: "File Transfer Protocol"
+                },
+                {
+                    question: "What does a 'DNS' server do?",
+                    options: ["It stores website files", "It secures your internet connection", "It translates domain names (like google.com) to IP addresses", "It blocks viruses"],
+                    answer: "It translates domain names (like google.com) to IP addresses"
+                },
+                {
+                    question: "What is a 'cookie' in the context of web browsing?",
+                    options: ["A type of malware", "A small piece of data stored by your browser", "A pop-up advertisement", "A computer snack"],
+                    answer: "A small piece of data stored by your browser"
+                },
+                {
+                    question: "What is 'AI' short for?",
+                    options: ["Automated Intelligence", "Artificial Intelligence", "Advanced Internet", "Algorithmic Internet"],
+                    answer: "Artificial Intelligence"
+                },
+                {
+                    question: "Which of the following is a type of database model?",
+                    options: ["Relational (SQL)", "Java", "Python", "HTTP"],
+                    answer: "Relational (SQL)"
+                },
+                {
+                    question: "What is a 'VPN'?",
+                    options: ["Virtual Private Network", "Very Private Network", "Virtual Public Network", "Virus Protection Network"],
+                    answer: "Virtual Private Network"
+                },
+                {
+                    question: "Which of these is a characteristic of a strong password?",
+                    options: ["Short and easy to remember", "Using your birthdate", "A mix of upper/lowercase letters, numbers, and symbols", "Using a common dictionary word"],
+                    answer: "A mix of upper/lowercase letters, numbers, and symbols"
+                },
+                {
+                    question: "What does 'ISP' stand for?",
+                    options: ["Internet Service Provider", "Internal System Protocol", "Internet Security Protocol", "Internet System Program"],
+                    answer: "Internet Service Provider"
+                },
+                {
+                    question: "What is 'Cloud Storage'?",
+                    options: ["Storing data on your local computer", "A model of data storage where data is stored on remote servers", "A type of temporary memory", "A physical hard drive that floats"],
+                    answer: "A model of data storage where data is stored on remote servers"
+                },
+                {
+                    question: "What does 'HTML' stand for?",
+                    options: ["HyperText Markup Language", "High-Level Text Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language"],
+                    answer: "HyperText Markup Language"
+                },
+                {
+                    question: "What is 'CSS' used for in web development?",
+                    options: ["To define the structure of a web page", "To style the visual presentation of a web page", "To add interactivity to a web page", "To manage server-side logic"],
+                    answer: "To style the visual presentation of a web page"
+                },
+                {
+                    question: "Which layer of the TCP/IP model is responsible for routing packets?",
+                    options: ["Application Layer", "Transport Layer", "Internet Layer", "Network Access Layer"],
+                    answer: "Internet Layer"
+                }
+            ]
+        };
+
+        // --- 2. STATE: Application State ---
+        let currentSetKey = null;
+        let currentSet = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+
+        // --- 3. DOM References ---
+        const selectionScreen = document.getElementById('selection-screen');
+        const testScreen = document.getElementById('test-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        
+        const testTitle = document.getElementById('test-title');
+        const progressText = document.getElementById('progress-text');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+
+        const scoreSummary = document.getElementById('score-summary');
+        const resultsContent = document.getElementById('results-content');
+        
+
+        // --- 4. FUNCTIONS ---
+
+        /**
+         * Switches the visible screen
+         * @param {string} viewId - 'selection-screen', 'test-screen', or 'results-screen'
+         */
+        function showView(viewId) {
+            selectionScreen.classList.add('hidden');
+            testScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        /**
+         * Starts a new test set
+         * @param {string} setKey - 'set1', 'set2', or 'set3'
+         */
+        function selectSet(setKey) {
+            currentSetKey = setKey;
+            currentSet = allQuestionSets[setKey];
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentSet.length).fill(null);
+            
+            // Set test title
+            if (setKey === 'set1') testTitle.innerText = "Test 1: Core Concepts";
+            else if (setKey === 'set2') testTitle.innerText = "Test 2: Hardware & Software";
+            else if (setKey === 'set3') testTitle.innerText = "Test 3: Networking & Security";
+
+            showQuestion(currentQuestionIndex);
+            showView('test-screen');
+        }
+
+        /**
+         * Displays a specific question
+         * @param {number} index - The index of the question to show
+         */
+        function showQuestion(index) {
+            // Get question data
+            const question = currentSet[index];
+            const currentAnswer = userAnswers[index];
+
+            // Update question text
+            questionText.innerText = question.question;
+
+            // Update progress
+            progressText.innerText = `Question ${index + 1} / ${currentSet.length}`;
+
+            // Clear old options
+            optionsContainer.innerHTML = '';
+
+            // Create and append new options
+            question.options.forEach(option => {
+                const optionId = `option-${option.replace(/\s+/g, '-')}`;
+                const optionElement = document.createElement('div');
+                
+                const radioInput = document.createElement('input');
+                radioInput.type = 'radio';
+                radioInput.id = optionId;
+                radioInput.name = 'option';
+                radioInput.value = option;
+                radioInput.className = 'hidden'; // Hide the default radio
+                
+                // Check if this was the user's previous answer
+                if (currentAnswer === option) {
+                    radioInput.checked = true;
+                }
+
+                const label = document.createElement('label');
+                label.htmlFor = optionId;
+                label.innerText = option;
+                label.className = 'block w-full p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-blue-400 transition-all';
+                
+                optionElement.appendChild(radioInput);
+                optionElement.appendChild(label);
+                optionsContainer.appendChild(optionElement);
+            });
+
+            // Update button visibility
+            prevBtn.classList.toggle('hidden', index === 0);
+            nextBtn.classList.toggle('hidden', index === currentSet.length - 1);
+            submitBtn.classList.toggle('hidden', index !== currentSet.length - 1);
+        }
+
+        /**
+         * Saves the currently selected answer
+         */
+        function saveAnswer() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (selectedOption) {
+                userAnswers[currentQuestionIndex] = selectedOption.value;
+            }
+        }
+
+        /**
+         * Navigates to the next question
+         */
+        function nextQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex < currentSet.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            }
+        }
+
+        /**
+         * Navigates to the previous question
+         */
+        function prevQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        }
+
+        /**
+         * Submits the test and shows results
+         */
+        function submitTest() {
+            saveAnswer();
+            calculateAndShowResults();
+            showView('results-screen');
+        }
+
+        /**
+         * Calculates the score and builds the review HTML
+         */
+        function calculateAndShowResults() {
+            let score = 0;
+            let resultsHtml = '';
+
+            currentSet.forEach((q, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === q.answer;
+
+                if (isCorrect) {
+                    score++;
+                }
+
+                resultsHtml += `
+                    <div class="p-4 border rounded-lg ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}">
+                        <p class="font-semibold mb-2">${index + 1}. ${q.question}</p>
+                        <p class="text-sm font-medium ${isCorrect ? 'text-green-700' : 'text-red-700'}">
+                            Your answer: ${userAnswer || 'No answer'}
+                        </p>
+                        ${!isCorrect ? `
+                            <p class="text-sm font-medium text-green-800 mt-1">
+                                Correct answer: ${q.answer}
+                            </p>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            // Display score
+            const percentage = Math.round((score / currentSet.length) * 100);
+            scoreSummary.innerHTML = `
+                <h2 class="text-4xl font-bold text-blue-800 mb-2">You Scored: ${score} / ${currentSet.length}</h2>
+                <p class="text-2xl font-semibold text-slate-600">(${percentage}%)</p>
+            `;
+
+            // Display review
+            resultsContent.innerHTML = resultsHtml;
+        }
+
+        /**
+         * Resets the app and goes back to the home screen
+         */
+        function goHome() {
+            currentSetKey = null;
+            currentSet = [];
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            showView('selection-screen');
+        }
+
+        // --- 5. Initializer ---
+        // Show the selection screen when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            showView('selection-screen');
+        });
+
+    </script>
+</body>
+</html>
