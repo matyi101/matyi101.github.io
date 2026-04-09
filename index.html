@@ -5,124 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDMP Fundamentals Practice Exam</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; line-height: 1.6; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; }
-        .question { font-weight: bold; margin-bottom: 20px; font-size: 1.1em; }
-        .options { list-style: none; padding: 0; }
-        .option { background: #e9ecef; margin-bottom: 10px; padding: 12px; border-radius: 5px; cursor: pointer; transition: 0.2s; }
-        .option:hover { background: #dee2e6; }
-        .correct { background: #d4edda !important; border-color: #c3e6cb; }
-        .incorrect { background: #f8d7da !important; border-color: #f5c6cb; }
-        .explanation { margin-top: 15px; padding: 15px; background: #e7f3ff; border-left: 5px solid #2196f3; display: none; }
-        #next-btn { display: block; width: 100%; padding: 10px; background: #2c3e50; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
-        #score-area { text-align: center; font-size: 1.2em; font-weight: bold; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: auto; padding: 20px; background-color: #f4f4f4; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .question { font-weight: bold; font-size: 1.2em; margin-bottom: 15px; }
+        .option { display: block; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; }
+        .option:hover { background-color: #e9e9e9; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb; }
+        .explanation { display: none; margin-top: 15px; padding: 15px; background: #e2f3ff; border-left: 5px solid #007bff; }
+        #results { font-size: 1.5em; text-align: center; font-weight: bold; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>CDMP Fundamentals Exam</h1>
-    <div id="quiz-box">
-        <div id="question-text" class="question"></div>
-        <ul id="options-list" class="options"></ul>
-        <div id="explanation-box" class="explanation"></div>
-        <button id="next-btn" style="display:none;">Next Question</button>
-    </div>
-    <div id="score-area"></div>
-</div>
+    <h1>CDMP Fundamentals Exam (DMBoK v2)</h1>
+    <div id="quiz-container"></div>
+    <div id="results"></div>
 
-<script>
-    const questions = [
-        {
-            q: "According to the DAMA-DMBOK2, which of the following is at the center of the DAMA Wheel?",
-            options: ["Data Architecture", "Data Governance", "Metadata Management", "Data Quality"],
-            correct: 1,
-            exp: "Data Governance is the central functional area in the DAMA Wheel because it provides the oversight and coordination for all other data management functions."
-        },
-        {
-            q: "Which environmental element of the DAMA Hexagon focuses on the 'how'—the documented processes and steps used to perform activities?",
-            options: ["Tools", "Organization and Culture", "Methods and Processes", "Roles and Responsibilities"],
-            correct: 2,
-            exp: "Methods and Processes describe the systematic procedures and workflows required to implement data management activities."
-        },
-        {
-            q: "In the context of Data Modeling, which model type is independent of any specific technology or Database Management System (DBMS)?",
-            options: ["Physical Data Model", "Conceptual Data Model", "Logical Data Model", "Both Conceptual and Logical"],
-            correct: 3,
-            exp: "Both Conceptual and Logical Data Models are business-oriented and technology-independent. The Physical Data Model is the only one specific to a DBMS."
-        },
-        {
-            q: "What is the primary goal of Master Data Management (MDM)?",
-            options: ["To store all historical transactions", "To provide a consistent, 'golden' version of core business entities", "To manage Big Data streams", "To create ad-hoc SQL reports"],
-            correct: 1,
-            exp: "MDM aims to provide a 'Single Version of Truth' or a 'Golden Record' for shared data entities like Customer, Product, or Location."
-        },
-        {
-            q: "Which data quality dimension measures the degree to which data represents the reality it is intended to describe?",
-            options: ["Timeliness", "Completeness", "Accuracy", "Consistency"],
-            correct: 2,
-            exp: "Accuracy refers to the correctness of the data values in representing the real-world objects or events they describe."
+    <script>
+        const questions = [
+            {
+                q: "Which of the following is the primary goal of Data Governance?",
+                options: ["To manage data as a valuable asset", "To install a central metadata repository", "To eliminate all data silos", "To automate data cleaning"],
+                correct: 0,
+                ref: "DMBoK2, Page 67",
+                why: "Data Governance is defined as the exercise of authority and control over the management of data assets (Henderson et al., 2017)."
+            },
+            {
+                q: "The DAMA-DMBOK2 Wheel consists of how many Knowledge Areas?",
+                options: ["9", "10", "11", "12"],
+                correct: 2,
+                ref: "DMBoK2, Page 35",
+                why: "The DAMA Wheel includes 11 Knowledge Areas: Governance, Architecture, Modeling, Storage, Security, Integration, Documents, Reference/Master Data, Warehousing/BI, Metadata, and Quality."
+            },
+            {
+                q: "In the Context Diagram format, which element describes the 'Rules' and 'Standards'?",
+                options: ["Activities", "Inputs", "Drivers", "Deliverables"],
+                correct: 2,
+                ref: "DMBoK2, Page 38",
+                why: "Drivers include goals, principles, and standards that guide the Knowledge Area (Henderson et al., 2017)."
+            },
+            {
+                q: "Which role is primarily responsible for the business-side 'meaning' and 'quality' of data?",
+                options: ["Data Architect", "Data Steward", "Database Administrator", "Data Scientist"],
+                correct: 1,
+                ref: "DMBoK2, Page 73",
+                why: "Data Stewards act as the bridge between IT and business, ensuring data quality and alignment with business needs."
+            },
+            {
+                q: "ACID properties (Atomicity, Consistency, Isolation, Durability) are primarily associated with:",
+                options: ["Data Warehousing", "Relational Database Transactions", "Data Mining", "NoSQL Document Stores"],
+                correct: 1,
+                ref: "DMBoK2, Page 174",
+                why: "ACID is a set of properties of database transactions intended to guarantee data validity despite errors or power failures."
+            },
+            {
+                q: "Which data modeling level is independent of technology and focuses on business definitions?",
+                options: ["Physical Data Model", "Logical Data Model", "Conceptual Data Model", "Canonical Data Model"],
+                correct: 2,
+                ref: "DMBoK2, Page 129",
+                why: "Conceptual models represent high-level business concepts and their relationships, independent of any implementation details."
+            },
+            {
+                q: "What is the central Knowledge Area of the DAMA Wheel?",
+                options: ["Data Quality", "Data Governance", "Metadata Management", "Data Architecture"],
+                correct: 1,
+                ref: "DMBoK2, Page 35",
+                why: "Data Governance is at the center because it provides the oversight and authority for all other knowledge areas."
+            },
+            {
+                q: "In Master Data Management (MDM), which architecture uses a central hub for data updates that are then pushed to subscribers?",
+                options: ["Registry", "Consolidated", "Transactional / Hub-and-Spoke", "Coexistence"],
+                correct: 2,
+                ref: "DMBoK2, Page 360",
+                why: "A Transactional hub acts as the system of record where data is mastered and synchronized across the enterprise."
+            },
+            {
+                q: "Which dimension of Data Quality refers to the degree to which data represents the reality it describes?",
+                options: ["Timeliness", "Accuracy", "Completeness", "Consistency"],
+                correct: 1,
+                ref: "DMBoK2, Page 458",
+                why: "Accuracy is defined as the degree to which data correctly describes the 'real world' object or event being described."
+            },
+            {
+                q: "Data Life Cycle Management focuses on data from:",
+                options: ["Creation to Disposal", "Storage to Retrieval", "Input to Output", "Ingestion to Dashboard"],
+                correct: 0,
+                ref: "DMBoK2, Page 28",
+                why: "Data Management must cover the entire lifecycle from planning and creation to archiving and destruction."
+            }
+        ];
+
+        let currentScore = 0;
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            questions.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerHTML = `
+                    <div class="question">${index + 1}. ${item.q}</div>
+                    <div id="options-${index}">
+                        ${item.options.map((opt, i) => `<div class="option" onclick="checkAnswer(${index}, ${i})">${opt}</div>`).join('')}
+                    </div>
+                    <div id="exp-${index}" class="explanation">
+                        <strong>Answer: ${item.options[item.correct]}</strong><br>
+                        <em>${item.ref}</em><br><br>
+                        ${item.why}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
         }
-        // Add 45 more questions here following the same format
-    ];
 
-    let currentIdx = 0;
-    let score = 0;
+        window.checkAnswer = function(qIdx, choiceIdx) {
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const expDiv = document.getElementById(`exp-${qIdx}`);
+            const options = optionsDiv.getElementsByClassName('option');
+            
+            if (expDiv.style.display === "block") return; // Prevent double clicking
 
-    const qText = document.getElementById('question-text');
-    const optList = document.getElementById('options-list');
-    const expBox = document.getElementById('explanation-box');
-    const nextBtn = document.getElementById('next-btn');
+            if (choiceIdx === questions[qIdx].correct) {
+                options[choiceIdx].classList.add('correct');
+                currentScore++;
+            } else {
+                options[choiceIdx].classList.add('incorrect');
+                options[questions[qIdx].correct].classList.add('correct');
+            }
+            
+            expDiv.style.display = "block";
+            updateScore();
+        };
 
-    function loadQuestion() {
-        const item = questions[currentIdx];
-        qText.innerText = `Question ${currentIdx + 1}: ${item.q}`;
-        optList.innerHTML = '';
-        expBox.style.display = 'none';
-        nextBtn.style.display = 'none';
-
-        item.options.forEach((opt, i) => {
-            const li = document.createElement('li');
-            li.innerText = opt;
-            li.classList.add('option');
-            li.onclick = () => checkAnswer(i);
-            optList.appendChild(li);
-        });
-    }
-
-    function checkAnswer(selected) {
-        const item = questions[currentIdx];
-        const options = document.querySelectorAll('.option');
-        
-        if (selected === item.correct) {
-            options[selected].classList.add('correct');
-            score++;
-        } else {
-            options[selected].classList.add('incorrect');
-            options[item.correct].classList.add('correct');
+        function updateScore() {
+            document.getElementById('results').innerText = `Current Score: ${currentScore} / ${questions.length}`;
         }
 
-        expBox.innerHTML = `<strong>Explanation:</strong> ${item.exp}`;
-        expBox.style.display = 'block';
-        nextBtn.style.display = 'block';
-        
-        // Disable further clicking
-        options.forEach(opt => opt.style.pointerEvents = 'none');
-    }
-
-    nextBtn.onclick = () => {
-        currentIdx++;
-        if (currentIdx < questions.length) {
-            loadQuestion();
-        } else {
-            document.getElementById('quiz-box').innerHTML = `<h2>Exam Complete!</h2>`;
-            document.getElementById('score-area').innerText = `Final Score: ${score} / ${questions.length}`;
-        }
-    };
-
-    loadQuestion();
-</script>
-
+        renderQuiz();
+    </script>
 </body>
 </html>
