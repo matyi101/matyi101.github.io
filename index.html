@@ -3,1049 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Foundations Practice Test</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Use Inter font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>CDMP Fundamentals Practice Exam</title>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Custom styles for selected and correct/incorrect answers */
-        .option-btn.selected {
-            background-color: #dbeafe; /* blue-100 */
-            border-color: #3b82f6; /* blue-500 */
-            font-weight: 600;
-        }
-        .option-btn.disabled {
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
-        .review-option.correct {
-            background-color: #dcfce7; /* green-100 */
-            border-color: #22c55e; /* green-500 */
-            color: #15803d; /* green-700 */
-            font-weight: 600;
-        }
-        .review-option.incorrect {
-            background-color: #fee2e2; /* red-100 */
-            border-color: #ef4444; /* red-500 */
-            color: #b91c1c; /* red-700 */
-            font-weight: 600;
-            text-decoration: line-through;
-        }
-        .review-option.base {
-            background-color: #f3f4f6; /* gray-100 */
-            border-color: #d1d5db; /* gray-300 */
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        .question { font-weight: bold; margin-bottom: 20px; font-size: 1.1em; }
+        .options { list-style: none; padding: 0; }
+        .option { background: #e9ecef; margin-bottom: 10px; padding: 12px; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .option:hover { background: #dee2e6; }
+        .correct { background: #d4edda !important; border-color: #c3e6cb; }
+        .incorrect { background: #f8d7da !important; border-color: #f5c6cb; }
+        .explanation { margin-top: 15px; padding: 15px; background: #e7f3ff; border-left: 5px solid #2196f3; display: none; }
+        #next-btn { display: block; width: 100%; padding: 10px; background: #2c3e50; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        #score-area { text-align: center; font-size: 1.2em; font-weight: bold; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body>
 
-    <main class="w-full max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden my-10">
-        
-        <!-- ======================= -->
-        <!--      Home Screen        -->
-        <!-- ======================= -->
-        <div id="home-screen" class="p-8 md:p-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">IT Foundations Practice Test</h1>
-            <p class="text-lg text-gray-600 mb-8">
-                Test your knowledge with 100 questions across four difficulty levels.
-                Choose a set to begin.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button onclick="selectSet(1)" class="set-btn bg-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-blue-700 transition-all shadow-md text-lg">
-                    Set 1: Basic Concepts
-                </button>
-                <button onclick="selectSet(2)" class="set-btn bg-green-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-green-700 transition-all shadow-md text-lg">
-                    Set 2: Hardware & Software
-                </button>
-                <button onclick="selectSet(3)" class="set-btn bg-yellow-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-yellow-700 transition-all shadow-md text-lg">
-                    Set 3: Networking & Security
-                </button>
-                <button onclick="selectSet(4)" class="set-btn bg-red-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-red-700 transition-all shadow-md text-lg">
-                    Set 4: Advanced Topics & Data
-                </button>
-            </div>
-        </div>
+<div class="container">
+    <h1>CDMP Fundamentals Exam</h1>
+    <div id="quiz-box">
+        <div id="question-text" class="question"></div>
+        <ul id="options-list" class="options"></ul>
+        <div id="explanation-box" class="explanation"></div>
+        <button id="next-btn" style="display:none;">Next Question</button>
+    </div>
+    <div id="score-area"></div>
+</div>
 
-        <!-- ======================= -->
-        <!--       Quiz Screen       -->
-        <!-- ======================= -->
-        <div id="quiz-screen" class="p-8 md:p-12 hidden">
-            <header class="mb-8">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 id="question-header" class="text-2xl font-bold text-gray-800">Set 1: Question 1 of 25</h2>
-                    <button onclick="goHome()" class="text-sm text-blue-600 hover:underline">&larr; Back to Home</button>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5">
-                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 4%"></div>
-                </div>
-            </header>
-
-            <div id="question-container">
-                <p id="question-text" class="text-xl md:text-2xl font-semibold text-gray-900 mb-6">
-                    What does CPU stand for?
-                </p>
-                <div id="options-container" class="space-y-3">
-                    <!-- Options will be dynamically inserted here -->
-                </div>
-            </div>
-
-            <footer id="nav-container" class="mt-8 text-right">
-                <!-- Next/Finish button will be dynamically inserted here -->
-            </footer>
-        </div>
-
-        <!-- ======================= -->
-        <!--     Results Screen      -->
-        <!-- ======================= -->
-        <div id="results-screen" class="p-8 md:p-12 hidden">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Quiz Complete!</h1>
-            <div id="score-display" class="text-2xl font-semibold text-blue-700 bg-blue-100 p-6 rounded-lg mb-8">
-                Your score: 20 out of 25 (80%)
-            </div>
-
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Review Your Answers</h2>
-            <div id="review-container" class="space-y-8">
-                <!-- Review content will be dynamically inserted here -->
-            </div>
-
-            <footer class="mt-10 text-center">
-                <button onclick="goHome()" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-all shadow-md text-lg">
-                    Back to Home
-                </button>
-            </footer>
-        </div>
-
-    </main>
-
-    <script>
-        // ===================================
-        //        QUIZ DATA
-        // ===================================
-        const allQuestions = [
-            // --- SET 1: Basic Concepts (Easy) ---
-            {
-                set: 1,
-                question: "What does 'CPU' stand for?",
-                options: ["Central Processing Unit", "Computer Personal Unit", "Central Power Unit", "Core Processing Unit"],
-                answer: 0,
-                explanation: "The CPU (Central Processing Unit) is the primary component of a computer that performs most of the processing inside the computer. It is often referred to as the 'brain' of the computer."
-            },
-            {
-                set: 1,
-                question: "What is 'RAM' used for?",
-                options: ["Long-term storage", "Temporary (volatile) storage for running programs", "Connecting to the internet", "Powering the monitor"],
-                answer: 1,
-                explanation: "RAM (Random Access Memory) is volatile memory that temporarily stores data that the CPU needs to access quickly. Data in RAM is lost when the computer is turned off."
-            },
-            {
-                set: 1,
-                question: "Which of these is an example of an Operating System?",
-                options: ["Microsoft Office", "Google Chrome", "Microsoft Windows", "Adobe Photoshop"],
-                answer: 2,
-                explanation: "An Operating System (OS) is system software that manages computer hardware and software resources and provides common services for computer programs. Windows, macOS, and Linux are common examples."
-            },
-            {
-                set: 1,
-                question: "What does 'URL' stand for?",
-                options: ["Universal Resource Locator", "Uniform Resource Locator", "Universal Reference Link", "Uniform Reference Link"],
-                answer: 1,
-                explanation: "A URL (Uniform Resource Locator) is a web address, a reference to a web resource that specifies its location on a computer network and a mechanism for retrieving it."
-            },
-            {
-                set: 1,
-                question: "What is the main function of a Hard Disk Drive (HDD)?",
-                options: ["To process instructions", "To display images", "Long-term (non-volatile) storage of data", "To connect to Wi-Fi"],
-                answer: 2,
-                explanation: "An HDD (Hard Disk Drive) is a non-volatile storage device that stores digital data permanently. Unlike RAM, it retains data even when the power is off."
-            },
-            {
-                set: 1,
-                question: "Which device is used to input text and commands into a computer?",
-                options: ["Mouse", "Monitor", "Printer", "Keyboard"],
-                answer: 3,
-                explanation: "A keyboard is the primary input device used to enter text, numbers, and commands into a computer."
-            },
-            {
-                set: 1,
-                question: "What does 'Wi-Fi' stand for?",
-                options: ["Wireless Fidelity", "Wireless Internet", "Wireless Connection", "It doesn't stand for anything"],
-                answer: 0,
-                explanation: "'Wi-Fi' is a trademarked term for a technology that allows devices to connect to a local area network (LAN) wirelessly. It is based on the IEEE 802.11 standards and is often marketed as 'Wireless Fidelity'."
-            },
-            {
-                set: 1,
-                question: "What is 'software'?",
-                options: ["The physical parts of a computer", "The set of instructions that tells a computer what to do", "The computer's screen", "The power cable"],
-                answer: 1,
-                explanation: "Software refers to the programs, applications, and other operating information used by a computer. It is intangible, unlike hardware, which is the physical components."
-            },
-            {
-                set: 1,
-                question: "Which of these is NOT an input device?",
-                options: ["Keyboard", "Mouse", "Scanner", "Printer"],
-                answer: 3,
-                explanation: "An input device sends data to a computer. A keyboard, mouse, and scanner are all input devices. A printer is an output device, as it receives data from the computer to create a physical copy."
-            },
-            {
-                set: 1,
-                question: "What does 'HTML' stand for?",
-                options: ["HyperText Markup Language", "High-Level Text Machine Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language"],
-                answer: 0,
-                explanation: "HTML (HyperText Markup Language) is the standard markup language used to create and design web pages."
-            },
-            {
-                set: 1,
-                question: "What is a 'browser' used for?",
-                options: ["To write code", "To view web pages on the internet", "To edit photos", "To create spreadsheets"],
-                answer: 1,
-                explanation: "A web browser (like Google Chrome, Firefox, or Safari) is a software application used to access, retrieve, and display information on the World Wide Web."
-            },
-            {
-                set: 1,
-                question: "What is the 'cloud' in cloud computing?",
-                options: ["A weather satellite", "A physical hard drive you own", "A network of servers on the internet", "A type of wireless connection"],
-                answer: 2,
-                explanation: "In cloud computing, 'the cloud' refers to a network of remote servers hosted on the internet, used for storing, managing, and processing data, rather than on a local server or personal computer."
-            },
-            {
-                set: 1,
-                question: "What is an 'algorithm'?",
-                options: ["A type of computer virus", "A physical computer component", "A step-by-step procedure for solving a problem", "A computer programming language"],
-                answer: 2,
-                explanation: "An algorithm is a finite sequence of well-defined, computer-implementable instructions, typically to solve a class of problems or to perform a computation."
-            },
-            {
-                set: 1,
-                question: "What is an 'IP Address'?",
-                options: ["A physical address for your computer", "A license key for software", "A unique number that identifies a device on a network", "A type of computer port"],
-                answer: 2,
-                explanation: "An IP (Internet Protocol) Address is a unique numerical label assigned to each device (e.g., computer, printer) participating in a computer network that uses the Internet Protocol for communication."
-            },
-            {
-                set: 1,
-                question: "Which component is often called the 'brain' of the computer?",
-                options: ["RAM", "Motherboard", "Hard Drive", "CPU"],
-                answer: 3,
-                explanation: "The CPU (Central Processing Unit) is often called the 'brain' because it executes the instructions that make up a computer program and controls the operations of all other components."
-            },
-            {
-                set: 1,
-                question: "What is 'malware' short for?",
-                options: ["Malicious Hardware", "Mainframe Software", "Malicious Software", "Manual Software"],
-                answer: 2,
-                explanation: "Malware is short for 'malicious software'. It is a broad term for any software intentionally designed to cause disruption, damage, or gain unauthorized access to a computer system."
-            },
-            {
-                set: 1,
-                question: "What does 'USB' stand for?",
-                options: ["Uniform Serial Bus", "Universal Serial Bus", "United Serial Box", "Universal System Block"],
-                answer: 1,
-                explanation: "USB (Universal Serial Bus) is an industry standard that establishes specifications for cables, connectors, and protocols for connection, communication, and power supply between computers and peripherals."
-            },
-            {
-                set: 1,
-                question: "What is a 'file extension'?",
-                options: ["The name of a file", "The size of a file", "A tag at the end of a filename that indicates its type", "A folder used to store files"],
-                answer: 2,
-                explanation: "A file extension (e.g., .txt, .jpg, .pdf) is a suffix at the end of a filename that indicates the type of file and the application that should be used to open it."
-            },
-            {
-                set: 1,
-                question: "Which of these is a programming language?",
-                options: ["HTML", "Python", "CSS", "HTTP"],
-                answer: 1,
-                explanation: "Python is a high-level, general-purpose programming language. HTML and CSS are markup/styling languages, and HTTP is a protocol."
-            },
-            {
-                set: 1,
-                question: "What is a 'network' in IT?",
-                options: ["A group of computers connected together", "A television channel", "A social media platform", "A type of software"],
-                answer: 0,
-                explanation: "A computer network is a group of two or more interconnected computer systems that can communicate and share resources (like files, printers, and internet connections)."
-            },
-            {
-                set: 1,
-                question: "What does 'LAN' stand for?",
-                options: ["Long Area Network", "Local Access Network", "Local Area Network", "Link Area Network"],
-                answer: 2,
-                explanation: "A LAN (Local Area Network) is a computer network that interconnects computers within a limited area, such as a residence, school, laboratory, or office building."
-            },
-            {
-                set: 1,
-                question: "What is an 'email'?",
-                options: ["A physical letter", "A method of exchanging digital messages", "A type of website", "A video conferencing tool"],
-                answer: 1,
-                explanation: "Email (Electronic Mail) is a method of exchanging messages between people using electronic devices."
-            },
-            {
-                set: 1,
-                question: "What is the function of a 'router'?",
-                options: ["To store files", "To display websites", "To type documents", "To direct data packets between computer networks"],
-                answer: 3,
-                explanation: "A router is a networking device that forwards data packets between computer networks. Routers perform the traffic-directing functions on the Internet."
-            },
-            {
-                set: 1,
-                question: "What is a 'pixel'?",
-                options: ["A type of computer", "A unit of measure for printing speed", "The smallest addressable element in a digital display", "A type of internet connection"],
-                answer: 2,
-                explanation: "A pixel (picture element) is the smallest controllable element of a picture represented on a screen. A display is made up of a grid of thousands or millions of pixels."
-            },
-            {
-                set: 1,
-                question: "What does 'HTTP' stand for?",
-                options: ["HyperText Transfer Protocol", "High-Level Transfer Protocol", "HyperText Transmission Protocol", "Hyperlink Text Transfer Protocol"],
-                answer: 0,
-                explanation: "HTTP (HyperText Transfer Protocol) is the foundation of data communication for the World Wide Web. It defines how messages are formatted and transmitted."
-            },
-
-            // --- SET 2: Hardware & Software (Intermediate) ---
-            {
-                set: 2,
-                question: "What is the difference between RAM and an SSD?",
-                options: ["RAM is volatile storage; SSD is non-volatile storage", "RAM is non-volatile; SSD is volatile", "RAM is for input; SSD is for output", "RAM is software; SSD is hardware"],
-                answer: 0,
-                explanation: "RAM (Random Access Memory) is volatile, meaning it loses its data when power is lost. It's used for active programs. An SSD (Solid State Drive) is non-volatile, meaning it retains data without power, and is used for long-term storage (like an operating system and files)."
-            },
-            {
-                set: 2,
-                question: "What is 'firmware'?",
-                options: ["A type of strong computer case", "A type of malware", "Software permanently programmed into a hardware device", "A flexible, non-rigid type of software"],
-                answer: 2,
-                explanation: "Firmware is a specific class of computer software that provides low-level control for a device's specific hardware. It is held in non-volatile memory, like ROM or flash memory."
-            },
-            {
-                set: 2,
-                question: "What is the main purpose of a 'motherboard'?",
-                options: ["To store long-term data", "To connect all the main components of a computer", "To cool the CPU", "To provide a user interface"],
-                answer: 1,
-                explanation: "The motherboard is the main printed circuit board (PCB) that holds and allows communication between many of the crucial electronic components of a system, such as the CPU, RAM, and expansion slots."
-            },
-            {
-                set: 2,
-                question: "What is 'open-source' software?",
-                options: ["Software that is free to use", "Software that only works on Linux", "Software with source code that is publicly available", "Software that has not been completed"],
-                answer: 2,
-                explanation: "Open-source software is software with source code that anyone can inspect, modify, and enhance. It may be free, but its primary definition relates to the accessibility of its code."
-            },
-            {
-                set: 2,
-                question: "What does 'GUI' stand for?",
-                options: ["Graphical User Interface", "General User Interaction", "Graphics Utility Interface", "Global Unique Identifier"],
-                answer: 0,
-                explanation: "A GUI (Graphical User Interface) allows users to interact with electronic devices through graphical icons and visual indicators, as opposed to text-based command-line interfaces."
-            },
-            {
-                set: 2,
-                question: "What is a Solid State Drive (SSD) and how does it differ from an HDD?",
-                options: ["It's a magnetic tape drive; it's slower than an HDD", "It uses spinning platters; it's faster than an HDD", "It uses flash memory; it has no moving parts and is faster", "It's an optical drive; it uses lasers"],
-                answer: 2,
-                explanation: "An SSD (Solid State Drive) uses flash-based memory and has no moving parts. This makes it much faster, quieter, and more durable than a traditional HDD (Hard Disk Drive), which uses spinning magnetic platters."
-            },
-            {
-                set: 2,
-                question: "What is 'binary code'?",
-                options: ["A programming language", "A code that uses only two symbols, 0 and 1", "A type of encryption", "A code used for web design"],
-                answer: 1,
-                explanation: "Binary code is the most basic language of computers. It represents all data and instructions using a two-symbol system of '0' (off) and '1' (on)."
-            },
-            {
-                set: 2,
-                question: "What is the function of a 'compiler'?",
-                options: ["To translate high-level programming code into machine code", "To fix errors in code automatically", "To run multiple programs at once", "To connect to the internet"],
-                answer: 0,
-                explanation: "A compiler is a special program that translates code written in a high-level programming language (like Python or C++) into a lower-level language (like machine code) that the CPU can understand and execute."
-            },
-            {
-                set: 2,
-                question: "What is 'virtualization'?",
-                options: ["Creating a fake website to steal data", "A new 3D graphics technology", "Creating a virtual (rather than actual) version of something", "A type of computer virus"],
-                answer: 2,
-                explanation: "Virtualization is the process of creating a software-based, or 'virtual', representation of something, such as virtual applications, servers, storage, and networks. A common use is running multiple 'virtual machines' (VMs) on a single physical computer."
-            },
-            {
-                set: 2,
-                question: "What is 'SaaS' in the context of cloud computing?",
-                options: ["Software as a Service", "System as a Service", "Security as a Service", "Storage as a Service"],
-                answer: 0,
-                explanation: "SaaS (Software as a Service) is a cloud computing model where software is licensed on a subscription basis and is centrally hosted. Users access it via a web browser, e.g., Google Docs or Salesforce."
-            },
-            {
-                set: 2,
-                question: "What is the 'kernel' of an Operating System?",
-                options: ["The user interface", "The core component that manages the system", "A basic text editor", "The set of default applications"],
-                answer: 1,
-                explanation: "The kernel is the central and most fundamental part of an operating system. It has complete control over everything in the system and manages tasks like memory management, process management, and device management."
-            },
-            {
-                set: 2,
-                question: "What is the primary difference between a 'bit' and a 'byte'?",
-                options: ["A bit is for storage, a byte is for processing", "A bit is a '0' or '1', and a byte is a group of 8 bits", "A bit is larger than a byte", "They are the same thing"],
-                answer: 1,
-                explanation: "A 'bit' (binary digit) is the smallest unit of data in a computer, a single '0' or '1'. A 'byte' is a group of 8 bits, which is often used to represent a single character, like the letter 'A'."
-            },
-            {
-                set: 2,
-                question: "What does 'BIOS' stand for, and what does it do?",
-                options: ["Basic Input/Output System; it manages peripherals", "Binary Input/Output System; it converts code to binary", "Basic Input/Output System; it initializes hardware during startup", "Basic Integrated Operating System; it's a simple OS"],
-                answer: 2,
-                explanation: "BIOS (Basic Input/Output System) is firmware stored on a chip on the motherboard. Its primary job is to initialize and test the system hardware (like the keyboard, RAM, and disk drives) when the computer is first powered on."
-            },
-            {
-                set: 2,
-                question: "What is 'phishing'?",
-                options: ["A method for cooling a CPU", "A fraudulent attempt to obtain sensitive information by disguising as a trustworthy entity", "A type of programming language", "A way to speed up internet connections"],
-                answer: 1,
-                explanation: "Phishing is a type of social engineering attack, often done via email, where an attacker sends a fraudulent message designed to trick a victim into revealing sensitive information (like passwords or credit card numbers)."
-            },
-            {
-                set: 2,
-                question: "What is the difference between 'application software' and 'system software'?",
-                options: ["Application software is free; system software is paid", "Application software is for users; system software runs the computer", "Application software is simple; system software is complex", "There is no difference"],
-                answer: 1,
-                explanation: "System software (like an OS or drivers) manages the computer's basic functions. Application software (like a web browser or word processor) is designed to perform specific tasks for the end-user."
-            },
-            {
-                set: 2,
-                question: "What is a 'file system' (e.g., NTFS, FAT32, APFS)?",
-                options: ["A way to organize physical paper files", "A type of database", "A method an OS uses to control how data is stored and retrieved on a disk", "A cabinet for storing hard drives"],
-                answer: 2,
-                explanation: "A file system defines the structure and logic used to store, organize, and access files on a storage device like a hard drive or SSD. It manages file names, permissions, and their physical location on the disk."
-            },
-            {
-                set: 2,
-                question: "What is 'Boolean logic' in computing?",
-                options: ["A type of computer hardware", "A form of algebra based on 'true' and 'false' values", "A method for drawing graphics", "A programming language"],
-                answer: 1,
-                explanation: "Boolean logic is a form of algebra centered on three simple logical operators: AND, OR, and NOT. It's fundamental to computing because it works with 'true' (1) and 'false' (0) values, just like binary."
-            },
-            {
-                set: 2,
-                question: "What is the role of a 'GPU'?",
-                options: ["To manage network connections", "To perform complex calculations for sound", "To rapidly process and render images and graphics", "To store the operating system"],
-                answer: 2,
-                explanation: "A GPU (Graphics Processing Unit) is a specialized electronic circuit designed to rapidly manipulate and alter memory to accelerate the creation of images for output to a display. They are crucial for gaming, video editing, and machine learning."
-            },
-            {
-                set: 2,
-                question: "What is 'bandwidth' in networking?",
-                options: ["The physical width of a network cable", "The maximum rate of data transfer across a network", "The number of devices on a network", "A type of internet connection"],
-                answer: 1,
-                explanation: "Bandwidth is a measure of the maximum amount of data that can be transmitted over a network connection in a given amount of time, usually measured in bits per second (bps)."
-            },
-            {
-                set: 2,
-                question: "What is 'malware'?",
-                options: ["Any software that is difficult to use", "Software designed to perform a specific task", "Software that has a lot of bugs", "Software intentionally designed to cause harm or disruption"],
-                answer: 3,
-                explanation: "Malware, short for 'malicious software', is a broad term for any software created to damage, disrupt, or gain unauthorized access to a computer system. Examples include viruses, worms, trojans, and ransomware."
-            },
-            {
-                set: 2,
-                question: "What is 'source code'?",
-                options: ["The binary code a computer runs", "The human-readable instructions written by a programmer", "An encrypted version of a program", "A log of a program's errors"],
-                answer: 1,
-                explanation: "Source code is the set of instructions and statements, written in a human-readable programming language (like Python, Java, or C++), that a programmer creates to build a piece of software."
-            },
-            {
-                set: 2,
-                question: "What is a 'server'?",
-                options: ["A computer or program that provides services to other computers (clients)", "Any computer that is connected to the internet", "A device used only for storing files", "A special type of web browser"],
-                answer: 0,
-                explanation: "A server is a computer, device, or program that is dedicated to managing network resources and providing functionality (a 'service') to other programs or devices, known as 'clients'."
-            },
-            {
-                set: 2,
-                question: "What is 'latency' in networking?",
-                options: ["The total bandwidth of a connection", "The amount of data that can be sent", "A measure of the time delay in data communication", "The number of errors in a transmission"],
-                answer: 2,
-                explanation: "Latency is the time it takes for a data packet to travel from its source to its destination. High latency (a long delay) results in lag, which is noticeable in video calls and online gaming."
-            },
-            {
-                set: 2,
-                question: "What is an 'API'?",
-                options: ["Advanced Programming Interface", "Application Programming Interface", "Application Process Integration", "Advanced Process Interaction"],
-                answer: 1,
-                explanation: "An API (Application Programming Interface) is a set of rules and protocols that allows different software applications to communicate with each other. It defines the 'requests' one program can make to another."
-            },
-            {
-                set: 2,
-                question: "What is a 'cookie' in the context of websites?",
-                options: ["A type of computer virus", "A small piece of data stored by a web browser on a user's computer", "A pop-up advertisement", "A setting for your browser's theme"],
-                answer: 1,
-                explanation: "A cookie is a small file that a website sends to a user's browser. The browser stores it and sends it back with future requests to the same site, allowing the site to 'remember' information about the user (like login status or items in a shopping cart)."
-            },
-
-            // --- SET 3: Networking & Security (Hard) ---
-            {
-                set: 3,
-                question: "What is the primary difference between TCP and UDP?",
-                options: ["TCP is faster; UDP is more reliable", "TCP is connection-oriented (reliable); UDP is connectionless (faster)", "TCP is for video streaming; UDP is for email", "TCP is for input; UDP is for output"],
-                answer: 1,
-                explanation: "TCP (Transmission Control Protocol) is connection-oriented, meaning it establishes a connection and ensures all packets are delivered in order, making it reliable (e.g., for web pages, email). UDP (User Datagram Protocol) is connectionless; it just sends packets without checking, making it faster but less reliable (e.g., for video streaming, online gaming)."
-            },
-            {
-                set: 3,
-                question: "What is the purpose of a 'firewall'?",
-                options: ["To speed up internet connections", "To monitor and filter network traffic to block threats", "To store and manage passwords", "To cool down server components"],
-                answer: 1,
-                explanation: "A firewall is a network security device that monitors incoming and outgoing network traffic and decides whether to allow or block specific traffic based on a defined set of security rules."
-            },
-            {
-                set: 3,
-                question: "What does 'DNS' stand for, and what is its function?",
-                options: ["Dynamic Network System; it manages network speed", "Data Naming Service; it names files", "Domain Name System; it translates domain names to IP addresses", "Digital Network Security; it secures connections"],
-                answer: 2,
-                explanation: "The DNS (Domain Name System) is the internet's phonebook. It translates human-readable domain names (like 'google.com') into machine-readable IP addresses (like '142.250.180.14') so browsers can load the correct resource."
-            },
-            {
-                set: 3,
-                question: "What is 'encryption'?",
-                options: ["The process of converting data into a secret code", "The process of deleting data permanently", "The process of backing up data", "The process of compressing data to save space"],
-                answer: 0,
-                explanation: "Encryption is the process of encoding information, converting the original plaintext into unreadable ciphertext. Only authorized parties with the correct 'key' can decrypt it back into plaintext."
-            },
-            {
-                set: 3,
-                question: "What is a 'VPN' and what is its primary use?",
-                options: ["Virtual Private Network; to create a secure, encrypted connection over a public network", "Very Public Network; to create a public Wi-Fi hotspot", "Virtual Processing Node; to increase computer speed", "Verified Private Number; to hide your phone number"],
-                answer: 0,
-                explanation: "A VPN (Virtual Private Network) creates a secure, encrypted 'tunnel' over the public internet, protecting your online privacy and data from being intercepted, especially on public Wi-Fi."
-            },
-            {
-                set: 3,
-                question: "What is a 'virus' in the context of computer security?",
-                options: ["A biological organism that infects computers", "A program that, when executed, replicates itself by modifying other computer programs", "A hardware component that has failed", "A simple bug or error in a program"],
-                answer: 1,
-                explanation: "A computer virus is a type of malicious code or program written to alter the way a computer operates and that is designed to spread from one computer to another. It requires a host program (like a document) to run."
-            },
-            {
-                set: 3,
-                question: "What is the difference between a 'virus' and a 'worm'?",
-                options: ["A virus is harmful, a worm is not", "A virus targets files, a worm targets hardware", "A virus needs a host program to spread; a worm is standalone and can self-replicate across a network", "A virus is a new threat, a worm is an old threat"],
-                answer: 2,
-                explanation: "The key difference is how they spread. A virus must attach itself to an executable file or document and requires human action (like opening the file) to spread. A worm is a standalone piece of software that can replicate itself and spread to other computers on its own, typically by exploiting a vulnerability in a network."
-            },
-            {
-                set: 3,
-                question: "What is a 'Trojan' (or Trojan Horse) in cybersecurity?",
-                options: ["A type of firewall", "Malware that disguises itself as a legitimate program", "A hardware key used for encryption", "A network diagnostic tool"],
-                answer: 1,
-                explanation: "A Trojan is a type of malware that misleads users of its true intent. It's often disguised as legitimate software (like a game or utility) but, once activated, can be used by attackers to steal data, install other malware, or take control of the system."
-            },
-            {
-                set: 3,
-                question: "What is 'SQL' (Structured Query Language) used for?",
-                options: ["To design web page layouts", "To manage and query data in relational databases", "To write operating systems", "To create 3D graphics"],
-                answer: 1,
-                explanation: "SQL (Structured Query Language) is a standard programming language used for managing relational databases. It is used to create, read, update, and delete (CRUD) data within a database."
-            },
-            {
-                set: 3,
-                question: "What is a 'MAC Address'?",
-                options: ["An address for Apple computers only", "A unique identifier assigned to a network interface controller (NIC)", "An IP address that changes dynamically", "A type of memory address in RAM"],
-                answer: 1,
-                explanation: "A MAC (Media Access Control) Address is a unique, hardware-level identifier burned into every Network Interface Card (NIC) by the manufacturer. It's used for communication on a local (LAN) network segment."
-            },
-            {
-                set: 3,
-                question: "What is 'HTTPS' and how is it different from 'HTTP'?",
-                options: ["It's a faster version of HTTP", "It's the same, just a different name", "HTTPS is 'secure' HTTP; it encrypts communication", "HTTP is for images, HTTPS is for text"],
-                answer: 2,
-                explanation: "HTTPS (HyperText Transfer Protocol Secure) is the secure version of HTTP. It uses SSL/TLS to encrypt the data transmitted between your browser and the website, preventing attackers from eavesdropping."
-            },
-            {
-                set: 3,
-                question: "What is 'two-factor authentication' (2FA)?",
-                options: ["Using two different passwords", "A security method requiring two different types of verification", "A firewall with two layers", "A password that must be entered twice"],
-                answer: 1,
-                explanation: "2FA (Two-Factor Authentication) is a security process that requires two out of three possible factors to verify a user's identity: something you know (password), something you have (phone/token), or something you are (fingerprint)."
-            },
-            {
-                set: 3,
-                question: "What is a 'DDoS' attack?",
-                options: ["A type of computer virus", "An attack that steals data from a database", "An attack that floods a server with traffic to make it unavailable", "An attack that physically destroys a server"],
-                answer: 2,
-                explanation: "A DDoS (Distributed Denial of Service) attack is a malicious attempt to disrupt the normal traffic of a targeted server or network by overwhelming it with a flood of internet traffic from many different sources (a 'botnet')."
-            },
-            {
-                set: 3,
-                question: "What is the 'OSI Model'?",
-                options: ["A model for building computer hardware", "A conceptual framework that standardizes the 7 layers of a telecommunication system", "A software development lifecycle model", "A type of database structure"],
-                answer: 1,
-                explanation: "The OSI (Open Systems Interconnection) Model is a conceptual framework that characterizes and standardizes the functions of a telecommunication or computing system into 7 abstract layers (Physical, Data Link, Network, Transport, Session, Presentation, Application)."
-            },
-            {
-                set: 3,
-                question: "What is 'DHCP' and what does it do?",
-                options: ["Dynamic Host Configuration Protocol; it automatically assigns IP addresses to devices", "Data Host Configuration Protocol; it configures web servers", "Dynamic Host Control Protocol; it controls user permissions", "Data Hyperlink Control Protocol; it manages web links"],
-                answer: 0,
-                explanation: "DHCP (Dynamic Host Configuration Protocol) is a network management protocol that automatically assigns an IP address and other network configuration parameters to each device that joins a network, simplifying network administration."
-            },
-            {
-                set: 3,
-                question: "What is 'ransomware'?",
-                options: ["Software that is held for ransom by its developers", "Malware that encrypts a victim's files and demands payment for decryption", "A hardware device that is stolen and held for ransom", "A service that recovers lost data for a fee"],
-                answer: 1,
-                explanation: "Ransomware is a type of malware that encrypts a victim's files, making them inaccessible. The attacker then demands a ransom (usually in cryptocurrency) in exchange for the decryption key."
-            },
-            {
-                set: 3,
-                question: "What is a 'packet' in networking?",
-                options: ["A physical box containing a router", "A complete software application", "A small unit of data transmitted over a network", "A type of network error"],
-                answer: 2,
-                explanation: "A packet is a small segment of a larger message. When data is sent over a network, it is broken down into packets, which are sent individually and reassembled at the destination. Each packet contains data and control information (like source/destination IP addresses)."
-            },
-            {
-                set: 3,
-                question: "What is a 'proxy server'?",
-                options: ["A server that speeds up file downloads", "An intermediary server that separates end users from the websites they browse", "The main web server for a company", "A backup server in case the main one fails"],
-                answer: 1,
-                explanation: "A proxy server acts as a gateway between a user and the internet. It forwards user requests to the internet and returns the results. It can be used for privacy, security (filtering), and caching."
-            },
-            {
-                set: 3,
-                question: "What is 'social engineering' in cybersecurity?",
-                options: ["Designing user-friendly social media apps", "The psychological manipulation of people into performing actions or divulging confidential information", "A method for building computer networks", "A type of software development"],
-                answer: 1,
-                explanation: "Social engineering is an attack method that relies on human interaction and manipulation to trick people into breaking security procedures, such as revealing passwords or giving access to a system. Phishing is a common example."
-            },
-            {
-                set: 3,
-                question: "What is 'IaaS' (Infrastructure as a Service)?",
-                options: ["A cloud model that provides virtualized computing resources over the internet", "A service for installing internet cables", "Software that you install on your own PC", "A type of internet security suite"],
-                answer: 0,
-                explanation: "IaaS (Infrastructure as a Service) is a cloud computing model that offers fundamental compute, network, and storage resources on-demand, over the internet, on a pay-as-you-go basis (e.g., Amazon Web Services EC2, Microsoft Azure VMs)."
-            },
-            {
-                set: 3,
-                question: "What is a 'port' in networking?",
-                options: ["A physical USB or HDMI connector", "An endpoint of communication in an operating system", "A website's homepage", "A type of network cable"],
-                answer: 1,
-                explanation: "In networking, a port is a virtual point where network connections start and end. They are software-based and are used to identify a specific process or service on a computer (e.g., port 80 for HTTP, port 443 for HTTPS)."
-            },
-            {
-                set: 3,
-                question: "What is 'authentication'?",
-                options: ["The process of creating a new user account", "The process of verifying the identity of a user or system", "The process of assigning permissions to a user", "The process of encrypting data"],
-                answer: 1,
-                explanation: "Authentication is the process of confirming that a user, device, or system is who or what it claims to be. This is typically done with a password, token, or biometric data."
-            },
-            {
-                set: 3,
-                question: "What is 'authorization'?",
-                options: ["The process of verifying a user's identity", "The process of creating an account", "The process of determining what a verified user is allowed to do", "The process of logging user activity"],
-                answer: 2,
-                explanation: "Authorization happens *after* authentication. It is the process of giving a user permission to access a specific resource or perform a specific action (e.g., 'User_Admin' is authorized to delete files, but 'User_Guest' is not)."
-            },
-            {
-                set: 3,
-                question: "What is a 'botnet'?",
-                options: ["A network of friendly helper robots", "A network of private computers infected with malicious software and controlled as a group", "A social network for IT professionals", "A new type of wireless network technology"],
-                answer: 1,
-                explanation: "A botnet is a collection of internet-connected devices, each of which is running one or more 'bots', that have been hijacked by a cybercriminal. Botnets are often used to conduct DDoS attacks, send spam, or mine cryptocurrency."
-            },
-            {
-                set: 3,
-                question: "What is a 'zero-day' vulnerability?",
-                options: ["A vulnerability that is easy to fix", "A vulnerability in a system that has just been released", "A software vulnerability that is unknown to the vendor and has no patch", "A vulnerability that has been public for 0 days (i.e., just patched)"],
-                answer: 2,
-                explanation: "A 'zero-day' vulnerability is a flaw in software, hardware, or firmware that is unknown to the party responsible for patching it. Because it's unpatched, attackers can exploit it to adversely affect a system."
-            },
-
-            // --- SET 4: Advanced Topics & Data (Expert) ---
-            {
-                set: 4,
-                question: "What is a 'data structure'?",
-                options: ["A physical building for storing servers", "A way of organizing, managing, and storing data in a computer", "A type of database", "A network's physical layout"],
-                answer: 1,
-                explanation: "A data structure is a specific format for organizing, processing, retrieving, and storing data. Common examples include arrays, linked lists, stacks, queues, trees, and graphs. Choosing the right data structure is crucial for efficient programming."
-            },
-            {
-                set: 4,
-                question: "What is the difference between 'structured' and 'unstructured' data?",
-                options: ["Structured data is in databases; unstructured data is in text files", "Structured data is well-organized (e.g., in tables); unstructured data is not (e.g., text, video)", "Structured data is small; unstructured data is large ('big data')", "Structured data is internal; unstructured data is from the internet"],
-                answer: 1,
-                explanation: "Structured data has a clearly defined data model and format, often stored in tables with rows and columns (e.g., a SQL database). Unstructured data has no predefined format (e.g., emails, social media posts, images, audio files)."
-            },
-            {
-                set: 4,
-                question: "What is 'Big Data'?",
-                options: ["A very large hard drive", "A popular database software", "Extremely large and complex data sets that traditional software can't handle", "A type of supercomputer"],
-                answer: 2,
-                explanation: "Big Data refers to data sets that are too large or complex for traditional data-processing application software to adequately deal with. It's often characterized by the '3 Vs': Volume (large amount), Velocity (high speed), and Variety (different forms)."
-            },
-            {
-                set: 4,
-                question: "What is 'machine learning'?",
-                options: ["A type of robot", "The study of algorithms that allow computers to learn from and make predictions on data", "A new type of computer hardware", "A method for making computers run faster"],
-                answer: 1,
-                explanation: "Machine Learning (ML) is a field of artificial intelligence (AI) that uses statistical techniques to give computer systems the ability to 'learn' (i.e., progressively improve performance on a specific task) with data, without being explicitly programmed."
-            },
-            {
-                set: 4,
-                question: "What is a 'primary key' in a relational database?",
-                options: ["The main password for the database", "The first column in a table", "A unique identifier for each record (row) in a table", "A key that unlocks the server room"],
-                answer: 2,
-                explanation: "A primary key is a specific column (or set of columns) in a relational database table that uniquely identifies each record. It must contain unique values and cannot contain NULL values."
-            },
-            {
-                set: 4,
-                question: "What is a 'foreign key' in a relational database?",
-                options: ["A key from a different country's database", "A secondary password", "A key in one table that links to a primary key in another table", "An encrypted key"],
-                answer: 2,
-                explanation: "A foreign key is a column in one table that is used to establish a link to another table. It does this by matching the values of the primary key in the other table, thereby enforcing 'referential integrity'."
-            },
-            {
-                set: 4,
-                question: "What is 'PaaS' (Platform as a Service)?",
-                options: ["A cloud model that provides a platform for developing, running, and managing applications", "A service for patching software", "Personal Access as a Service", "A type of computer hardware"],
-                answer: 0,
-                explanation: "PaaS (Platform as a Service) is a cloud computing model that provides a 'platform'—including hardware, operating systems, and development tools—for customers to develop, run, and manage applications without the complexity of building and maintaining the underlying infrastructure."
-            },
-            {
-                set: 4,
-                question: "What is 'Agile' in software development?",
-                options: ["A programming language", "A type of fast computer", "An iterative approach to project management and software development", "A tool for fixing bugs"],
-                answer: 2,
-                explanation: "Agile is a methodology for software development that emphasizes iterative development, team collaboration, and flexibility to adapt to change. Work is done in short cycles called 'sprints'."
-            },
-            {
-                set: 4,
-                question: "What is 'DevOps'?",
-                options: ["A specific job title", "A set of practices that combines software development (Dev) and IT operations (Ops)", "A type of server hardware", "A new programming language"],
-                answer: 1,
-                explanation: "DevOps is a set of cultural philosophies, practices, and tools that aims to shorten the software development life cycle by automating and integrating the processes between software development and IT operations teams."
-            },
-            {
-                set: 4,
-                question: "What is 'containerization' (e.g., Docker)?",
-                options: ["A method of physically shipping servers in containers", "A lightweight form of virtualization that packages an application and its dependencies", "A way to organize files on a hard drive", "A type of network security"],
-                answer: 1,
-                explanation: "Containerization is a technology that bundles an application, its libraries, and its dependencies into a single 'container'. This ensures the application runs quickly and reliably in any computing environment. Docker is the most popular containerization platform."
-            },
-            {
-                set: 4,
-                question: "What is 'Kubernetes'?",
-                options: ["A type of database", "A container orchestration platform for automating application deployment and scaling", "A machine learning algorithm", "A new cybersecurity protocol"],
-                answer: 1,
-                explanation: "Kubernetes (often called 'K8s') is an open-source container orchestration system. It automates the deployment, scaling, and management of containerized applications (like those created with Docker)."
-            },
-            {
-                set: 4,
-                question: "What is 'object-oriented programming' (OOP)?",
-                options: ["Programming by physically moving objects on screen", "A programming model based on the concept of 'objects' containing data and code", "A programming language used for 3D modeling", "A method for writing code that has no errors"],
-                answer: 1,
-                explanation: "OOP (Object-Oriented Programming) is a paradigm based on 'objects', which are data structures that contain both data (in the form of 'attributes' or 'properties') and code (in the form of 'methods'). Languages like Java, Python, and C++ are object-oriented."
-            },
-            {
-                set: 4,
-                question: "What is 'RAID' (Redundant Array of Independent Disks)?",
-                options: ["A type of cybersecurity attack", "A brand of hard drive", "A data storage technology that combines multiple disk drives into one unit for redundancy or performance", "A backup software"],
-                answer: 2,
-                explanation: "RAID is a way of storing the same data in different places on multiple hard disks or SSDs to protect data in the case of a drive failure. Different RAID levels (e.g., RAID 0, 1, 5) provide different balances of performance, storage capacity, and reliability."
-            },
-            {
-                set: 4,
-                question: "What is 'SQL Injection'?",
-                options: ["A method for speeding up database queries", "A web security vulnerability that allows an attacker to interfere with database queries", "A tool for adding new data to a database", "A type of SQL database"],
-                answer: 1,
-                explanation: "SQL Injection is an attack technique where a malicious user inserts their own SQL code into a query, often via a web form. If successful, this can allow the attacker to view, modify, or delete data they are not authorized to access."
-            },
-            {
-                set: 4,
-                question: "What is the 'Internet of Things' (IoT)?",
-                options: ["A new version of the internet", "A network of physical objects ('things') embedded with sensors and software to connect and exchange data", "A social media platform for objects", "A type of cloud storage"],
-                answer: 1,
-                explanation: "The IoT refers to the vast network of physical devices—from smart lightbulbs and thermostats to industrial machinery—that are embedded with sensors, software, and other technologies for the purpose of connecting and exchanging data with other devices and systems over the internet."
-            },
-            {
-                set: 4,
-                question: "What is 'blockchain'?",
-                options: ["A type of physical chain for securing laptops", "A new type of server", "A specific brand of database", "A distributed, immutable digital ledger"],
-                answer: 3,
-                explanation: "A blockchain is a decentralized and distributed digital ledger that records transactions in a way that is difficult or impossible to change, alter, or hack. Each 'block' in the 'chain' contains a number of transactions. It's the core technology behind cryptocurrencies like Bitcoin."
-            },
-            {
-                set: 4,
-                question: "What is 'data normalization' in databases?",
-                options: ["The process of deleting old data", "The process of structuring a database to reduce data redundancy and improve data integrity", "The process of backing up a database", "The process of converting all data to a single format"],
-                answer: 1,
-                explanation: "Data normalization is a design technique in database management. It involves organizing data into tables and establishing relationships between them according to rules (Normal Forms) to minimize data redundancy (repetition) and prevent data anomalies (like update or deletion issues)."
-            },
-            {
-                set: 4,
-                question: "What is 'scalability' in IT?",
-                options: ["The ability of a system to handle a growing amount of work", "How secure a system is", "How physically large a server is", "The process of reducing the size of a system"],
-                answer: 0,
-                explanation: "Scalability is the property of a system to handle an increasing workload by adding resources. 'Scaling up' means adding resources to a single server (e.g., more RAM/CPU). 'Scaling out' means adding more servers to a network to share the load."
-            },
-            {
-                set: 4,
-                question: "What is a 'stack' as a data structure?",
-                options: ["A physical stack of hard drives", "A data structure that follows the Last-In, First-Out (LIFO) principle", "A data structure that follows the First-In, First-Out (FIFO) principle", "A collection of servers"],
-                answer: 1,
-                explanation: "A stack is an abstract data type that serves as a collection of elements. It has two main operations: 'push', which adds an element to the collection, and 'pop', which removes the most recently added element. This is known as Last-In, First-Out (LIFO)."
-            },
-            {
-                set: 4,
-                question: "What is a 'queue' as a data structure?",
-                options: ["A line of people waiting for IT support", "A data structure that follows the Last-In, First-Out (LIFO) principle", "A data structure that follows the First-In, First-Out (FIFO) principle", "A list of tasks for a CPU"],
-                answer: 2,
-                explanation: "A queue is a data structure that follows the First-In, First-Out (FIFO) principle. Elements are added to the end (enqueue) and removed from the front (dequeue), much like a real-world checkout line."
-            },
-            {
-                set: 4,
-                question: "What is 'ACID' compliance in databases?",
-                options: ["A measure of database speed", "A security protocol", "A set of properties (Atomicity, Consistency, Isolation, Durability) that guarantee transaction validity", "A type of database file system"],
-                answer: 2,
-                explanation: "ACID is an acronym for Atomicity, Consistency, Isolation, and Durability. These are a set of properties for database transactions that ensure data validity despite errors, power failures, or other mishaps. It guarantees that a transaction is all-or-nothing (Atomic), leaves the database in a valid state (Consistent), doesn't interfere with other transactions (Isolated), and is saved permanently (Durable)."
-            },
-            {
-                set: 4,
-                question: "What is 'edge computing'?",
-                options: ["A new, risky type of computing", "Computing that is done on the 'edge' of a network, closer to the source of data", "A type of cloud computing for graphics", "A computer with a sharp, angular design"],
-                answer: 1,
-                explanation: "Edge computing is a distributed computing paradigm that brings computation and data storage closer to the sources of data. This is done to improve response times and save bandwidth, as data doesn't have to be sent to a centralized cloud for processing."
-            },
-            {
-                set: 4,
-                question: "What is 'sandboxing' in computer security?",
-                options: ["A program for designing virtual landscapes", "A security mechanism for separating running programs in an isolated environment", "A physical, secure room for servers", "A method for cleaning up malware"],
-                answer: 1,
-                explanation: "A sandbox is an isolated testing environment that allows users to run programs or open files without affecting the application or system on which they run. It's used to safely execute and analyze untrusted code (like potential malware) or test new software."
-            },
-            {
-                set: 4,
-                question: "What is 'git'?",
-                options: ["A type of server", "A text editor for code", "A distributed version control system for tracking changes in source code", "A project management tool"],
-                answer: 2,
-                explanation: "Git is a distributed version control system (VCS) designed to handle everything from small to very large projects with speed and efficiency. It allows multiple developers to work on the same codebase, tracking changes, and managing different 'branches' of development. GitHub is a popular platform that hosts Git repositories."
-            },
-            {
-                set: 4,
-                question: "What is 'virtual memory'?",
-                options: ["Memory that doesn't actually exist", "A cloud-based RAM service", "A memory management technique where secondary storage (e.g., HDD/SSD) is used as if it were part of RAM", "A secure, encrypted part of RAM"],
-                answer: 2,
-                explanation: "Virtual memory is a feature of an operating system that allows a computer to compensate for shortages of physical memory (RAM) by temporarily transferring pages of data from RAM to disk storage (e.g., an SSD). This allows a computer to run larger applications or more applications at once than it could with RAM alone."
-            },
-        ];
-
-        // ===================================
-        //        APPLICATION STATE
-        // ===================================
-        const state = {
-            currentSet: 1,
-            currentQuestionIndex: 0,
-            userAnswers: {}, // { 0: 1, 1: 3, ... }
-            questionsForSet: [],
-        };
-
-        // ===================================
-        //        DOM ELEMENTS
-        // ===================================
-        const screens = {
-            home: document.getElementById('home-screen'),
-            quiz: document.getElementById('quiz-screen'),
-            results: document.getElementById('results-screen'),
-        };
-
-        const quizElements = {
-            header: document.getElementById('question-header'),
-            progressBar: document.getElementById('progress-bar'),
-            questionText: document.getElementById('question-text'),
-            optionsContainer: document.getElementById('options-container'),
-            navContainer: document.getElementById('nav-container'),
-        };
-
-        const resultsElements = {
-            scoreDisplay: document.getElementById('score-display'),
-            reviewContainer: document.getElementById('review-container'),
-        };
-
-        // ===================================
-        //        QUIZ LOGIC
-        // ===================================
-
-        /**
-         * Hides all screens and shows the one with the specified ID
-         */
-        function showScreen(screenId) {
-            Object.values(screens).forEach(screen => screen.classList.add('hidden'));
-            if (screens[screenId]) {
-                screens[screenId].classList.remove('hidden');
-            }
+<script>
+    const questions = [
+        {
+            q: "According to the DAMA-DMBOK2, which of the following is at the center of the DAMA Wheel?",
+            options: ["Data Architecture", "Data Governance", "Metadata Management", "Data Quality"],
+            correct: 1,
+            exp: "Data Governance is the central functional area in the DAMA Wheel because it provides the oversight and coordination for all other data management functions."
+        },
+        {
+            q: "Which environmental element of the DAMA Hexagon focuses on the 'how'—the documented processes and steps used to perform activities?",
+            options: ["Tools", "Organization and Culture", "Methods and Processes", "Roles and Responsibilities"],
+            correct: 2,
+            exp: "Methods and Processes describe the systematic procedures and workflows required to implement data management activities."
+        },
+        {
+            q: "In the context of Data Modeling, which model type is independent of any specific technology or Database Management System (DBMS)?",
+            options: ["Physical Data Model", "Conceptual Data Model", "Logical Data Model", "Both Conceptual and Logical"],
+            correct: 3,
+            exp: "Both Conceptual and Logical Data Models are business-oriented and technology-independent. The Physical Data Model is the only one specific to a DBMS."
+        },
+        {
+            q: "What is the primary goal of Master Data Management (MDM)?",
+            options: ["To store all historical transactions", "To provide a consistent, 'golden' version of core business entities", "To manage Big Data streams", "To create ad-hoc SQL reports"],
+            correct: 1,
+            exp: "MDM aims to provide a 'Single Version of Truth' or a 'Golden Record' for shared data entities like Customer, Product, or Location."
+        },
+        {
+            q: "Which data quality dimension measures the degree to which data represents the reality it is intended to describe?",
+            options: ["Timeliness", "Completeness", "Accuracy", "Consistency"],
+            correct: 2,
+            exp: "Accuracy refers to the correctness of the data values in representing the real-world objects or events they describe."
         }
+        // Add 45 more questions here following the same format
+    ];
 
-        /**
-         * Starts the quiz for a specific set
-         */
-        function selectSet(setNumber) {
-            state.currentSet = setNumber;
-            state.questionsForSet = allQuestions.filter(q => q.set === setNumber);
-            state.currentQuestionIndex = 0;
-            state.userAnswers = {};
-            
-            displayQuestion();
-            showScreen('quiz');
-        }
+    let currentIdx = 0;
+    let score = 0;
 
-        /**
-         * Displays the current question and options
-         */
-        function displayQuestion() {
-            // Get the current question
-            const question = state.questionsForSet[state.currentQuestionIndex];
-            if (!question) return;
+    const qText = document.getElementById('question-text');
+    const optList = document.getElementById('options-list');
+    const expBox = document.getElementById('explanation-box');
+    const nextBtn = document.getElementById('next-btn');
 
-            // Update header and progress bar
-            const questionNum = state.currentQuestionIndex + 1;
-            const totalQuestions = state.questionsForSet.length;
-            const setInfo = document.querySelector(`button[onclick="selectSet(${state.currentSet})"]`).textContent;
-            
-            quizElements.header.textContent = `${setInfo}: Question ${questionNum} of ${totalQuestions}`;
-            quizElements.progressBar.style.width = `${(questionNum / totalQuestions) * 100}%`;
+    function loadQuestion() {
+        const item = questions[currentIdx];
+        qText.innerText = `Question ${currentIdx + 1}: ${item.q}`;
+        optList.innerHTML = '';
+        expBox.style.display = 'none';
+        nextBtn.style.display = 'none';
 
-            // Update question text
-            quizElements.questionText.textContent = question.question;
-
-            // Clear old options and nav
-            quizElements.optionsContainer.innerHTML = '';
-            quizElements.navContainer.innerHTML = '';
-
-            // Create new option buttons
-            question.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.innerHTML = option;
-                button.dataset.index = index;
-                button.className = 'option-btn block w-full text-left p-4 rounded-lg border-2 border-gray-300 hover:bg-blue-50 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800';
-                button.onclick = () => selectAnswer(index);
-                quizElements.optionsContainer.appendChild(button);
-            });
-        }
-
-        /**
-         * Handles the user clicking an answer
-         */
-        function selectAnswer(selectedIndex) {
-            // Store the answer
-            state.userAnswers[state.currentQuestionIndex] = selectedIndex;
-
-            // Disable all option buttons
-            const optionButtons = quizElements.optionsContainer.querySelectorAll('.option-btn');
-            optionButtons.forEach((btn, index) => {
-                btn.classList.add('disabled');
-                btn.disabled = true;
-                // Highlight the selected one
-                if (index === selectedIndex) {
-                    btn.classList.add('selected');
-                }
-            });
-
-            // Show 'Next' or 'Finish' button
-            const isLastQuestion = state.currentQuestionIndex === state.questionsForSet.length - 1;
-            const navButton = document.createElement('button');
-            navButton.textContent = isLastQuestion ? 'Finish Quiz' : 'Next Question';
-            navButton.className = 'bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-all shadow-md';
-            navButton.onclick = isLastQuestion ? finishQuiz : nextQuestion;
-            quizElements.navContainer.appendChild(navButton);
-        }
-
-        /**
-         * Moves to the next question
-         */
-        function nextQuestion() {
-            state.currentQuestionIndex++;
-            displayQuestion();
-        }
-
-        /**
-         * Finishes the quiz and shows results
-         */
-        function finishQuiz() {
-            displayReview();
-            showScreen('results');
-        }
-
-        /**
-         * Calculates score and builds the review section
-         */
-        function displayReview() {
-            let score = 0;
-            resultsElements.reviewContainer.innerHTML = ''; // Clear previous review
-
-            state.questionsForSet.forEach((question, index) => {
-                const userAnswer = state.userAnswers[index];
-                const correctAnswer = question.answer;
-                const isCorrect = userAnswer === correctAnswer;
-
-                if (isCorrect) {
-                    score++;
-                }
-
-                // Create review card
-                const reviewCard = document.createElement('div');
-                reviewCard.className = `p-6 rounded-lg shadow-md ${isCorrect ? 'bg-green-50' : 'bg-red-50'}`;
-                
-                let optionsHTML = '';
-                question.options.forEach((option, i) => {
-                    let optionClass = 'base';
-                    if (i === correctAnswer) {
-                        optionClass = 'correct'; // Always show the correct answer
-                    }
-                    if (i === userAnswer && !isCorrect) {
-                        optionClass = 'incorrect'; // Show user's wrong answer
-                    }
-                    optionsHTML += `<li class="review-option ${optionClass} p-3 rounded-md border text-sm">${option}</li>`;
-                });
-
-                reviewCard.innerHTML = `
-                    <p class="text-lg font-semibold text-gray-900 mb-4">
-                        <span class="font-bold">${index + 1}. ${question.question}</span>
-                    </p>
-                    <ul class="space-y-2 mb-4">
-                        ${optionsHTML}
-                    </ul>
-                    <div class="bg-gray-100 p-4 rounded-lg border border-gray-200">
-                        <p class="font-bold text-gray-800">Explanation:</p>
-                        <p class="text-gray-700">${question.explanation}</p>
-                    </div>
-                `;
-
-                resultsElements.reviewContainer.appendChild(reviewCard);
-            });
-
-            // Display final score
-            const total = state.questionsForSet.length;
-            const percentage = Math.round((score / total) * 100);
-            resultsElements.scoreDisplay.innerHTML = `Your score: 
-                <span class="text-3xl block mt-2">${score} out of ${total} (${percentage}%)</span>`;
-        }
-
-        /**
-         * Resets state and returns to the home screen
-         */
-        function goHome() {
-            // Reset state object properties, not the object itself
-            state.currentSet = 1;
-            state.currentQuestionIndex = 0;
-            state.userAnswers = {};
-            state.questionsForSet = [];
-            showScreen('home');
-        }
-
-        // Initial setup
-        document.addEventListener('DOMContentLoaded', () => {
-            showScreen('home');
+        item.options.forEach((opt, i) => {
+            const li = document.createElement('li');
+            li.innerText = opt;
+            li.classList.add('option');
+            li.onclick = () => checkAnswer(i);
+            optList.appendChild(li);
         });
+    }
 
-    </script>
+    function checkAnswer(selected) {
+        const item = questions[currentIdx];
+        const options = document.querySelectorAll('.option');
+        
+        if (selected === item.correct) {
+            options[selected].classList.add('correct');
+            score++;
+        } else {
+            options[selected].classList.add('incorrect');
+            options[item.correct].classList.add('correct');
+        }
+
+        expBox.innerHTML = `<strong>Explanation:</strong> ${item.exp}`;
+        expBox.style.display = 'block';
+        nextBtn.style.display = 'block';
+        
+        // Disable further clicking
+        options.forEach(opt => opt.style.pointerEvents = 'none');
+    }
+
+    nextBtn.onclick = () => {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById('quiz-box').innerHTML = `<h2>Exam Complete!</h2>`;
+            document.getElementById('score-area').innerText = `Final Score: ${score} / ${questions.length}`;
+        }
+    };
+
+    loadQuestion();
+</script>
+
 </body>
 </html>
-
