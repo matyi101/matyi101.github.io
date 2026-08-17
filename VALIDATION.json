@@ -1,0 +1,99 @@
+{
+  "totalQuestions": 360,
+  "webSets": 12,
+  "questionsPerSet": 30,
+  "scorableQuestions": 359,
+  "unscoredQuestions": [
+    70
+  ],
+  "sourceDerivedAnswerNotes": {
+    "70": "The supplied source does not provide an answer or explanation for Question 70. This question is not scored.",
+    "193": "The source omits an explicit Answer line; option B is identified as correct in the source explanation."
+  },
+  "sets": [
+    {
+      "set": 1,
+      "start": 1,
+      "end": 30,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 2,
+      "start": 31,
+      "end": 60,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 3,
+      "start": 61,
+      "end": 90,
+      "count": 30,
+      "scorable": 29
+    },
+    {
+      "set": 4,
+      "start": 91,
+      "end": 120,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 5,
+      "start": 121,
+      "end": 150,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 6,
+      "start": 151,
+      "end": 180,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 7,
+      "start": 181,
+      "end": 210,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 8,
+      "start": 211,
+      "end": 240,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 9,
+      "start": 241,
+      "end": 270,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 10,
+      "start": 271,
+      "end": 300,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 11,
+      "start": 301,
+      "end": 330,
+      "count": 30,
+      "scorable": 30
+    },
+    {
+      "set": 12,
+      "start": 331,
+      "end": 360,
+      "count": 30,
+      "scorable": 30
+    }
+  ]
+}
