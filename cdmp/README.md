@@ -8,6 +8,7 @@ A no-build, static GitHub Pages study app created from the supplied **CDMP - Dat
 - `quiz-data.js` - the same question dataset as a reusable JavaScript data file.
 - `question_bank.json` - machine-readable full extraction.
 - `question_bank.csv` - spreadsheet-friendly full extraction.
+- `TYPO_CORRECTIONS.md` - audit log of source typo/editorial corrections.
 
 The question set contains **490 questions**: 290 single-choice and 200 multi-select questions, covering Chapters 1-17 plus Practice Test 1 and Practice Test 2 (100 questions each).
 
@@ -43,4 +44,4 @@ Two apparent page-reference errors in the source bank are flagged in the app:
 
 ## Source note
 
-The supplied question book describes itself as unofficial revision material and states that it is not endorsed by DAMA. The app preserves the original question wording, including occasional source typos, while adding structured answer explanations and DMBOK cross-references.
+The supplied question book describes itself as unofficial revision material and states that it is not endorsed by DAMA. The app preserves the source question intent and answer keys while correcting obvious spelling, grammar, extraction/truncation, and duplicate-option defects where the intended wording can be established without changing answer logic. See `TYPO_CORRECTIONS.md` for the audit trail. Answer-sensitive anomalies are left unchanged and documented rather than silently rewritten.
