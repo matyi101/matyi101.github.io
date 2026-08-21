@@ -100,7 +100,7 @@
     "section": "Chapter 1",
     "number": 3,
     "type": "multiple-choice",
-    "question": "Differentiating between data and information. Please select the correct answers based on the sentence below: Here is a marketing report for the last month [1]. It is based on data from our data warehouse [2]. Next month these results [3] will be used to generate our month-over-month performance measure [4].",
+    "question": "Differentiating between data and information. Please select the correct answers based on the sentence below: [1] Here is a marketing report for the last month. [2] It is based on data from our data warehouse. [3] Next month these results. [4] Will be used to generate our month-over-month performance measure.",
     "options": [
       {
         "n": 1,
