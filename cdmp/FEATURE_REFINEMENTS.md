@@ -43,3 +43,15 @@ This revision adds persistent adaptive-study features while keeping the app stat
 - `cdmp-progress-v2` - adaptive progress, missed queue, and recent session history.
 
 All progress remains on the device/browser unless the user exports it.
+## Local user profile
+
+The app now includes an optional browser-local study profile. A learner can save:
+
+- display name;
+- CDMP study goal;
+- a personal target score;
+- a target exam date;
+- a primary DMBOK focus area.
+
+The profile appears in the top bar and on the home dashboard. It summarizes the number of unique questions attempted, cumulative accuracy, current mastery, persistent missed-question count, and best 100-question simulator score. The profile is stored in `localStorage` under `cdmp-user-profile-v1`; it does not require an account, does not leave the browser, and can be removed without deleting study progress. JSON result exports include a snapshot of the local profile when one exists.
+

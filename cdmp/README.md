@@ -27,6 +27,7 @@ Open `index.html` in a browser. It is fully self-contained and does not require 
 
 ## Study and adaptive practice modes
 
+- **Local user profile**: create a browser-local study identity with display name, CDMP goal, personal target score, target exam date, and focus area. The profile card summarizes attempted questions, accuracy, current mastery, missed queue, and best 100-question mock score.
 - **Study mode**: check answers one at a time and read the explanation and DMBOK evidence.
 - **Custom exam mode**: hides answers until submission and uses 54 seconds per question, equivalent to 90 minutes for 100 questions.
 - **Weak-area practice**: ranks knowledge areas from your saved attempts and builds a focused session from the areas with the lowest current mastery/accuracy.
@@ -64,6 +65,8 @@ The generated mock uses the chapter pools rather than copying one of the two sou
 ## Weak-area tracking and DMBOK chapter statistics
 
 Progress is stored locally in the browser under `cdmp-progress-v2`. For each question, the app stores the number of attempts, correct/incorrect counts, the last result, answer streak, and last-answer timestamp.
+
+The optional study profile is stored separately under `cdmp-user-profile-v1`. Removing the profile does **not** delete quiz progress, bookmarks, or the missed-question queue. No sign-in or server is used.
 
 The home dashboard reports:
 

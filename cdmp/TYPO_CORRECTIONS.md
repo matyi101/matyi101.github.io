@@ -107,3 +107,14 @@ This pass corrects obvious spelling, grammar, extraction/truncation, and duplica
 - `chapter-11-q003` — “ineffective business analysis” is retained because the item is deliberately keyed False.
 - `chapter-10-q006` — “undefined domain values” is retained because the item is deliberately keyed False.
 
+### Chapter 1 · Question 3 — bracket placement clarification
+
+**Before**
+
+> Differentiating between data and information. Please select the correct answers based on the sentence below: Here is a marketing report for the last month [1]. It is based on data from our data warehouse [2]. Next month these results [3] will be used to generate our month-over-month performance measure [4].
+
+**After**
+
+> Differentiating between data and information. Please select the correct answers based on the sentence below: [1] Here is a marketing report for the last month. [2] It is based on data from our data warehouse. [3] Next month these results. [4] Will be used to generate our month-over-month performance measure.
+
+The answer key remains **D**: `[1] Information, [2] Data, [3] Data, [4] Information`.
