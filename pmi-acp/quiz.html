@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="30-question PMI-ACP practice test with percentage score and answer explanations after submission.">
+  <title>PMI-ACP Practice Set</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <div class="eyebrow">PMI-ACP practice · User: <span id="userDisplay"></span></div>
+    <h1 id="setTitle">Practice Set</h1>
+    <p id="setRange">30 questions</p>
+  </div></header>
+
+  <nav class="quiz-toolbar" aria-label="Practice navigation"><div class="toolbar-inner">
+    <div class="toolbar-left">
+      <a class="button" href="index.html">All Sets / User Record</a>
+      <a class="button" id="prevSet" href="#">Previous Set</a>
+      <a class="button" id="nextSet" href="#">Next Set</a>
+    </div>
+    <div class="toolbar-right">
+      <span id="progressText" class="progress-text">0/30 answered</span>
+      <button id="resetBtn" class="button danger reset-top" type="button">Reset This Test</button>
+    </div>
+  </div></nav>
+
+  <main class="container">
+    <section class="quiz-intro">
+      <h2>Choose one answer for each question.</h2>
+      <p>Correct answers and explanations remain hidden until you submit the test. Your selections are automatically saved under your selected user profile.</p>
+    </section>
+
+    <div id="quizRoot"></div>
+
+    <section class="submit-panel">
+      <p>When you submit, the percentage is calculated and the complete answer/explanation review appears below. The attempt is added to your individual record.</p>
+      <button id="submitBtn" class="button primary" type="button">Submit Test &amp; Calculate Score</button>
+    </section>
+
+    <section id="results" class="results" hidden></section>
+    <section id="review" class="review" hidden></section>
+  </main>
+
+  <footer class="footer">Percentage = correct answers ÷ source-scorable questions × 100. “Reset This Test” clears only the current test state; previous attempt history remains stored.</footer>
+  <script src="assets/questions.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
