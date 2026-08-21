@@ -9,6 +9,7 @@ A no-build, static GitHub Pages study app created from the supplied **CDMP - Dat
 - `question_bank.json` - machine-readable full extraction.
 - `question_bank.csv` - spreadsheet-friendly full extraction.
 - `TYPO_CORRECTIONS.md` - audit log of source typo/editorial corrections.
+- `FEATURE_REFINEMENTS.md` - notes on the adaptive practice, progress tracking, and exam simulator added in the refined version.
 
 The question set contains **490 questions**: 290 single-choice and 200 multi-select questions, covering Chapters 1-17 plus Practice Test 1 and Practice Test 2 (100 questions each).
 
@@ -24,14 +25,59 @@ Open `index.html` in a browser. It is fully self-contained and does not require 
 4. Select the `main` branch and `/ (root)` folder, then save.
 5. GitHub Pages will publish the static site at the Pages URL shown in the repository settings.
 
-## Study modes
+## Study and adaptive practice modes
 
 - **Study mode**: check answers one at a time and read the explanation and DMBOK evidence.
-- **Exam mode**: hides answers until submission and uses 54 seconds per question, matching 90 minutes for 100 questions.
+- **Custom exam mode**: hides answers until submission and uses 54 seconds per question, equivalent to 90 minutes for 100 questions.
+- **Weak-area practice**: ranks knowledge areas from your saved attempts and builds a focused session from the areas with the lowest current mastery/accuracy.
+- **Missed-question sessions**: incorrect answers and skipped exam questions are stored in a persistent retry queue. A correctly answered retry removes the item from that queue.
+- **100-question exam simulator**: creates a unique 100-question, 90-minute exam from the chapter question pools and suppresses answer feedback until submission.
 - Filter by source section, knowledge area, text, bookmarks, or session size.
 - Optional question and answer-choice shuffling.
 - Bookmarking is saved in browser `localStorage`.
-- Session results can be exported as JSON.
+- Session results and the current progress snapshot can be exported as JSON.
+
+## 100-question simulator blueprint
+
+The simulator is deliberately described as **source-aligned**, not as an official DAMA blueprint. The supplied book contains two 100-question practice tests. Their knowledge-area distributions are nearly identical, so the simulator randomly follows one of the two source profiles:
+
+| Knowledge area | Practice Test 1 | Practice Test 2 |
+|---|---:|---:|
+| Data Management | 3 | 2 |
+| Data Handling Ethics | 2 | 3 |
+| Data Governance | 10 | 10 |
+| Data Architecture | 6 | 6 |
+| Data Modelling and Design | 11 | 11 |
+| Data Storage and Operations | 6 | 6 |
+| Data Security | 6 | 6 |
+| Data Integration and Interoperability | 6 | 6 |
+| Document and Content Management | 6 | 6 |
+| Reference and Master Data | 10 | 10 |
+| Data Warehousing and Business Intelligence | 9 | 9 |
+| Metadata Management | 11 | 11 |
+| Data Quality | 11 | 11 |
+| Big Data and Data Science | 3 | 3 |
+| **Total** | **100** | **100** |
+
+The generated mock uses the chapter pools rather than copying one of the two source practice tests verbatim. This produces a fresh exam while preserving the source practice-test mix.
+
+## Weak-area tracking and DMBOK chapter statistics
+
+Progress is stored locally in the browser under `cdmp-progress-v2`. For each question, the app stores the number of attempts, correct/incorrect counts, the last result, answer streak, and last-answer timestamp.
+
+The home dashboard reports:
+
+- total attempts;
+- unique questions attempted;
+- cumulative accuracy;
+- current missed-question queue;
+- weakest knowledge areas;
+- recent session scores;
+- all 17 DMBOK chapters, with bank-item count, unique attempted items, total attempts, cumulative accuracy, current mastery, missed questions, and a status label.
+
+**Accuracy** is calculated across all recorded attempts. **Mastery** is based on the latest recorded result for each attempted question, so a later correct retry can improve the chapter's current mastery even though the earlier incorrect attempt remains part of cumulative accuracy.
+
+Progress can be reset from the dashboard without removing bookmarks.
 
 ## DMBOK references
 
