@@ -46,3 +46,8 @@ The app presents these as two selectable source collections. It still retains `s
 ## Dashboard navigation
 
 A dedicated **Dashboard** button is available in the top navigation bar. On narrow phone screens it appears as a home icon to save space. Selecting it returns to the progress dashboard. If a study or exam session is still active, the app asks for confirmation before ending that session; saved progress and previously checked answers are not erased.
+
+## Answer display refinement
+
+- A correct option that was not selected is now shown with a solid green border rather than a dashed green border.
+- The `DMBOK-checked answer` label and answer text are blue for quick visual recognition.

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cdmp-question-lab-two-sources-v3-dashboard';
+const CACHE_NAME = 'cdmp-question-lab-two-sources-v4-answer-style';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
