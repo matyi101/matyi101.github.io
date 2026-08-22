@@ -42,3 +42,7 @@ The supplied Data Strategy Professionals materials and DAMA exam-attempt materia
 - **Combined Sources** — all 204 DMBOK-verified additions from the Data Strategy Professionals sets and DAMA practice-attempt PDFs.
 
 The app presents these as two selectable source collections. It still retains `source_group`, `source_name`, and `source_question` for detailed provenance and audit purposes.
+
+## Dashboard navigation
+
+A dedicated **Dashboard** button is available in the top navigation bar. On narrow phone screens it appears as a home icon to save space. Selecting it returns to the progress dashboard. If a study or exam session is still active, the app asks for confirmation before ending that session; saved progress and previously checked answers are not erased.

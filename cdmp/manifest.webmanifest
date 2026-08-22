@@ -1,0 +1,25 @@
+{
+  "name": "CDMP DMBOK2 Question Lab",
+  "short_name": "CDMP Lab",
+  "description": "Private CDMP DMBOK2 study bank with progress tracking and a 100-question simulator.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fb",
+  "theme_color": "#0969da",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

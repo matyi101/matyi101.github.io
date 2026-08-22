@@ -41,6 +41,7 @@
     .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:5px 9px;font-size:12px;white-space:nowrap;color:var(--muted)}
     .pill b{color:var(--text)}
     .icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:8px 10px}
+    .dashboard-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:8px 11px;font-weight:750;white-space:nowrap;flex:0 0 auto}.dashboard-link:hover{border-color:var(--brand);background:var(--panel2)}.dashboard-link svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .layout{max-width:1500px;margin:auto;padding:20px;display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px}
     .sidebar{position:sticky;top:78px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
     .side-section{padding:16px;border-bottom:1px solid var(--line)}.side-section:last-child{border-bottom:0}
@@ -108,7 +109,7 @@
     :root{--safe-top:env(safe-area-inset-top,0px);--safe-right:env(safe-area-inset-right,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px)}
     body{min-height:100dvh;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
     button,input,select,.option{touch-action:manipulation}
-    button,.profile-button,.icon-btn,.primary,.secondary,.danger,.ghost{min-height:44px}
+    button,.profile-button,.icon-btn,.dashboard-link,.primary,.secondary,.danger,.ghost{min-height:44px}
     .option,.q-text,.feedback-body,.notice{overflow-wrap:anywhere;word-break:normal}
     .topbar{-webkit-backdrop-filter:blur(12px);padding-top:var(--safe-top)}
     .mobile-menu-btn,.install-btn,.sidebar-mobile-head,.drawer-backdrop{display:none}
@@ -136,7 +137,7 @@
     @media (max-width:700px){
       .topbar-inner{gap:7px;padding:8px max(9px,var(--safe-right)) 8px max(9px,var(--safe-left))}
       .brand{min-width:0;flex:1;gap:8px}.logo{width:34px;height:34px;border-radius:9px}.brand h1{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{display:none}
-      .icon-btn{width:42px;height:42px;padding:0;display:grid;place-items:center}.profile-button{width:42px;min-width:42px;max-width:42px;height:42px;padding:4px;justify-content:center}.profile-avatar{width:30px;height:30px}
+      .icon-btn{width:42px;height:42px;padding:0;display:grid;place-items:center}.dashboard-link{width:42px;min-width:42px;max-width:42px;height:42px;padding:0}.dashboard-link span{display:none}.profile-button{width:42px;min-width:42px;max-width:42px;height:42px;padding:4px;justify-content:center}.profile-avatar{width:30px;height:30px}
       .layout{padding:10px max(10px,var(--safe-right)) calc(18px + var(--safe-bottom)) max(10px,var(--safe-left));gap:12px}
       .welcome,.card,.summary{padding:16px;border-radius:13px}.welcome h2{font-size:22px;line-height:1.25}.welcome p{font-size:14px}
       .metric-grid{gap:8px;margin:15px 0}.metric{padding:11px}.metric strong{font-size:20px}
@@ -157,7 +158,7 @@
     }
 
     @media (max-width:420px){
-      .topbar-inner{gap:5px}.logo{width:31px;height:31px}.brand h1{font-size:13px}.icon-btn,.profile-button{width:39px;min-width:39px;height:39px;min-height:39px}
+      .topbar-inner{gap:5px}.logo{width:31px;height:31px}.brand h1{font-size:13px}.icon-btn,.dashboard-link,.profile-button{width:39px;min-width:39px;height:39px;min-height:39px}
       .welcome,.card,.summary{padding:14px}.card.show{padding-bottom:0}.card.show .q-actions{margin-left:-14px;margin-right:-14px;padding-left:12px;padding-right:12px}
       .q-actions button{font-size:13px;padding:8px 7px}.q-text{font-size:17px}.option .opt-text{font-size:14px}
       .profile-meta{gap:5px}.profile-chip{font-size:10px}.profile-stat{padding:9px}.device-data-actions{grid-template-columns:1fr}
@@ -176,6 +177,7 @@
       <button class="icon-btn mobile-menu-btn" id="menuBtn" type="button" aria-label="Open session controls" aria-controls="sidebar" aria-expanded="false">☰</button>
       <div class="brand"><div class="logo">DM</div><div><h1>CDMP DMBOK2 Question Lab</h1><small>Private 694-question verified study bank</small></div></div>
       <div class="top-stats" id="topStats"></div>
+      <button class="dashboard-link" id="dashboardBtn" type="button" title="Open dashboard" aria-label="Open dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-7h6v7"></path></svg><span>Dashboard</span></button>
       <button class="profile-button" id="profileBtn" type="button" title="Open study profile"><span class="profile-avatar" id="profileTopAvatar">?</span><span class="profile-button-text"><b id="profileTopName">Create profile</b><small id="profileTopGoal">Local study profile</small></span></button>
       <button class="icon-btn install-btn hidden" id="installBtn" type="button" title="Install app" aria-label="Install app">⇩</button>
       <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme" aria-label="Toggle light and dark theme">◐</button>
@@ -334,7 +336,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     card:$('questionCard'), qLabel:$('qLabel'), qTags:$('qTags'), qText:$('qText'), instruction:$('instruction'), options:$('options'), feedback:$('feedback'), feedbackHead:$('feedbackHead'), feedbackBody:$('feedbackBody'),
     bookmark:$('bookmarkBtn'), prev:$('prevBtn'), check:$('checkBtn'), clear:$('clearBtn'), next:$('nextBtn'), submit:$('submitBtn'), navigator:$('navigator'), navGrid:$('navGrid'),
     summary:$('summary'), scoreRing:$('scoreRing'), scorePercent:$('scorePercent'), summaryMetrics:$('summaryMetrics'), summaryText:$('summaryText'), summaryBreakdown:$('summaryBreakdown'), retryWrong:$('retryWrongBtn'), reviewWrong:$('reviewWrongBtn'), reviewAll:$('reviewAllBtn'), newSession:$('newSessionBtn'),
-    sideAnswered:$('sideAnswered'), sideCorrect:$('sideCorrect'), sideBookmarks:$('sideBookmarks'), export:$('exportBtn'), reset:$('resetBtn'), theme:$('themeBtn'),
+    sideAnswered:$('sideAnswered'), sideCorrect:$('sideCorrect'), sideBookmarks:$('sideBookmarks'), export:$('exportBtn'), reset:$('resetBtn'), dashboard:$('dashboardBtn'), theme:$('themeBtn'),
     sidebar:$('sidebar'), menu:$('menuBtn'), sidebarClose:$('sidebarCloseBtn'), drawerBackdrop:$('drawerBackdrop'), install:$('installBtn'), backupData:$('backupDataBtn'), restoreData:$('restoreDataBtn'), restoreInput:$('restoreDataInput'),
     profileBtn:$('profileBtn'), profileTopAvatar:$('profileTopAvatar'), profileTopName:$('profileTopName'), profileTopGoal:$('profileTopGoal'), profileCard:$('profileCard'),
     profileModal:$('profileModal'), profileForm:$('profileForm'), profileName:$('profileName'), profileGoal:$('profileGoal'), profileTargetScore:$('profileTargetScore'), profileExamDate:$('profileExamDate'), profileFocus:$('profileFocus'), profileClose:$('profileCloseBtn'), profileCancel:$('profileCancelBtn'), removeProfile:$('removeProfileBtn')
@@ -745,6 +747,22 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     el.weakCount.textContent=`${weak.length} area${weak.length===1?'':'s'}`; el.missedCount.textContent=`${state.missed.size} queued`; el.weakBtn.disabled=!weak.length; el.missedBtn.disabled=!state.missed.size; renderStats();
   }
 
+  function goToDashboard(){
+    const active=state.session.length&&!state.submitted;
+    if(active){
+      const answered=Object.values(state.answers).some(v=>Array.isArray(v)&&v.length);
+      const message=state.mode==='exam'
+        ? 'Return to the dashboard and end this exam session? Unsubmitted answers will not be scored.'
+        : answered
+          ? 'Return to the dashboard and end this study session? Checked answers remain in your progress history, but unchecked selections will be discarded.'
+          : 'Return to the dashboard and end this session?';
+      if(!confirm(message))return;
+    }
+    resetSession();
+    closeSidebar();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
   function resetProgress(){ if(!confirm('Reset all tracked attempts, weak-area history, missed questions, and session history? Bookmarks will be kept.'))return; state.progressData=defaultProgress(); state.missed=new Set(); localStorage.removeItem(STORAGE_KEY); renderDashboard(); }
 
   function exportResults(){
@@ -771,7 +789,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   el.modeSwitch.addEventListener('click',e=>{if(e.target.dataset.mode)setMode(e.target.dataset.mode)});
   [el.section,el.ka,el.source,el.verification,el.size,el.onlyBookmarks].forEach(x=>x.addEventListener('change',updatePoolCount)); el.search.addEventListener('input',updatePoolCount);
   el.start.onclick=startSession; el.weakBtn.onclick=startWeakSession; el.missedBtn.onclick=startMissedSession; el.mockBtn.onclick=startMockExam; el.resetProgress.onclick=resetProgress;
-  el.theme.onclick=toggleTheme; el.bookmark.onclick=toggleBookmark; el.check.onclick=checkCurrent; el.clear.onclick=clearCurrent; el.prev.onclick=()=>go(-1); el.next.onclick=()=>go(1); el.submit.onclick=()=>completeSession(false);
+  el.dashboard.onclick=goToDashboard; el.theme.onclick=toggleTheme; el.bookmark.onclick=toggleBookmark; el.check.onclick=checkCurrent; el.clear.onclick=clearCurrent; el.prev.onclick=()=>go(-1); el.next.onclick=()=>go(1); el.submit.onclick=()=>completeSession(false);
   el.export.onclick=exportResults; el.reset.onclick=resetSession; el.retryWrong.onclick=retryWrong; el.reviewWrong.onclick=()=>review('wrong'); el.reviewAll.onclick=()=>review('all'); el.newSession.onclick=resetSession; document.addEventListener('keydown',keyHandler);
   el.profileBtn.onclick=openProfile; el.profileClose.onclick=closeProfile; el.profileCancel.onclick=closeProfile; el.profileForm.addEventListener('submit',saveProfileFromForm); el.removeProfile.onclick=removeProfile; el.profileCard.addEventListener('click',e=>{if(e.target.closest('[data-profile-edit]'))openProfile();}); el.profileModal.addEventListener('click',e=>{if(e.target===el.profileModal)closeProfile();}); document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(el.profileModal.classList.contains('show'))closeProfile();else closeSidebar();}});
 
