@@ -168,9 +168,40 @@
     @media (hover:none){.option:hover{border-color:var(--line);background:var(--panel)}.secondary:hover,.ghost:hover{background:inherit}}
 
     @media print{.topbar,.sidebar,.navigator,.q-actions,footer{display:none!important}.layout{display:block;padding:0}.card,.feedback{box-shadow:none;border:0}.feedback{display:block}.card{display:block}}
+
+
+    /* Firebase access gate */
+    body.auth-pending .app, body.auth-required .app{display:none!important}
+    body.auth-ready .auth-gate{display:none!important}
+    .auth-gate{min-height:100dvh;display:grid;place-items:center;padding:24px;background:var(--bg);color:var(--text)}
+    .auth-card{width:min(470px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 18px 55px rgba(0,0,0,.12)}
+    .auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}.auth-brand .logo{flex:0 0 auto}
+    .auth-card h1{font-size:26px;line-height:1.2;margin:0 0 8px}.auth-card p{margin:0;color:var(--muted);line-height:1.6}
+    .auth-google{width:100%;margin-top:22px;min-height:50px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px}
+    .google-mark{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#4285f4;font-weight:800;border:1px solid #ddd}
+    .auth-status{min-height:22px;margin-top:12px!important;font-size:13px}.auth-status.error{color:var(--bad)}.auth-status.ok{color:var(--good)}
+    .auth-privacy{margin-top:18px!important;padding-top:16px;border-top:1px solid var(--line);font-size:12px;line-height:1.55!important}
+    .account-button{border:1px solid var(--line);background:var(--panel);color:var(--text);height:42px;min-width:42px;border-radius:12px;padding:4px 9px;display:flex;align-items:center;gap:8px;cursor:pointer}
+    .account-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;background:var(--soft);display:grid;place-items:center;font-weight:700;overflow:hidden}
+    .account-avatar img{width:100%;height:100%;object-fit:cover}.account-button-text{display:flex;flex-direction:column;align-items:flex-start;max-width:140px}.account-button-text b,.account-button-text small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.account-button-text small{font-size:10px;color:var(--muted)}
+    .account-details{display:grid;gap:11px;padding:16px}.account-row{padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--soft)}.account-row small{display:block;color:var(--muted);margin-bottom:3px}.account-row b{display:block;word-break:break-word}
+    @media(max-width:900px){.account-button-text{display:none}.account-button{width:42px;min-width:42px;padding:4px;justify-content:center}}
+    @media(max-width:700px){.auth-gate{padding:16px}.auth-card{padding:22px 18px;border-radius:16px}.auth-card h1{font-size:23px}.account-button{width:42px;min-width:42px;height:42px}}
+
   </style>
 </head>
-<body>
+<body class="auth-pending">
+<section class="auth-gate" id="authGate" aria-live="polite">
+  <div class="auth-card">
+    <div class="auth-brand"><div class="logo">DM</div><div><b>CDMP DMBOK2 Question Lab</b><p style="font-size:12px">Private study access</p></div></div>
+    <h1 id="authTitle">Sign in to enter the Test Lab</h1>
+    <p id="authIntro">Access is restricted to registered users. Use your Google account to continue.</p>
+    <button class="primary auth-google" id="googleAccessBtn" type="button"><span class="google-mark">G</span><span>Continue with Google</span></button>
+    <p class="auth-status" id="authStatus">Checking your sign-in status…</p>
+    <p class="auth-privacy">By continuing, your Google display name, email address, first access, last access and access count will be stored in this project's Firebase database for access administration. Your quiz progress remains in your browser in this version.</p>
+  </div>
+</section>
+
 <div class="app" id="app">
   <header class="topbar">
     <div class="topbar-inner">
@@ -178,6 +209,7 @@
       <div class="brand"><div class="logo">DM</div><div><h1>CDMP DMBOK2 Question Lab</h1><small>Private 694-question verified study bank</small></div></div>
       <div class="top-stats" id="topStats"></div>
       <button class="dashboard-link" id="dashboardBtn" type="button" title="Open dashboard" aria-label="Open dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-7h6v7"></path></svg><span>Dashboard</span></button>
+      <button class="account-button" id="accountBtn" type="button" title="Signed-in account" aria-label="Open signed-in account"><span class="account-avatar" id="accountAvatar">?</span><span class="account-button-text"><b id="accountName">Signed in</b><small id="accountEmail">Google account</small></span></button>
       <button class="profile-button" id="profileBtn" type="button" title="Open study profile"><span class="profile-avatar" id="profileTopAvatar">?</span><span class="profile-button-text"><b id="profileTopName">Create profile</b><small id="profileTopGoal">Local study profile</small></span></button>
       <button class="icon-btn install-btn hidden" id="installBtn" type="button" title="Install app" aria-label="Install app">⇩</button>
       <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme" aria-label="Toggle light and dark theme">◐</button>
@@ -299,9 +331,23 @@
   <button class="drawer-backdrop" id="drawerBackdrop" type="button" aria-label="Close session controls"></button>
   <footer>Unofficial study tool. The source book states that its questions are not official CDMP training material and are not endorsed by DAMA. Question wording is based on the supplied source; obvious source typos were corrected against DMBOK2 where they could be verified. Keyboard: <span class="kbd">1–6</span> choose, <span class="kbd">J/K</span> next/previous, <span class="kbd">Enter</span> check.</footer>
 </div>
+<div class="modal" id="accountModal" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+  <div class="modal-panel" style="max-width:520px">
+    <div class="modal-head"><div><h2 id="accountModalTitle">Test Lab account</h2><p>Authenticated with Firebase.</p></div><button class="modal-close" id="accountCloseBtn" type="button" aria-label="Close account dialog">×</button></div>
+    <div class="account-details">
+      <div class="account-row"><small>Name</small><b id="accountModalName">—</b></div>
+      <div class="account-row"><small>Email</small><b id="accountModalEmail">—</b></div>
+      <div class="account-row"><small>Sign-in provider</small><b id="accountModalProvider">Google</b></div>
+      <div class="account-row"><small>Access status</small><b id="accountAccessStatus">Authenticated</b></div>
+      <p class="small-note">Signing out closes access to the Test Lab on this browser. Your local study progress is not deleted.</p>
+    </div>
+    <div class="modal-actions"><button class="secondary" id="accountCloseActionBtn" type="button">Close</button><button class="danger" id="signOutBtn" type="button">Sign out</button></div>
+  </div>
+</div>
+
 <div class="modal" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
   <div class="modal-panel">
-    <div class="modal-head"><div><h2 id="profileModalTitle">Study profile</h2><p>Saved only in this browser. No account or sign-in is required.</p></div><button class="modal-close" id="profileCloseBtn" type="button" aria-label="Close profile dialog">×</button></div>
+    <div class="modal-head"><div><h2 id="profileModalTitle">Study profile</h2><p>Your study preferences are saved locally in this browser; site access is controlled by Firebase sign-in.</p></div><button class="modal-close" id="profileCloseBtn" type="button" aria-label="Close profile dialog">×</button></div>
     <form class="profile-form" id="profileForm">
       <div class="form-grid">
         <div class="full"><label for="profileName">Display name</label><input id="profileName" name="displayName" maxlength="60" autocomplete="name" placeholder="e.g. Nazri" required /></div>
@@ -796,5 +842,116 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   initTheme(); initPWA(); populateFilters(); populateProfileFocus(); updatePoolCount(); setMode('study'); renderDashboard(); el.sideBookmarks.textContent=state.bookmarks.size;
 })();
 </script>
+
+<script src="firebase-config.js"></script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
+  import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, increment } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
+
+  const config = window.CDMP_FIREBASE_CONFIG;
+  const gate = document.getElementById('authGate');
+  const status = document.getElementById('authStatus');
+  const googleBtn = document.getElementById('googleAccessBtn');
+  const accountBtn = document.getElementById('accountBtn');
+  const accountAvatar = document.getElementById('accountAvatar');
+  const accountName = document.getElementById('accountName');
+  const accountEmail = document.getElementById('accountEmail');
+  const accountModal = document.getElementById('accountModal');
+  const accountClose = document.getElementById('accountCloseBtn');
+  const accountCloseAction = document.getElementById('accountCloseActionBtn');
+  const signOutBtn = document.getElementById('signOutBtn');
+  const modalName = document.getElementById('accountModalName');
+  const modalEmail = document.getElementById('accountModalEmail');
+  const modalProvider = document.getElementById('accountModalProvider');
+  const accessStatus = document.getElementById('accountAccessStatus');
+
+  function setGateState(state, message='', isError=false){
+    document.body.classList.remove('auth-pending','auth-required','auth-ready');
+    document.body.classList.add(state);
+    if(status){status.textContent=message;status.classList.toggle('error',!!isError);status.classList.toggle('ok',!isError&&!!message);}
+  }
+  function initials(name,email){const base=(name||email||'?').trim();const parts=base.split(/\s+/).filter(Boolean);return parts.length>1?(parts[0][0]+parts.at(-1)[0]).toUpperCase():base.slice(0,2).toUpperCase();}
+  function providerLabel(user){const id=user?.providerData?.[0]?.providerId||'google.com';return id==='google.com'?'Google':id;}
+  function openAccount(){accountModal?.classList.add('show');}
+  function closeAccount(){accountModal?.classList.remove('show');}
+
+  if(!config?.apiKey || !config?.projectId){
+    setGateState('auth-required','Firebase configuration is missing. Check firebase-config.js.',true);
+    if(googleBtn)googleBtn.disabled=true;
+  } else {
+    const app = initializeApp(config);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
+    await setPersistence(auth,browserLocalPersistence);
+
+    async function recordAccess(user){
+      const key='cdmp-access-logged-'+user.uid;
+      if(sessionStorage.getItem(key)) return;
+      const ref=doc(db,'users',user.uid);
+      const snap=await getDoc(ref);
+      const common={
+        uid:user.uid,
+        name:user.displayName||'',
+        email:user.email||'',
+        photoURL:user.photoURL||'',
+        emailVerified:!!user.emailVerified,
+        provider:providerLabel(user),
+        lastAccessAt:serverTimestamp(),
+        accessCount:increment(1)
+      };
+      if(snap.exists()) await setDoc(ref,common,{merge:true});
+      else await setDoc(ref,{...common,firstAccessAt:serverTimestamp()},{merge:true});
+      sessionStorage.setItem(key,'1');
+    }
+
+    async function signInGoogle(){
+      googleBtn.disabled=true;
+      status.textContent='Opening Google sign-in…';status.classList.remove('error','ok');
+      try{
+        await signInWithPopup(auth,provider);
+      }catch(err){
+        const fallback=['auth/popup-blocked','auth/popup-closed-by-user','auth/cancelled-popup-request'].includes(err?.code);
+        if(fallback && err?.code==='auth/popup-blocked'){
+          status.textContent='Popup blocked. Redirecting to Google…';
+          await signInWithRedirect(auth,provider);
+          return;
+        }
+        status.textContent=(err?.code==='auth/unauthorized-domain')?'This GitHub Pages domain is not yet listed in Firebase Authentication → Settings → Authorized domains.':(err?.message||'Google sign-in failed.');
+        status.classList.add('error');
+      }finally{googleBtn.disabled=false;}
+    }
+
+    googleBtn?.addEventListener('click',signInGoogle);
+    accountBtn?.addEventListener('click',openAccount);
+    accountClose?.addEventListener('click',closeAccount);
+    accountCloseAction?.addEventListener('click',closeAccount);
+    accountModal?.addEventListener('click',e=>{if(e.target===accountModal)closeAccount();});
+    signOutBtn?.addEventListener('click',async()=>{
+      const u=auth.currentUser;if(u)sessionStorage.removeItem('cdmp-access-logged-'+u.uid);
+      closeAccount();await signOut(auth);
+    });
+
+    try{await getRedirectResult(auth);}catch(err){status.textContent=err?.message||'Sign-in redirect failed.';status.classList.add('error');}
+
+    onAuthStateChanged(auth,async user=>{
+      if(!user){
+        accountAvatar.textContent='?';accountName.textContent='Signed out';accountEmail.textContent='Google account';
+        setGateState('auth-required','Sign in with Google to continue.');
+        return;
+      }
+      const name=user.displayName||'CDMP learner', email=user.email||'';
+      if(user.photoURL)accountAvatar.innerHTML=`<img src="${user.photoURL.replace(/"/g,'&quot;')}" alt="">`; else accountAvatar.textContent=initials(name,email);
+      accountName.textContent=name;accountEmail.textContent=email;
+      modalName.textContent=name;modalEmail.textContent=email;modalProvider.textContent=providerLabel(user);accessStatus.textContent='Authenticated';
+      setGateState('auth-ready','Access granted.');
+      try{await recordAccess(user);accessStatus.textContent='Authenticated · access recorded';}
+      catch(err){console.error('Could not record Firestore access',err);accessStatus.textContent='Authenticated · access log could not be written';}
+    });
+  }
+</script>
+
 </body>
 </html>

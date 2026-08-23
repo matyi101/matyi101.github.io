@@ -51,3 +51,7 @@ A dedicated **Dashboard** button is available in the top navigation bar. On narr
 
 - A correct option that was not selected is now shown with a solid green border rather than a dashed green border.
 - The `DMBOK-checked answer` label and answer text are blue for quick visual recognition.
+
+## Firebase access control
+
+This build adds mandatory Google authentication using Firebase project `cdmp-test-lab`. The quiz interface remains hidden until Firebase confirms a signed-in user. Basic access information is written to Firestore under `users/{uid}`. Existing 694 question IDs and browser-local progress/profile keys are unchanged. See `FIREBASE_GITHUB_SETUP.md`.
