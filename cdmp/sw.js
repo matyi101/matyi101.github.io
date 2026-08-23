@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cdmp-study-v15-google-logo-align';
+const CACHE_NAME = 'cdmp-study-v16-firebase-analytics';
 const CORE = ['./', './index.html', './firebase-config.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));

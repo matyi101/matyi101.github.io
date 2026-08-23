@@ -922,6 +922,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
   import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
   import { getFirestore, doc, getDoc, setDoc, serverTimestamp, increment, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
+  import { getAnalytics, isSupported as analyticsIsSupported } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js';
 
   const config = window.CDMP_FIREBASE_CONFIG;
   const gate = document.getElementById('authGate');
@@ -1020,6 +1021,13 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     const app = initializeApp(config);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    let analytics = null;
+    if(config.measurementId){
+      try{
+        if(await analyticsIsSupported()) analytics = getAnalytics(app);
+        else console.info('Firebase Analytics is not supported in this browser context.');
+      }catch(err){console.warn('Firebase Analytics could not be initialized.',err);}
+    }
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({prompt:'select_account'});
     await setPersistence(auth,browserLocalPersistence);
