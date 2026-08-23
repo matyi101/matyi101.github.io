@@ -195,8 +195,11 @@
     .auth-card{width:min(720px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:0 18px 55px rgba(0,0,0,.12)}
     .auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}.auth-brand .logo{flex:0 0 auto}
     .seo-title{font-size:30px;line-height:1.15;margin:0 0 10px;letter-spacing:-.02em}.seo-lead{font-size:16px!important;color:var(--text)!important;margin-bottom:18px!important}.seo-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin:0 0 22px;padding:0;list-style:none;color:var(--muted);font-size:14px}.seo-features li::before{content:"✓";color:var(--good);font-weight:800;margin-right:8px}.auth-divider{border:0;border-top:1px solid var(--line);margin:20px 0}.auth-card h2{font-size:21px;line-height:1.25;margin:0 0 8px}.auth-card p{margin:0;color:var(--muted);line-height:1.6}
-    .auth-google{width:100%;margin-top:22px;min-height:50px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px}
-    .google-mark{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#4285f4;font-weight:800;border:1px solid #ddd}
+    .auth-provider{width:100%;min-height:50px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px}
+    .auth-google{margin-top:22px}.auth-apple{margin-top:10px;background:#111;color:#fff;border-color:#111}.auth-apple:hover{background:#000!important}
+    .google-mark{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#4285f4;font-weight:800;border:1px solid #ddd}.apple-mark{font-size:21px;line-height:1}
+    .auth-or{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--muted);font-size:12px}.auth-or::before,.auth-or::after{content:"";height:1px;background:var(--line);flex:1}
+    .auth-email-form{display:grid;gap:10px}.auth-email-form input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--text);padding:10px 12px;font:inherit}.auth-email-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.auth-email-actions button{min-height:46px}.auth-email-help{font-size:11px!important;margin-top:8px!important}
     .auth-status{min-height:22px;margin-top:12px!important;font-size:13px}.auth-status.error{color:var(--bad)}.auth-status.ok{color:var(--good)}
     .auth-privacy{margin-top:18px!important;padding-top:16px;border-top:1px solid var(--line);font-size:12px;line-height:1.55!important}
     .account-button{border:1px solid var(--line);background:var(--panel);color:var(--text);height:42px;min-width:42px;border-radius:12px;padding:4px 9px;display:flex;align-items:center;gap:8px;cursor:pointer}
@@ -241,10 +244,21 @@
     </ul>
     <hr class="auth-divider" />
     <h2 id="authTitle">Sign in to enter the Test Lab</h2>
-    <p id="authIntro">Use your Google account to access the private practice question bank and study tools.</p>
-    <button class="primary auth-google" id="googleAccessBtn" type="button"><span class="google-mark">G</span><span>Continue with Google</span></button>
+    <p id="authIntro">Choose a sign-in method to access the private practice question bank and study tools.</p>
+    <button class="primary auth-provider auth-google" id="googleAccessBtn" type="button"><span class="google-mark">G</span><span>Continue with Google</span></button>
+    <button class="secondary auth-provider auth-apple" id="appleAccessBtn" type="button"><span class="apple-mark">●</span><span>Continue with Apple</span></button>
+    <div class="auth-or" aria-hidden="true"><span>or use email</span></div>
+    <form class="auth-email-form" id="emailAuthForm">
+      <input id="emailAuthEmail" type="email" autocomplete="email" placeholder="Email address" required aria-label="Email address">
+      <input id="emailAuthPassword" type="password" autocomplete="current-password" placeholder="Password" minlength="6" required aria-label="Password">
+      <div class="auth-email-actions">
+        <button class="primary" id="emailSignInBtn" type="submit">Sign in</button>
+        <button class="secondary" id="emailRegisterBtn" type="button">Create account</button>
+      </div>
+      <p class="auth-email-help">New users can create an account with an email address and a password of at least 6 characters.</p>
+    </form>
     <p class="auth-status" id="authStatus">Checking your sign-in status…</p>
-    <p class="auth-privacy">By continuing, your Google display name, email address, first access, last access, and access count will be stored in this project's Firebase database for access administration. Your study progress remains in this browser in the current version.</p>
+    <p class="auth-privacy">By continuing, your account name (when provided), email address, sign-in provider, first access, last access, and access count will be stored in this project's Firebase database for access administration. Your study progress remains in this browser in the current version.</p>
   </div>
 </section>
 
@@ -907,13 +921,18 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
 <script src="firebase-config.js"></script>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
-  import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
+  import { getAuth, onAuthStateChanged, GoogleAuthProvider, OAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
   import { getFirestore, doc, getDoc, setDoc, serverTimestamp, increment, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
 
   const config = window.CDMP_FIREBASE_CONFIG;
   const gate = document.getElementById('authGate');
   const status = document.getElementById('authStatus');
   const googleBtn = document.getElementById('googleAccessBtn');
+  const appleBtn = document.getElementById('appleAccessBtn');
+  const emailAuthForm = document.getElementById('emailAuthForm');
+  const emailAuthEmail = document.getElementById('emailAuthEmail');
+  const emailAuthPassword = document.getElementById('emailAuthPassword');
+  const emailRegisterBtn = document.getElementById('emailRegisterBtn');
   const accountBtn = document.getElementById('accountBtn');
   const accountMenuWrap = document.getElementById('accountMenuWrap');
   const accountMenu = document.getElementById('accountMenu');
@@ -956,7 +975,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     if(status){status.textContent=message;status.classList.toggle('error',!!isError);status.classList.toggle('ok',!isError&&!!message);}
   }
   function initials(name,email){const base=(name||email||'?').trim();const parts=base.split(/\s+/).filter(Boolean);return parts.length>1?(parts[0][0]+parts.at(-1)[0]).toUpperCase():base.slice(0,2).toUpperCase();}
-  function providerLabel(user){const id=user?.providerData?.[0]?.providerId||'google.com';return id==='google.com'?'Google':id;}
+  function providerLabel(user){const id=user?.providerData?.[0]?.providerId||'password';return id==='google.com'?'Google':id==='apple.com'?'Apple':id==='password'?'Email / Password':id;}
   function closeAccountMenu(){accountMenu?.classList.remove('show');accountBtn?.setAttribute('aria-expanded','false');}
   function toggleAccountMenu(){const open=!accountMenu?.classList.contains('show');accountMenu?.classList.toggle('show',open);accountBtn?.setAttribute('aria-expanded',open?'true':'false');}
   function openAccount(){closeAccountMenu();accountModal?.classList.add('show');}
@@ -998,13 +1017,16 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
 
   if(!config?.apiKey || !config?.projectId){
     setGateState('auth-required','Firebase configuration is missing. Check firebase-config.js.',true);
-    if(googleBtn)googleBtn.disabled=true;
+    if(googleBtn)googleBtn.disabled=true;if(appleBtn)appleBtn.disabled=true;if(emailRegisterBtn)emailRegisterBtn.disabled=true;
   } else {
     const app = initializeApp(config);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({prompt:'select_account'});
+    const appleProvider = new OAuthProvider('apple.com');
+    appleProvider.addScope('email');
+    appleProvider.addScope('name');
     await setPersistence(auth,browserLocalPersistence);
 
     async function recordAccess(user){
@@ -1044,7 +1066,32 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
       }finally{googleBtn.disabled=false;}
     }
 
+    async function signInApple(){
+      appleBtn.disabled=true;status.textContent='Opening Apple sign-in…';status.classList.remove('error','ok');
+      try{await signInWithPopup(auth,appleProvider);}
+      catch(err){
+        if(err?.code==='auth/popup-blocked'){status.textContent='Popup blocked. Redirecting to Apple…';await signInWithRedirect(auth,appleProvider);return;}
+        status.textContent=err?.message||'Apple sign-in failed.';status.classList.add('error');
+      }finally{appleBtn.disabled=false;}
+    }
+    async function signInEmail(e){
+      e?.preventDefault();const email=emailAuthEmail?.value.trim(),password=emailAuthPassword?.value||'';if(!email||!password)return;
+      status.textContent='Signing in…';status.classList.remove('error','ok');
+      try{await signInWithEmailAndPassword(auth,email,password);}
+      catch(err){status.textContent=err?.code==='auth/invalid-credential'?'Email or password is incorrect.':(err?.message||'Email sign-in failed.');status.classList.add('error');}
+    }
+    async function registerEmail(){
+      const email=emailAuthEmail?.value.trim(),password=emailAuthPassword?.value||'';if(!email||!password){status.textContent='Enter an email address and password first.';status.classList.add('error');return;}
+      emailRegisterBtn.disabled=true;status.textContent='Creating account…';status.classList.remove('error','ok');
+      try{await createUserWithEmailAndPassword(auth,email,password);}
+      catch(err){status.textContent=err?.code==='auth/email-already-in-use'?'An account already exists for this email. Sign in instead.':err?.code==='auth/weak-password'?'Use a password with at least 6 characters.':(err?.message||'Could not create the account.');status.classList.add('error');}
+      finally{emailRegisterBtn.disabled=false;}
+    }
+
     googleBtn?.addEventListener('click',signInGoogle);
+    appleBtn?.addEventListener('click',signInApple);
+    emailAuthForm?.addEventListener('submit',signInEmail);
+    emailRegisterBtn?.addEventListener('click',registerEmail);
     accountBtn?.addEventListener('click',e=>{e.stopPropagation();toggleAccountMenu();});
     accountMenuAccountBtn?.addEventListener('click',openAccount);
     accountClose?.addEventListener('click',closeAccount);
@@ -1070,10 +1117,10 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     onAuthStateChanged(auth,async user=>{
       if(!user){
         isAdmin=false;adminBtn?.classList.remove('show');closeAdmin();
-        accountAvatar.textContent='?';accountName.textContent='Signed out';accountEmail.textContent='Google account';
-        if(accountMenuAvatar)accountMenuAvatar.textContent='?';if(accountMenuName)accountMenuName.textContent='Signed out';if(accountMenuEmail)accountMenuEmail.textContent='Google account';closeAccountMenu();
+        accountAvatar.textContent='?';accountName.textContent='Signed out';accountEmail.textContent='Not signed in';
+        if(accountMenuAvatar)accountMenuAvatar.textContent='?';if(accountMenuName)accountMenuName.textContent='Signed out';if(accountMenuEmail)accountMenuEmail.textContent='Not signed in';closeAccountMenu();
         if(modalUid)modalUid.textContent='—';if(accountAdminStatus)accountAdminStatus.textContent='Standard user';
-        setGateState('auth-required','Sign in with Google to continue.');
+        setGateState('auth-required','Choose Google, Apple, or email to continue.');
         return;
       }
       const name=user.displayName||'CDMP learner', email=user.email||'';
