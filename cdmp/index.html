@@ -8,12 +8,12 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="CDMP Lab" />
+  <meta name="apple-mobile-web-app-title" content="CDMP Practice" />
   <meta name="format-detection" content="telephone=no" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <title>CDMP DMBOK2 Question Lab</title>
+  <title>CDMP Practice Quizes and Exam</title>
   <style>
     :root {
       --bg:#f6f8fb; --panel:#ffffff; --panel2:#f0f4f8; --text:#172033; --muted:#667085;
@@ -34,10 +34,10 @@
     .app{min-height:100vh}
     .topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
     .topbar-inner{max-width:1500px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
-    .brand{display:flex;align-items:center;gap:11px;min-width:260px}
+    .brand{display:flex;align-items:center;gap:0;min-width:0;flex:1}
     .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#7c3aed);display:grid;place-items:center;color:white;font-weight:800;letter-spacing:-1px}
-    .brand h1{font-size:16px;margin:0;line-height:1.15}.brand small{color:var(--muted);display:block;font-size:12px;margin-top:2px}
-    .top-stats{display:flex;gap:8px;flex:1;overflow:auto;padding:2px 0}
+    .brand h1{font-size:18px;margin:0;line-height:1.2;white-space:nowrap}.brand small{color:var(--muted);display:block;font-size:12px;margin-top:2px}
+    .top-stats{display:none}
     .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:5px 9px;font-size:12px;white-space:nowrap;color:var(--muted)}
     .pill b{color:var(--text)}
     .icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:8px 10px}
@@ -188,69 +188,40 @@
     @media(max-width:900px){.account-button-text{display:none}.account-button{width:42px;min-width:42px;padding:4px;justify-content:center}}
     @media(max-width:700px){.auth-gate{padding:16px}.auth-card{padding:22px 18px;border-radius:16px}.auth-card h1{font-size:23px}.account-button{width:42px;min-width:42px;height:42px}}
 
-
-    /* Compact account menu */
-    .account-menu-wrap{position:relative;flex:0 0 auto}.compact-account{max-width:210px}.account-chevron{font-size:13px;color:var(--muted);transition:transform .16s ease}.account-button[aria-expanded="true"] .account-chevron{transform:rotate(180deg)}
-    .account-menu{display:none;position:absolute;right:0;top:calc(100% + 9px);z-index:95;width:min(310px,calc(100vw - 24px));padding:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 48px rgba(0,0,0,.18)}.account-menu.show{display:block}
-    .account-menu-head{display:flex;align-items:center;gap:10px;padding:9px 10px 11px;margin-bottom:4px;border-bottom:1px solid var(--line)}.account-menu-head>div{min-width:0}.account-menu-head b,.account-menu-head small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.account-menu-head small{font-size:11px;color:var(--muted)}
-    .account-menu-item{width:100%;min-height:0!important;display:flex!important;flex-direction:column;align-items:flex-start;gap:1px;border:0;background:transparent;color:var(--text);border-radius:9px;padding:9px 10px;text-align:left}.account-menu-item:hover{background:var(--panel2)}.account-menu-item>span{font-weight:750;font-size:13px}.account-menu-item>small{font-size:10px;color:var(--muted)}.account-menu-item.admin-entry{display:none!important}.account-menu-item.admin-entry.show{display:flex!important}.account-menu .install-btn:not(.hidden){display:flex!important}.account-menu-danger>span{color:var(--bad)}
-    @media(max-width:900px){.compact-account{width:42px;min-width:42px;padding:4px;justify-content:center}.compact-account .account-button-text,.compact-account .account-chevron{display:none}}
-    @media(max-width:700px){.account-menu{position:fixed;right:max(10px,var(--safe-right));left:max(10px,var(--safe-left));top:calc(61px + var(--safe-top));width:auto}.account-menu-head{padding-top:7px}}
-
     /* Owner-only admin dashboard */
     .admin-entry{display:none}.admin-entry.show{display:inline-flex}
     .admin-panel{width:min(1050px,96vw);max-height:90dvh}
     .admin-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 16px 4px}
     .admin-stat{border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:12px}.admin-stat small{display:block;color:var(--muted);margin-bottom:5px}.admin-stat b{font-size:20px}
-    .admin-periods{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:12px 16px 0}.admin-period-btn{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:999px;padding:6px 11px;min-height:36px;font-size:12px;font-weight:750}.admin-period-btn.active{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,var(--panel));color:var(--brand)}
-    .admin-toolbar{display:flex;gap:10px;align-items:center;padding:10px 16px 12px}.admin-toolbar input{flex:1;min-width:0}.admin-status{font-size:12px;color:var(--muted)}
+    .admin-toolbar{display:flex;gap:10px;align-items:center;padding:12px 16px}.admin-toolbar input{flex:1;min-width:0}.admin-status{font-size:12px;color:var(--muted)}
     .admin-table-wrap{overflow:auto;margin:0 16px 16px;border:1px solid var(--line);border-radius:12px}.admin-table{width:100%;border-collapse:collapse;min-width:790px}.admin-table th,.admin-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.admin-table th{position:sticky;top:0;background:var(--panel);z-index:2;font-size:12px}.admin-table td{font-size:13px}.admin-user{display:flex;align-items:center;gap:9px}.admin-user img{width:30px;height:30px;border-radius:50%;object-fit:cover}.admin-user .mini-avatar{width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:700}.admin-empty{padding:30px;text-align:center;color:var(--muted)}
     @media(max-width:700px){.admin-summary{grid-template-columns:1fr 1fr}.admin-toolbar{flex-wrap:wrap}.admin-toolbar input{flex-basis:100%}.admin-panel{width:100%;max-height:94dvh}}
-
-
-    /* Firebase Analytics consent */
-    .analytics-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:120;display:none;max-width:760px;margin:auto;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 55px rgba(0,0,0,.18);padding:14px 16px;align-items:center;gap:14px}
-    .analytics-consent.show{display:flex}.analytics-consent p{margin:0;flex:1;font-size:12px;color:var(--muted);line-height:1.5}.analytics-consent b{color:var(--text)}.analytics-consent-actions{display:flex;gap:8px;flex:0 0 auto}
-    @media(max-width:650px){.analytics-consent{left:10px;right:10px;bottom:10px;align-items:stretch;flex-direction:column}.analytics-consent-actions{display:grid;grid-template-columns:1fr 1fr}.analytics-consent-actions button{width:100%}}
 
   </style>
 </head>
 <body class="auth-pending">
 <section class="auth-gate" id="authGate" aria-live="polite">
   <div class="auth-card">
-    <div class="auth-brand"><div class="logo">DM</div><div><b>CDMP DMBOK2 Question Lab</b><p style="font-size:12px">Private study access</p></div></div>
+    <div class="auth-brand"><div><b>CDMP Practice Quizes and Exam</b><p style="font-size:12px">Private study access</p></div></div>
     <h1 id="authTitle">Sign in to enter the Test Lab</h1>
     <p id="authIntro">Access is restricted to registered users. Use your Google account to continue.</p>
     <button class="primary auth-google" id="googleAccessBtn" type="button"><span class="google-mark">G</span><span>Continue with Google</span></button>
     <p class="auth-status" id="authStatus">Checking your sign-in status…</p>
-    <p class="auth-privacy">By continuing, your Google display name, email address, first access, last access and access count will be stored in this project's Firebase database for access administration. Your quiz progress remains in your browser in this version. Optional Firebase Analytics is only enabled if you allow it.</p>
+    <p class="auth-privacy">By continuing, your Google display name, email address, first access, last access and access count will be stored in this project's Firebase database for access administration. Your quiz progress remains in your browser in this version.</p>
   </div>
 </section>
-
-<div class="analytics-consent" id="analyticsConsent" role="dialog" aria-live="polite" aria-label="Analytics choice">
-  <p><b>Help improve the Test Lab?</b> Firebase Analytics can collect anonymous usage events such as session starts, completed quizzes, scores, and feature use. Names and email addresses are not sent as analytics event data.</p>
-  <div class="analytics-consent-actions"><button class="secondary" id="analyticsDeclineBtn" type="button">No thanks</button><button class="primary" id="analyticsAcceptBtn" type="button" style="width:auto">Allow analytics</button></div>
-</div>
 
 <div class="app" id="app">
   <header class="topbar">
     <div class="topbar-inner">
       <button class="icon-btn mobile-menu-btn" id="menuBtn" type="button" aria-label="Open session controls" aria-controls="sidebar" aria-expanded="false">☰</button>
-      <div class="brand"><div class="logo">DM</div><div><h1>CDMP DMBOK2 Question Lab</h1><small>Private 694-question verified study bank</small></div></div>
+      <div class="brand"><div><h1>CDMP Practice Quizes and Exam</h1></div></div>
       <div class="top-stats" id="topStats"></div>
       <button class="dashboard-link" id="dashboardBtn" type="button" title="Open dashboard" aria-label="Open dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-7h6v7"></path></svg><span>Dashboard</span></button>
-      <div class="account-menu-wrap" id="accountMenuWrap">
-        <button class="account-button compact-account" id="accountBtn" type="button" title="Account and study menu" aria-label="Open account and study menu" aria-haspopup="menu" aria-expanded="false"><span class="account-avatar" id="accountAvatar">?</span><span class="account-button-text"><b id="accountName">Signed in</b><small id="accountEmail">Google account</small></span><span class="account-chevron" aria-hidden="true">⌄</span></button>
-        <div class="account-menu" id="accountMenu" role="menu" aria-label="Account and study menu">
-          <div class="account-menu-head"><span class="account-avatar" id="accountMenuAvatar">?</span><div><b id="accountMenuName">Signed in</b><small id="accountMenuEmail">Google account</small></div></div>
-          <button class="account-menu-item" id="accountMenuAccountBtn" type="button" role="menuitem"><span>Account</span><small>Firebase identity and access</small></button>
-          <button class="account-menu-item" id="profileBtn" type="button" role="menuitem"><span>Study profile</span><small id="profileTopGoal">Local study settings</small></button>
-          <button class="account-menu-item admin-entry" id="adminBtn" type="button" role="menuitem"><span>Admin dashboard</span><small>Users and access activity</small></button>
-          <button class="account-menu-item install-btn hidden" id="installBtn" type="button" role="menuitem"><span>Install app</span><small>Add Test Lab to this device</small></button>
-          <button class="account-menu-item account-menu-danger" id="accountMenuSignOutBtn" type="button" role="menuitem"><span>Sign out</span><small>Close Test Lab access</small></button>
-        </div>
-      </div>
-      <span class="hidden" id="profileTopAvatar">?</span><span class="hidden" id="profileTopName">Create profile</span>
+      <button class="dashboard-link admin-entry" id="adminBtn" type="button" title="Open owner admin dashboard" aria-label="Open admin dashboard"><span>Admin</span></button>
+      <button class="account-button" id="accountBtn" type="button" title="Signed-in account" aria-label="Open signed-in account"><span class="account-avatar" id="accountAvatar">?</span><span class="account-button-text"><b id="accountName">Signed in</b><small id="accountEmail">Google account</small></span></button>
+      <button class="profile-button" id="profileBtn" type="button" title="Open study profile"><span class="profile-avatar" id="profileTopAvatar">?</span><span class="profile-button-text"><b id="profileTopName">Create profile</b><small id="profileTopGoal">Local study profile</small></span></button>
+      <button class="icon-btn install-btn hidden" id="installBtn" type="button" title="Install app" aria-label="Install app">⇩</button>
       <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme" aria-label="Toggle light and dark theme">◐</button>
     </div>
   </header>
@@ -309,11 +280,7 @@
 
     <main class="main">
       <section class="welcome" id="welcome">
-        <h2>Study the private multi-source question bank with DMBOK references</h2>
-        <p>This private static app combines the original 490-question bank with the supplied Data Strategy Professionals sets and deduplicated DAMA practice-attempt questions. Imported items retain source provenance and source answers, and are tagged as DMBOK verified, corrected, source-conflict, or review.</p>
-        <div class="metric-grid" id="metricGrid"></div>
-        <div class="notice"><b>Reference note.</b> The question bank was written against DMBOK2 (2017), so the source page number is retained. The revised-edition page is a content match against the supplied 2024 edition. The original-bank reference corrections are retained, and imported-source disagreements are explicitly tagged rather than silently overwritten.</div>
-        <p style="font-size:13px;margin-top:18px">Choose a section or knowledge area on the left, set a session size, and start. Study mode can show feedback as you go. Exam mode hides answers until submission and uses a 54-second-per-question timer (90 minutes for 100 questions).</p>
+        <p style="font-size:16px;line-height:1.6;margin-top:18px">Choose a section or knowledge area on the left, set a session size, and start. Study mode can show feedback as you go. Exam mode hides answers until submission and uses a 54-second-per-question timer (90 minutes for 100 questions).</p>
         <section class="profile-card" id="profileCard" aria-label="Study profile"></section>
         <div class="progress-panel" id="progressPanel">
           <div class="progress-head"><div><h3>Your progress</h3><p>Performance is stored only in this browser. Weak-area scores use your completed answers across study, missed-question, weak-area, and exam sessions.</p></div><button class="ghost" id="resetProgressBtn">Reset progress</button></div>
@@ -395,15 +362,8 @@
       <div class="admin-stat"><small>Accessed today</small><b id="adminTodayCount">0</b></div>
       <div class="admin-stat"><small>Verified emails</small><b id="adminVerifiedCount">0</b></div>
     </div>
-    <div class="admin-periods" id="adminPeriods" aria-label="Filter users by recent access">
-      <button class="admin-period-btn active" type="button" data-admin-period="all">All users</button>
-      <button class="admin-period-btn" type="button" data-admin-period="today">Today</button>
-      <button class="admin-period-btn" type="button" data-admin-period="7">Last 7 days</button>
-      <button class="admin-period-btn" type="button" data-admin-period="30">Last 30 days</button>
-    </div>
     <div class="admin-toolbar">
       <input id="adminSearch" type="search" placeholder="Search name or email…" aria-label="Search registered users">
-      <button class="secondary" id="adminExportBtn" type="button">Export CSV</button>
       <button class="secondary" id="adminRefreshBtn" type="button">Refresh</button>
       <span class="admin-status" id="adminStatus">Ready</span>
     </div>
@@ -603,7 +563,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     const mc=ALL.filter(q=>q.type==='multiple-choice').length, ms=ALL.length-mc;
     const original=ALL.filter(q=>sourceCollection(q)==='Original').length, combined=ALL.length-original;
     el.topStats.innerHTML=`<span class="pill"><b>${ALL.length}</b> questions</span><span class="pill"><b>${original}</b> original</span><span class="pill"><b>${combined}</b> combined</span><span class="pill"><b>17</b> chapters</span><span class="pill"><b>${state.missed.size}</b> missed</span>`;
-    el.metricGrid.innerHTML=[['Questions',ALL.length],['Original source',original],['Combined sources',combined],['Multi-select',ms]].map(([k,v])=>`<div class="metric"><strong>${v}</strong><span>${k}</span></div>`).join('');
+    if(el.metricGrid) el.metricGrid.innerHTML=[['Questions',ALL.length],['Original source',original],['Combined sources',combined],['Multi-select',ms]].map(([k,v])=>`<div class="metric"><strong>${v}</strong><span>${k}</span></div>`).join('');
   }
 
   function filteredPool(){
@@ -642,7 +602,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     el.autoCheck.disabled=mode==='exam';
     el.welcome.classList.add('hidden'); el.summary.classList.remove('show'); el.sessionHead.classList.add('show'); el.card.classList.add('show'); el.navigator.classList.add('show'); el.export.disabled=false; el.reset.disabled=false;
     renderExamBanner(); render();
-    window.cdmpTrack?.('quiz_session_start',{session_kind:kind,session_mode:mode,question_count:pool.length,exam_profile:examProfile||0});
   }
 
   function startSession(){
@@ -781,7 +740,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     if(state.mode==='study'&&el.autoCheck.checked&&q.type!=='multi-select')checkCurrent(); else render();
   }
 
-  function checkCurrent(){ const q=current(); if(!getSelected(q).length)return; state.checked[q.id]=true; recordAttempt(q); window.cdmpTrack?.('question_checked',{session_kind:state.kind,knowledge_area:q.knowledge_area,is_correct:isCorrect(q)?1:0,question_type:q.type}); render(); }
+  function checkCurrent(){ const q=current(); if(!getSelected(q).length)return; state.checked[q.id]=true; recordAttempt(q); render(); }
 
   function renderFeedback(q,show){
     el.feedback.classList.toggle('show',!!show); if(!show)return;
@@ -800,7 +759,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     el.navGrid.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.index=Number(b.dataset.i);render();window.scrollTo({top:0,behavior:'smooth'});});
   }
 
-  function toggleBookmark(){ const q=current(); if(!q)return; const was=state.bookmarks.has(q.id); was?state.bookmarks.delete(q.id):state.bookmarks.add(q.id); localStorage.setItem('cdmp-bookmarks',JSON.stringify([...state.bookmarks])); window.cdmpTrack?.('bookmark_change',{bookmarked:was?0:1,knowledge_area:q.knowledge_area}); render(); updatePoolCount(); }
+  function toggleBookmark(){ const q=current(); if(!q)return; state.bookmarks.has(q.id)?state.bookmarks.delete(q.id):state.bookmarks.add(q.id); localStorage.setItem('cdmp-bookmarks',JSON.stringify([...state.bookmarks])); render(); updatePoolCount(); }
   function clearCurrent(){ const q=current(); if(!q||state.checked[q.id])return; delete state.answers[q.id]; render(); }
   function go(delta){ const ni=state.index+delta; if(ni>=0&&ni<state.session.length){state.index=ni;render();window.scrollTo({top:0,behavior:'smooth'});} }
 
@@ -837,7 +796,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     const rows=breakdownRows(base);
     el.summaryBreakdown.innerHTML=`<h3>Knowledge-area result</h3><div class="table-wrap"><table class="summary-table"><thead><tr><th>Knowledge area</th><th>Correct</th><th>Answered</th><th>Score</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${escapeHTML(r.ka)}</td><td>${r.correct}/${r.total}</td><td>${r.answered}/${r.total}</td><td>${pct(r.correct,r.total)}%</td></tr>`).join('')}</tbody></table></div>`;
     el.retryWrong.disabled=!base.some(q=>!isCorrect(q)); renderDashboard();
-    window.cdmpTrack?.('quiz_session_complete',{session_kind:state.kind,session_mode:state.mode,question_count:total,answered_count:answered,correct_count:correct,score_percent:scorePct,duration_seconds:Math.round((state.endedAt-state.startedAt)/1000),auto_submit:auto?1:0});
   }
 
   function review(mode){
@@ -890,7 +848,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     const rows=base.map(q=>({id:q.id,section:q.section,knowledge_area:q.knowledge_area,question_number:q.number,question:q.question,source_collection:sourceCollection(q),source_group:q.source_group,source_name:q.source_name,source_question:q.source_question,verification_status:q.verification_status,selected:(state.answers[q.id]||[]).map(n=>letters[n-1]),correct:q.correct_labels,source_answer:q.source_answer_labels,dmbok_verified_answer:q.dmbok_verified_answer_labels,is_correct:isCorrect(q),dmbok_2017:q.dmbok_2017_pages,dmbok_2024:q.dmbok_revised_pages}));
     const payload={exported_at:new Date().toISOString(),profile:state.profile?{...state.profile}:null,mode:state.mode,kind:state.kind,started_at:state.startedAt?new Date(state.startedAt).toISOString():null,results:rows,progress_snapshot:{missed:[...state.missed],questions:state.progressData.questions,sessions:state.progressData.sessions}};
     downloadJSON(payload,'cdmp-quiz-results.json');
-    window.cdmpTrack?.('quiz_results_export',{session_kind:state.kind,question_count:base.length});
   }
 
   function resetSession(){
@@ -921,7 +878,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
 <script src="firebase-config.js"></script>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
-  import { getAnalytics, logEvent, isSupported, setAnalyticsCollectionEnabled } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js';
   import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
   import { getFirestore, doc, getDoc, setDoc, serverTimestamp, increment, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
 
@@ -930,15 +886,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   const status = document.getElementById('authStatus');
   const googleBtn = document.getElementById('googleAccessBtn');
   const accountBtn = document.getElementById('accountBtn');
-  const accountMenuWrap = document.getElementById('accountMenuWrap');
-  const accountMenu = document.getElementById('accountMenu');
-  const accountMenuAccountBtn = document.getElementById('accountMenuAccountBtn');
-  const accountMenuSignOutBtn = document.getElementById('accountMenuSignOutBtn');
-  const studyProfileMenuBtn = document.getElementById('profileBtn');
-  const installMenuBtn = document.getElementById('installBtn');
-  const accountMenuAvatar = document.getElementById('accountMenuAvatar');
-  const accountMenuName = document.getElementById('accountMenuName');
-  const accountMenuEmail = document.getElementById('accountMenuEmail');
   const accountAvatar = document.getElementById('accountAvatar');
   const accountName = document.getElementById('accountName');
   const accountEmail = document.getElementById('accountEmail');
@@ -957,8 +904,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   const adminCloseBtn = document.getElementById('adminCloseBtn');
   const adminCloseActionBtn = document.getElementById('adminCloseActionBtn');
   const adminRefreshBtn = document.getElementById('adminRefreshBtn');
-  const adminExportBtn = document.getElementById('adminExportBtn');
-  const adminPeriods = document.getElementById('adminPeriods');
   const adminSearch = document.getElementById('adminSearch');
   const adminUsersBody = document.getElementById('adminUsersBody');
   const adminStatus = document.getElementById('adminStatus');
@@ -967,14 +912,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   const adminTodayCount = document.getElementById('adminTodayCount');
   const adminVerifiedCount = document.getElementById('adminVerifiedCount');
   let adminUsers = [];
-  let adminPeriod = 'all';
-  let adminUpdatedAt = null;
-  const ANALYTICS_CONSENT_KEY='cdmp-analytics-consent-v1';
-  const analyticsConsent=document.getElementById('analyticsConsent');
-  const analyticsAcceptBtn=document.getElementById('analyticsAcceptBtn');
-  const analyticsDeclineBtn=document.getElementById('analyticsDeclineBtn');
-  let analytics=null;
-  window.cdmpTrack=()=>{};
   let isAdmin = false;
 
   function setGateState(state, message='', isError=false){
@@ -984,73 +921,19 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   }
   function initials(name,email){const base=(name||email||'?').trim();const parts=base.split(/\s+/).filter(Boolean);return parts.length>1?(parts[0][0]+parts.at(-1)[0]).toUpperCase():base.slice(0,2).toUpperCase();}
   function providerLabel(user){const id=user?.providerData?.[0]?.providerId||'google.com';return id==='google.com'?'Google':id;}
-  function closeAccountMenu(){accountMenu?.classList.remove('show');accountBtn?.setAttribute('aria-expanded','false');}
-  function toggleAccountMenu(){const open=!accountMenu?.classList.contains('show');accountMenu?.classList.toggle('show',open);accountBtn?.setAttribute('aria-expanded',open?'true':'false');}
-  function openAccount(){closeAccountMenu();accountModal?.classList.add('show');}
+  function openAccount(){accountModal?.classList.add('show');}
   function closeAccount(){accountModal?.classList.remove('show');}
-  async function configureAnalytics(app){
-    const choice=localStorage.getItem(ANALYTICS_CONSENT_KEY);
-    analyticsConsent?.classList.toggle('show',choice===null);
-    try{
-      if(!(await isSupported()))return;
-      analytics=getAnalytics(app);
-      setAnalyticsCollectionEnabled(analytics,choice==='yes');
-      window.cdmpTrack=(name,params={})=>{
-        if(localStorage.getItem(ANALYTICS_CONSENT_KEY)!=='yes'||!analytics)return;
-        try{logEvent(analytics,name,params);}catch(err){console.warn('Analytics event failed',err);}
-      };
-      if(choice==='yes')window.cdmpTrack('analytics_ready',{host:location.hostname});
-    }catch(err){console.warn('Firebase Analytics unavailable',err);}
-  }
-  function setAnalyticsChoice(allow){
-    localStorage.setItem(ANALYTICS_CONSENT_KEY,allow?'yes':'no');
-    analyticsConsent?.classList.remove('show');
-    if(analytics)setAnalyticsCollectionEnabled(analytics,allow);
-    if(allow)window.cdmpTrack?.('analytics_consent',{granted:1});
-  }
-
   function closeAdmin(){adminModal?.classList.remove('show');}
   function toDate(value){try{return value?.toDate?.()||null;}catch{return null;}}
   function fmtDate(value){const d=toDate(value);return d?d.toLocaleString(): '—';}
   function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function adminPeriodMatches(user){
-    if(adminPeriod==='all')return true;
-    const d=toDate(user.lastAccessAt);if(!d)return false;
-    const now=new Date();
-    if(adminPeriod==='today')return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()&&d.getDate()===now.getDate();
-    const days=Number(adminPeriod);
-    return Number.isFinite(days)&&d.getTime()>=now.getTime()-(days*24*60*60*1000);
-  }
-  function filteredAdminUsers(){
-    const term=(adminSearch?.value||'').trim().toLowerCase();
-    return adminUsers.filter(u=>adminPeriodMatches(u)&&(!term||String(u.name||'').toLowerCase().includes(term)||String(u.email||'').toLowerCase().includes(term)||String(u.uid||'').toLowerCase().includes(term)));
-  }
   function renderAdminUsers(){
-    const rows=filteredAdminUsers();
+    const term=(adminSearch?.value||'').trim().toLowerCase();
+    const rows=adminUsers.filter(u=>!term||String(u.name||'').toLowerCase().includes(term)||String(u.email||'').toLowerCase().includes(term));
     adminUsersBody.innerHTML=rows.length?rows.map(u=>{
       const avatar=u.photoURL?`<img src="${esc(u.photoURL)}" alt="">`:`<span class="mini-avatar">${esc(initials(u.name,u.email))}</span>`;
       return `<tr><td><div class="admin-user">${avatar}<div><b>${esc(u.name||'Unnamed user')}</b><br><small>${esc(u.uid||'')}</small></div></div></td><td>${esc(u.email||'—')}</td><td>${esc(u.provider||'—')}</td><td>${esc(fmtDate(u.firstAccessAt))}</td><td>${esc(fmtDate(u.lastAccessAt))}</td><td>${Number(u.accessCount||0).toLocaleString()}</td></tr>`;
-    }).join(''):`<tr><td colspan="6" class="admin-empty">No users match the selected activity period and search.</td></tr>`;
-    if(adminStatus){const stamp=adminUpdatedAt?` • Updated ${adminUpdatedAt.toLocaleTimeString()}`:'';adminStatus.textContent=`Showing ${rows.length} of ${adminUsers.length}${stamp}`;}
-  }
-  function setAdminPeriod(period){
-    adminPeriod=period||'all';
-    adminPeriods?.querySelectorAll('[data-admin-period]').forEach(btn=>btn.classList.toggle('active',btn.dataset.adminPeriod===adminPeriod));
-    renderAdminUsers();
-  }
-  function csvCell(value){const text=String(value??'');return `"${text.replace(/"/g,'""')}"`;}
-  function exportAdminCsv(){
-    if(!isAdmin)return;
-    const rows=filteredAdminUsers();
-    const header=['Name','Email','Firebase UID','Provider','First access','Last access','Access count','Email verified'];
-    const lines=[header.map(csvCell).join(',')];
-    rows.forEach(u=>{
-      const first=toDate(u.firstAccessAt),last=toDate(u.lastAccessAt);
-      lines.push([u.name||'',u.email||'',u.uid||'',u.provider||'',first?first.toISOString():'',last?last.toISOString():'',Number(u.accessCount||0),u.emailVerified?'Yes':'No'].map(csvCell).join(','));
-    });
-    const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
-    window.cdmpTrack?.('admin_users_export',{visible_users:rows.length,activity_period:String(adminPeriod)});
-    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`cdmp-users-${adminPeriod==='all'?'all':adminPeriod==='today'?'today':`last-${adminPeriod}-days`}-${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+    }).join(''):`<tr><td colspan="6" class="admin-empty">No users match this search.</td></tr>`;
   }
   async function checkAdmin(db,user){
     if(!user){isAdmin=false;return false;}
@@ -1070,17 +953,16 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
       adminAccessCount.textContent=adminUsers.reduce((a,u)=>a+Number(u.accessCount||0),0).toLocaleString();
       adminTodayCount.textContent=adminUsers.filter(u=>{const d=toDate(u.lastAccessAt);return d&&d.getFullYear()===y&&d.getMonth()===m&&d.getDate()===day;}).length.toLocaleString();
       adminVerifiedCount.textContent=adminUsers.filter(u=>u.emailVerified).length.toLocaleString();
-      adminUpdatedAt=new Date();renderAdminUsers();
+      renderAdminUsers();adminStatus.textContent=`Updated ${new Date().toLocaleTimeString()}`;
     }catch(err){console.error('Admin user list failed',err);adminStatus.textContent='Could not load users';adminUsersBody.innerHTML=`<tr><td colspan="6" class="admin-empty">${esc(err?.message||'Firestore denied the admin query.')}</td></tr>`;}
   }
-  async function openAdmin(db){if(!isAdmin)return;adminModal?.classList.add('show');window.cdmpTrack?.('admin_dashboard_open');await loadAdminUsers(db);}
+  async function openAdmin(db){if(!isAdmin)return;adminModal?.classList.add('show');await loadAdminUsers(db);}
 
   if(!config?.apiKey || !config?.projectId){
     setGateState('auth-required','Firebase configuration is missing. Check firebase-config.js.',true);
     if(googleBtn)googleBtn.disabled=true;
   } else {
     const app = initializeApp(config);
-    await configureAnalytics(app);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
@@ -1124,48 +1006,35 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
       }finally{googleBtn.disabled=false;}
     }
 
-    analyticsAcceptBtn?.addEventListener('click',()=>setAnalyticsChoice(true));
-    analyticsDeclineBtn?.addEventListener('click',()=>setAnalyticsChoice(false));
     googleBtn?.addEventListener('click',signInGoogle);
-    accountBtn?.addEventListener('click',e=>{e.stopPropagation();toggleAccountMenu();});
-    accountMenuAccountBtn?.addEventListener('click',openAccount);
-    studyProfileMenuBtn?.addEventListener('click',closeAccountMenu);
-    installMenuBtn?.addEventListener('click',closeAccountMenu);
+    accountBtn?.addEventListener('click',openAccount);
     accountClose?.addEventListener('click',closeAccount);
     accountCloseAction?.addEventListener('click',closeAccount);
     accountModal?.addEventListener('click',e=>{if(e.target===accountModal)closeAccount();});
-    adminBtn?.addEventListener('click',()=>{closeAccountMenu();openAdmin(db);});
+    adminBtn?.addEventListener('click',()=>openAdmin(db));
     adminCloseBtn?.addEventListener('click',closeAdmin);
     adminCloseActionBtn?.addEventListener('click',closeAdmin);
     adminRefreshBtn?.addEventListener('click',()=>loadAdminUsers(db));
-    adminExportBtn?.addEventListener('click',exportAdminCsv);
-    adminPeriods?.addEventListener('click',e=>{const btn=e.target.closest('[data-admin-period]');if(btn)setAdminPeriod(btn.dataset.adminPeriod);});
     adminSearch?.addEventListener('input',renderAdminUsers);
     adminModal?.addEventListener('click',e=>{if(e.target===adminModal)closeAdmin();});
-    document.addEventListener('click',e=>{if(accountMenu?.classList.contains('show')&&!accountMenuWrap?.contains(e.target))closeAccountMenu();});
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAccountMenu();});
-    async function performSignOut(){
+    signOutBtn?.addEventListener('click',async()=>{
       const u=auth.currentUser;if(u)sessionStorage.removeItem('cdmp-access-logged-'+u.uid);
-      window.cdmpTrack?.('logout',{provider:'google'});closeAccountMenu();closeAccount();await signOut(auth);
-    }
-    accountMenuSignOutBtn?.addEventListener('click',performSignOut);
-    signOutBtn?.addEventListener('click',performSignOut);
+      closeAccount();await signOut(auth);
+    });
 
     try{await getRedirectResult(auth);}catch(err){status.textContent=err?.message||'Sign-in redirect failed.';status.classList.add('error');}
 
     onAuthStateChanged(auth,async user=>{
       if(!user){
         isAdmin=false;adminBtn?.classList.remove('show');closeAdmin();
-        accountAvatar.textContent='?';accountName.textContent='Signed out';accountEmail.textContent='Google account';if(accountMenuAvatar)accountMenuAvatar.textContent='?';if(accountMenuName)accountMenuName.textContent='Signed out';if(accountMenuEmail)accountMenuEmail.textContent='Google account';closeAccountMenu();
+        accountAvatar.textContent='?';accountName.textContent='Signed out';accountEmail.textContent='Google account';
         if(modalUid)modalUid.textContent='—';if(accountAdminStatus)accountAdminStatus.textContent='Standard user';
         setGateState('auth-required','Sign in with Google to continue.');
         return;
       }
       const name=user.displayName||'CDMP learner', email=user.email||'';
-      const analyticsLoginKey='cdmp-analytics-login-'+user.uid;
-      if(!sessionStorage.getItem(analyticsLoginKey)){window.cdmpTrack?.('login',{method:'Google'});sessionStorage.setItem(analyticsLoginKey,'1');}
-      if(user.photoURL){const img=`<img src="${user.photoURL.replace(/"/g,'&quot;')}" alt="">`;accountAvatar.innerHTML=img;if(accountMenuAvatar)accountMenuAvatar.innerHTML=img;} else {const init=initials(name,email);accountAvatar.textContent=init;if(accountMenuAvatar)accountMenuAvatar.textContent=init;}
-      accountName.textContent=name;accountEmail.textContent=email;if(accountMenuName)accountMenuName.textContent=name;if(accountMenuEmail)accountMenuEmail.textContent=email;
+      if(user.photoURL)accountAvatar.innerHTML=`<img src="${user.photoURL.replace(/"/g,'&quot;')}" alt="">`; else accountAvatar.textContent=initials(name,email);
+      accountName.textContent=name;accountEmail.textContent=email;
       modalName.textContent=name;modalEmail.textContent=email;modalProvider.textContent=providerLabel(user);modalUid.textContent=user.uid;accessStatus.textContent='Authenticated';
       setGateState('auth-ready','Access granted.');
       try{await recordAccess(user);accessStatus.textContent='Authenticated · access recorded';}
