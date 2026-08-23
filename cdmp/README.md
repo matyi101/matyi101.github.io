@@ -55,3 +55,7 @@ A dedicated **Dashboard** button is available in the top navigation bar. On narr
 ## Firebase access control
 
 This build adds mandatory Google authentication using Firebase project `cdmp-test-lab`. The quiz interface remains hidden until Firebase confirms a signed-in user. Basic access information is written to Firestore under `users/{uid}`. Existing 694 question IDs and browser-local progress/profile keys are unchanged. See `FIREBASE_GITHUB_SETUP.md`.
+
+## Owner admin dashboard
+
+This build includes an owner-only Firebase admin dashboard. Admin status is granted by creating `admins/{yourFirebaseUid}` in Firestore. See `ADMIN_SETUP.md` for the one-time setup and the updated `firestore.rules` required for secure user-list access.

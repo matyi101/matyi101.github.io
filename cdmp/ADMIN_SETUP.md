@@ -35,3 +35,6 @@ The **Admin** button will then appear in the top bar for that account only.
 Ordinary users can read/update only their own `users/{uid}` document. Admins can read all documents in `users` for the dashboard. Admins do not receive write access to other users and do not receive access to users' session subcollections.
 
 The browser cannot create an admin marker. Admin access is granted only by manually creating/removing `admins/{uid}` in Firebase Console.
+
+## Admin activity filters and CSV export
+The admin dashboard now includes **All users**, **Today**, **Last 7 days**, and **Last 30 days** filters based on each user's `lastAccessAt` timestamp. **Export CSV** downloads the currently filtered/searched user list. This does not require additional Firestore permissions because it uses the same owner-only `/users` read access.

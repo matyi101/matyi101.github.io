@@ -3,21 +3,37 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Each signed-in user can access only their own user document.
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Users can access their own user document. The owner/admin can read all
+    // user documents for the admin dashboard, but cannot modify users here.
     match /users/{userId} {
-      allow read, create, update: if request.auth != null
-                                  && request.auth.uid == userId;
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow create, update: if signedIn() && request.auth.uid == userId;
       allow delete: if false;
     }
 
-    // Reserved for later session syncing. Each user can access only their own sessions.
+    // Reserved for later study-session syncing. Users can access only their
+    // own session records. Admin access is intentionally not granted here.
     match /users/{userId}/sessions/{sessionId} {
-      allow read, create, update: if request.auth != null
-                                  && request.auth.uid == userId;
+      allow read, create, update: if signedIn() && request.auth.uid == userId;
       allow delete: if false;
     }
 
-    // Deny everything else by default.
+    // A signed-in user may read only their own admin marker. Admin marker
+    // documents must be created/removed manually in Firebase Console.
+    match /admins/{adminId} {
+      allow read: if signedIn() && request.auth.uid == adminId;
+      allow write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
