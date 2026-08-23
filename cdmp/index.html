@@ -13,7 +13,25 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <title>CDMP Practice Quizes and Exam</title>
+  <title>CDMP Practice Quizzes &amp; Exam | DAMA DMBOK2 Study Tool</title>
+  <meta name="description" content="Prepare for the CDMP Data Management Fundamentals exam with DMBOK2-based practice quizzes, mock exams, progress tracking, missed-question review and knowledge-area practice." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://matyi101.github.io/cdmp/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="CDMP Practice Quizzes &amp; Exam" />
+  <meta property="og:description" content="DMBOK2-based CDMP practice quizzes, mock exams and study progress tracking." />
+  <meta property="og:url" content="https://matyi101.github.io/cdmp/" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "CDMP Practice Quizzes and Exam",
+    "url": "https://matyi101.github.io/cdmp/",
+    "applicationCategory": "EducationalApplication",
+    "description": "A study tool for CDMP Data Management Fundamentals preparation with DMBOK2-based practice quizzes, mock exams and progress tracking."
+  }
+  </script>
   <style>
     :root {
       --bg:#f6f8fb; --panel:#ffffff; --panel2:#f0f4f8; --text:#172033; --muted:#667085;
@@ -174,9 +192,9 @@
     body.auth-pending .app, body.auth-required .app{display:none!important}
     body.auth-ready .auth-gate{display:none!important}
     .auth-gate{min-height:100dvh;display:grid;place-items:center;padding:24px;background:var(--bg);color:var(--text)}
-    .auth-card{width:min(470px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 18px 55px rgba(0,0,0,.12)}
-    .auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}.auth-brand .logo{flex:0 0 auto}
-    .auth-card h1{font-size:26px;line-height:1.2;margin:0 0 8px}.auth-card p{margin:0;color:var(--muted);line-height:1.6}
+    .auth-card{width:min(720px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:0 18px 55px rgba(0,0,0,.12)}
+    .auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}.auth-brand .logo{flex:0 0 auto}
+    .seo-title{font-size:30px;line-height:1.15;margin:0 0 10px;letter-spacing:-.02em}.seo-lead{font-size:16px!important;color:var(--text)!important;margin-bottom:18px!important}.seo-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin:0 0 22px;padding:0;list-style:none;color:var(--muted);font-size:14px}.seo-features li::before{content:"✓";color:var(--good);font-weight:800;margin-right:8px}.auth-divider{border:0;border-top:1px solid var(--line);margin:20px 0}.auth-card h2{font-size:21px;line-height:1.25;margin:0 0 8px}.auth-card p{margin:0;color:var(--muted);line-height:1.6}
     .auth-google{width:100%;margin-top:22px;min-height:50px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px}
     .google-mark{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#4285f4;font-weight:800;border:1px solid #ddd}
     .auth-status{min-height:22px;margin-top:12px!important;font-size:13px}.auth-status.error{color:var(--bad)}.auth-status.ok{color:var(--good)}
@@ -186,7 +204,17 @@
     .account-avatar img{width:100%;height:100%;object-fit:cover}.account-button-text{display:flex;flex-direction:column;align-items:flex-start;max-width:140px}.account-button-text b,.account-button-text small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.account-button-text small{font-size:10px;color:var(--muted)}
     .account-details{display:grid;gap:11px;padding:16px}.account-row{padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--soft)}.account-row small{display:block;color:var(--muted);margin-bottom:3px}.account-row b{display:block;word-break:break-word}
     @media(max-width:900px){.account-button-text{display:none}.account-button{width:42px;min-width:42px;padding:4px;justify-content:center}}
-    @media(max-width:700px){.auth-gate{padding:16px}.auth-card{padding:22px 18px;border-radius:16px}.auth-card h1{font-size:23px}.account-button{width:42px;min-width:42px;height:42px}}
+    @media(max-width:700px){.auth-gate{padding:16px}.auth-card{padding:22px 18px;border-radius:16px}.seo-title{font-size:26px}.seo-features{grid-template-columns:1fr}.auth-card h2{font-size:20px}.account-button{width:42px;min-width:42px;height:42px}}
+
+
+    /* Compact account/study dropdown */
+    .account-menu-wrap{position:relative;flex:0 0 auto}.compact-account{max-width:210px}.account-chevron{font-size:13px;color:var(--muted);transition:transform .16s ease}.compact-account[aria-expanded="true"] .account-chevron{transform:rotate(180deg)}
+    .account-menu{display:none;position:absolute;right:0;top:calc(100% + 9px);z-index:100;width:min(310px,calc(100vw - 24px));padding:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 48px rgba(0,0,0,.18)}.account-menu.show{display:block}
+    .account-menu-head{display:flex;align-items:center;gap:10px;padding:9px 10px 11px;margin-bottom:4px;border-bottom:1px solid var(--line)}.account-menu-head>div{min-width:0}.account-menu-head b,.account-menu-head small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.account-menu-head small{font-size:11px;color:var(--muted)}
+    .account-menu-item{width:100%;min-height:0!important;display:flex!important;flex-direction:column;align-items:flex-start;gap:1px;border:0;background:transparent;color:var(--text);border-radius:9px;padding:9px 10px;text-align:left}.account-menu-item:hover{background:var(--panel2)}.account-menu-item>span{font-weight:750;font-size:13px}.account-menu-item>small{font-size:10px;color:var(--muted)}
+    .account-menu-item.admin-entry{display:none!important}.account-menu-item.admin-entry.show{display:flex!important}.account-menu .install-btn:not(.hidden){display:flex!important}.account-menu-danger>span{color:var(--bad)}
+    @media(max-width:900px){.compact-account{width:42px;min-width:42px;padding:4px;justify-content:center}.compact-account .account-button-text,.compact-account .account-chevron{display:none}}
+    @media(max-width:700px){.account-menu{position:fixed;right:max(10px,var(--safe-right));left:max(10px,var(--safe-left));top:calc(61px + var(--safe-top));width:auto}}
 
     /* Owner-only admin dashboard */
     .admin-entry{display:none}.admin-entry.show{display:inline-flex}
@@ -202,9 +230,18 @@
 <body class="auth-pending">
 <section class="auth-gate" id="authGate" aria-live="polite">
   <div class="auth-card">
-    <div class="auth-brand"><div><b>CDMP Practice Quizes and Exam</b><p style="font-size:12px">Private study access</p></div></div>
-    <h1 id="authTitle">Sign in to enter the Test Lab</h1>
-    <p id="authIntro">Access is restricted to registered users. Use your Google account to continue.</p>
+    <div class="auth-brand"><div><b>CDMP Practice Quizes and Exam</b><p style="font-size:12px">DMBOK2 study and exam practice</p></div></div>
+    <h1 class="seo-title">CDMP Practice Quizzes and Exam</h1>
+    <p class="seo-lead">Prepare for the DAMA CDMP Data Management Fundamentals exam with structured DMBOK2-based practice, mock exams and progress review.</p>
+    <ul class="seo-features" aria-label="Study features">
+      <li>Practice across DMBOK2 knowledge areas</li>
+      <li>100-question exam simulator</li>
+      <li>Missed-question and weak-area review</li>
+      <li>Personal study progress tracking</li>
+    </ul>
+    <hr class="auth-divider" />
+    <h2 id="authTitle">Sign in to enter the Test Lab</h2>
+    <p id="authIntro">Use your Google account to access the private practice question bank and your study tools.</p>
     <button class="primary auth-google" id="googleAccessBtn" type="button"><span class="google-mark">G</span><span>Continue with Google</span></button>
     <p class="auth-status" id="authStatus">Checking your sign-in status…</p>
     <p class="auth-privacy">By continuing, your Google display name, email address, first access, last access and access count will be stored in this project's Firebase database for access administration. Your quiz progress remains in your browser in this version.</p>
@@ -218,10 +255,18 @@
       <div class="brand"><div><h1>CDMP Practice Quizes and Exam</h1></div></div>
       <div class="top-stats" id="topStats"></div>
       <button class="dashboard-link" id="dashboardBtn" type="button" title="Open dashboard" aria-label="Open dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-7h6v7"></path></svg><span>Dashboard</span></button>
-      <button class="dashboard-link admin-entry" id="adminBtn" type="button" title="Open owner admin dashboard" aria-label="Open admin dashboard"><span>Admin</span></button>
-      <button class="account-button" id="accountBtn" type="button" title="Signed-in account" aria-label="Open signed-in account"><span class="account-avatar" id="accountAvatar">?</span><span class="account-button-text"><b id="accountName">Signed in</b><small id="accountEmail">Google account</small></span></button>
-      <button class="profile-button" id="profileBtn" type="button" title="Open study profile"><span class="profile-avatar" id="profileTopAvatar">?</span><span class="profile-button-text"><b id="profileTopName">Create profile</b><small id="profileTopGoal">Local study profile</small></span></button>
-      <button class="icon-btn install-btn hidden" id="installBtn" type="button" title="Install app" aria-label="Install app">⇩</button>
+      <div class="account-menu-wrap" id="accountMenuWrap">
+        <button class="account-button compact-account" id="accountBtn" type="button" title="Account and study menu" aria-label="Open account and study menu" aria-haspopup="menu" aria-expanded="false"><span class="account-avatar" id="accountAvatar">?</span><span class="account-button-text"><b id="accountName">Signed in</b><small id="accountEmail">Google account</small></span><span class="account-chevron" aria-hidden="true">⌄</span></button>
+        <div class="account-menu" id="accountMenu" role="menu" aria-label="Account and study menu">
+          <div class="account-menu-head"><span class="account-avatar" id="accountMenuAvatar">?</span><div><b id="accountMenuName">Signed in</b><small id="accountMenuEmail">Google account</small></div></div>
+          <button class="account-menu-item" id="accountMenuAccountBtn" type="button" role="menuitem"><span>Account</span><small>Firebase identity and access</small></button>
+          <button class="account-menu-item" id="profileBtn" type="button" role="menuitem"><span>Study profile</span><small id="profileTopGoal">Local study settings</small></button>
+          <button class="account-menu-item admin-entry" id="adminBtn" type="button" role="menuitem"><span>Admin dashboard</span><small>Users and access activity</small></button>
+          <button class="account-menu-item install-btn hidden" id="installBtn" type="button" role="menuitem"><span>Install app</span><small>Add Test Lab to this device</small></button>
+          <button class="account-menu-item account-menu-danger" id="accountMenuSignOutBtn" type="button" role="menuitem"><span>Sign out</span><small>Close Test Lab access</small></button>
+        </div>
+      </div>
+      <span class="hidden" id="profileTopAvatar">?</span><span class="hidden" id="profileTopName">Create profile</span>
       <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme" aria-label="Toggle light and dark theme">◐</button>
     </div>
   </header>
@@ -261,12 +306,6 @@
           <button class="primary adaptive-btn" id="mockBtn"><span>100Q exam simulator</span><span>90 min</span></button>
         </div>
         <div class="small-note">The 100-question simulator uses DMBOK-verified items from all available sources while preserving the knowledge-area mix found across the two original 100-question practice tests. It is a source-aligned practice blueprint, not an official DAMA exam blueprint.</div>
-      </div>
-      <div class="side-section">
-        <div class="side-title">Phone / computer transfer</div>
-        <div class="device-data-actions"><button class="secondary" id="backupDataBtn" type="button">Backup data</button><button class="secondary" id="restoreDataBtn" type="button">Restore data</button></div>
-        <input id="restoreDataInput" class="hidden" type="file" accept="application/json,.json" />
-        <div class="small-note">Use a backup file to move your profile, progress, bookmarks, and missed queue between devices. Data is not synchronized automatically.</div>
       </div>
       <div class="side-section">
         <div class="side-title">Current session</div>
@@ -862,7 +901,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   }
 
   el.menu.onclick=openSidebar; el.sidebarClose.onclick=closeSidebar; el.drawerBackdrop.onclick=closeSidebar; el.install.onclick=installApp;
-  el.backupData.onclick=backupStudyData; el.restoreData.onclick=()=>el.restoreInput.click(); el.restoreInput.addEventListener('change',()=>restoreStudyData(el.restoreInput.files?.[0]));
+  if(el.backupData)el.backupData.onclick=backupStudyData; if(el.restoreData&&el.restoreInput)el.restoreData.onclick=()=>el.restoreInput.click(); el.restoreInput?.addEventListener('change',()=>restoreStudyData(el.restoreInput.files?.[0]));
   window.addEventListener('resize',()=>{if(!drawerMode())closeSidebar();});
   el.modeSwitch.addEventListener('click',e=>{if(e.target.dataset.mode)setMode(e.target.dataset.mode)});
   [el.section,el.ka,el.source,el.verification,el.size,el.onlyBookmarks].forEach(x=>x.addEventListener('change',updatePoolCount)); el.search.addEventListener('input',updatePoolCount);
@@ -886,6 +925,13 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   const status = document.getElementById('authStatus');
   const googleBtn = document.getElementById('googleAccessBtn');
   const accountBtn = document.getElementById('accountBtn');
+  const accountMenuWrap = document.getElementById('accountMenuWrap');
+  const accountMenu = document.getElementById('accountMenu');
+  const accountMenuAccountBtn = document.getElementById('accountMenuAccountBtn');
+  const accountMenuSignOutBtn = document.getElementById('accountMenuSignOutBtn');
+  const accountMenuAvatar = document.getElementById('accountMenuAvatar');
+  const accountMenuName = document.getElementById('accountMenuName');
+  const accountMenuEmail = document.getElementById('accountMenuEmail');
   const accountAvatar = document.getElementById('accountAvatar');
   const accountName = document.getElementById('accountName');
   const accountEmail = document.getElementById('accountEmail');
@@ -921,7 +967,9 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   }
   function initials(name,email){const base=(name||email||'?').trim();const parts=base.split(/\s+/).filter(Boolean);return parts.length>1?(parts[0][0]+parts.at(-1)[0]).toUpperCase():base.slice(0,2).toUpperCase();}
   function providerLabel(user){const id=user?.providerData?.[0]?.providerId||'google.com';return id==='google.com'?'Google':id;}
-  function openAccount(){accountModal?.classList.add('show');}
+  function closeAccountMenu(){accountMenu?.classList.remove('show');accountBtn?.setAttribute('aria-expanded','false');}
+  function toggleAccountMenu(){const open=!accountMenu?.classList.contains('show');accountMenu?.classList.toggle('show',open);accountBtn?.setAttribute('aria-expanded',open?'true':'false');}
+  function openAccount(){closeAccountMenu();accountModal?.classList.add('show');}
   function closeAccount(){accountModal?.classList.remove('show');}
   function closeAdmin(){adminModal?.classList.remove('show');}
   function toDate(value){try{return value?.toDate?.()||null;}catch{return null;}}
@@ -1007,20 +1055,25 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     }
 
     googleBtn?.addEventListener('click',signInGoogle);
-    accountBtn?.addEventListener('click',openAccount);
+    accountBtn?.addEventListener('click',e=>{e.stopPropagation();toggleAccountMenu();});
+    accountMenuAccountBtn?.addEventListener('click',openAccount);
     accountClose?.addEventListener('click',closeAccount);
     accountCloseAction?.addEventListener('click',closeAccount);
     accountModal?.addEventListener('click',e=>{if(e.target===accountModal)closeAccount();});
-    adminBtn?.addEventListener('click',()=>openAdmin(db));
+    adminBtn?.addEventListener('click',()=>{closeAccountMenu();openAdmin(db);});
     adminCloseBtn?.addEventListener('click',closeAdmin);
     adminCloseActionBtn?.addEventListener('click',closeAdmin);
     adminRefreshBtn?.addEventListener('click',()=>loadAdminUsers(db));
     adminSearch?.addEventListener('input',renderAdminUsers);
     adminModal?.addEventListener('click',e=>{if(e.target===adminModal)closeAdmin();});
-    signOutBtn?.addEventListener('click',async()=>{
+    document.addEventListener('click',e=>{if(accountMenu?.classList.contains('show')&&!accountMenuWrap?.contains(e.target))closeAccountMenu();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAccountMenu();});
+    async function performSignOut(){
       const u=auth.currentUser;if(u)sessionStorage.removeItem('cdmp-access-logged-'+u.uid);
-      closeAccount();await signOut(auth);
-    });
+      closeAccountMenu();closeAccount();await signOut(auth);
+    }
+    accountMenuSignOutBtn?.addEventListener('click',performSignOut);
+    signOutBtn?.addEventListener('click',performSignOut);
 
     try{await getRedirectResult(auth);}catch(err){status.textContent=err?.message||'Sign-in redirect failed.';status.classList.add('error');}
 
@@ -1028,13 +1081,14 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
       if(!user){
         isAdmin=false;adminBtn?.classList.remove('show');closeAdmin();
         accountAvatar.textContent='?';accountName.textContent='Signed out';accountEmail.textContent='Google account';
+        if(accountMenuAvatar)accountMenuAvatar.textContent='?';if(accountMenuName)accountMenuName.textContent='Signed out';if(accountMenuEmail)accountMenuEmail.textContent='Google account';closeAccountMenu();
         if(modalUid)modalUid.textContent='—';if(accountAdminStatus)accountAdminStatus.textContent='Standard user';
         setGateState('auth-required','Sign in with Google to continue.');
         return;
       }
       const name=user.displayName||'CDMP learner', email=user.email||'';
-      if(user.photoURL)accountAvatar.innerHTML=`<img src="${user.photoURL.replace(/"/g,'&quot;')}" alt="">`; else accountAvatar.textContent=initials(name,email);
-      accountName.textContent=name;accountEmail.textContent=email;
+      if(user.photoURL){const img=`<img src="${user.photoURL.replace(/"/g,'&quot;')}" alt="">`;accountAvatar.innerHTML=img;if(accountMenuAvatar)accountMenuAvatar.innerHTML=img;} else {const init=initials(name,email);accountAvatar.textContent=init;if(accountMenuAvatar)accountMenuAvatar.textContent=init;}
+      accountName.textContent=name;accountEmail.textContent=email;if(accountMenuName)accountMenuName.textContent=name;if(accountMenuEmail)accountMenuEmail.textContent=email;
       modalName.textContent=name;modalEmail.textContent=email;modalProvider.textContent=providerLabel(user);modalUid.textContent=user.uid;accessStatus.textContent='Authenticated';
       setGateState('auth-ready','Access granted.');
       try{await recordAccess(user);accessStatus.textContent='Authenticated · access recorded';}

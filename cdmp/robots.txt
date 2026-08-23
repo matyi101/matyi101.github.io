@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://matyi101.github.io/cdmp/sitemap.xml
