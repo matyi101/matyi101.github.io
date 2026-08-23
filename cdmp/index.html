@@ -282,10 +282,6 @@
         <div class="side-title">Question pool</div>
         <div class="field"><label class="caption" for="sectionFilter">Section</label><select id="sectionFilter"></select></div>
         <div class="field"><label class="caption" for="kaFilter">Knowledge area</label><select id="kaFilter"></select></div>
-        <div class="field"><label class="caption" for="sourceFilter">Question source</label><select id="sourceFilter"></select></div>
-        <p class="small-note" style="margin:-2px 0 10px">Original contains the initial 490-question bank. Combined Sources contains the 204 verified additions from all other supplied questionnaires.</p>
-        <div class="field"><label class="caption" for="verificationFilter">Verification</label><select id="verificationFilter"><option value="">All statuses</option><option value="verified">DMBOK verified + corrected</option><option value="conflict">Source conflicts / review</option></select></div>
-        <div class="field"><label class="caption" for="searchFilter">Contains text</label><input id="searchFilter" type="search" placeholder="e.g. metadata, cardinality…" /></div>
         <div class="field"><label class="caption" for="sizeFilter">Questions in session</label><select id="sizeFilter"><option value="10">10</option><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option><option value="all">All filtered</option></select></div>
         <div class="pool-count" id="poolCount"></div>
         <button class="primary" id="startBtn">Start study session</button>
@@ -445,7 +441,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   const PROFILE_KEY = 'cdmp-user-profile-v1';
   const MAX_HISTORY = 30;
   const el = {
-    topStats:$('topStats'), metricGrid:$('metricGrid'), modeSwitch:$('modeSwitch'), section:$('sectionFilter'), ka:$('kaFilter'), source:$('sourceFilter'), verification:$('verificationFilter'), search:$('searchFilter'), size:$('sizeFilter'),
+    topStats:$('topStats'), metricGrid:$('metricGrid'), modeSwitch:$('modeSwitch'), section:$('sectionFilter'), ka:$('kaFilter'), size:$('sizeFilter'),
     poolCount:$('poolCount'), start:$('startBtn'), shuffleQ:$('shuffleQuestions'), shuffleO:$('shuffleOptions'), autoCheck:$('autoCheck'), onlyBookmarks:$('onlyBookmarks'),
     weakBtn:$('weakBtn'), weakCount:$('weakCount'), missedBtn:$('missedBtn'), missedCount:$('missedCount'), mockBtn:$('mockBtn'), resetProgress:$('resetProgressBtn'),
     progressMetrics:$('progressMetrics'), weakAreaList:$('weakAreaList'), recentSessions:$('recentSessions'), chapterStatsBody:$('chapterStatsBody'),
@@ -594,8 +590,6 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     el.section.innerHTML='<option value="">All sections</option>'+sections.map(s=>`<option value="${escapeHTML(s)}">${escapeHTML(s)} (${ALL.filter(q=>q.section===s).length})</option>`).join('');
     const kas=unique(ALL.map(q=>q.knowledge_area)).sort((a,b)=>a.localeCompare(b));
     el.ka.innerHTML='<option value="">All knowledge areas</option>'+kas.map(k=>`<option value="${escapeHTML(k)}">${escapeHTML(k)} (${ALL.filter(q=>q.knowledge_area===k).length})</option>`).join('');
-    const sources=['Original','Combined Sources'];
-    el.source.innerHTML='<option value="">All sources ('+ALL.length+')</option>'+sources.map(s=>`<option value="${escapeHTML(s)}">${escapeHTML(s)} (${ALL.filter(q=>sourceCollection(q)===s).length})</option>`).join('');
   }
 
   function renderStats(){
@@ -606,12 +600,8 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   }
 
   function filteredPool(){
-    const sec=el.section.value, ka=el.ka.value, src=el.source.value, vf=el.verification.value, term=el.search.value.trim().toLowerCase();
-    return ALL.filter(q => {
-      const status=q.verification_status||'verified';
-      const vOk=!vf || (vf==='verified' ? ['verified','corrected'].includes(status) : ['source-conflict','review'].includes(status));
-      return (!sec||q.section===sec) && (!ka||q.knowledge_area===ka) && (!src||sourceCollection(q)===src) && vOk && (!el.onlyBookmarks.checked||state.bookmarks.has(q.id)) && (!term || `${q.question} ${q.options.map(o=>o.text).join(' ')} ${q.knowledge_area} ${sourceCollection(q)} ${q.source_group||''} ${q.source_name||''}`.toLowerCase().includes(term));
-    });
+    const sec=el.section.value, ka=el.ka.value;
+    return ALL.filter(q => (!sec||q.section===sec) && (!ka||q.knowledge_area===ka) && (!el.onlyBookmarks.checked||state.bookmarks.has(q.id)));
   }
   function updatePoolCount(){ const p=filteredPool(); el.poolCount.innerHTML=`<strong>${p.length}</strong> questions match the current filters.`; el.start.disabled=!p.length; }
 
@@ -904,7 +894,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   if(el.backupData)el.backupData.onclick=backupStudyData; if(el.restoreData&&el.restoreInput)el.restoreData.onclick=()=>el.restoreInput.click(); el.restoreInput?.addEventListener('change',()=>restoreStudyData(el.restoreInput.files?.[0]));
   window.addEventListener('resize',()=>{if(!drawerMode())closeSidebar();});
   el.modeSwitch.addEventListener('click',e=>{if(e.target.dataset.mode)setMode(e.target.dataset.mode)});
-  [el.section,el.ka,el.source,el.verification,el.size,el.onlyBookmarks].forEach(x=>x.addEventListener('change',updatePoolCount)); el.search.addEventListener('input',updatePoolCount);
+  [el.section,el.ka,el.size,el.onlyBookmarks].forEach(x=>x.addEventListener('change',updatePoolCount));
   el.start.onclick=startSession; el.weakBtn.onclick=startWeakSession; el.missedBtn.onclick=startMissedSession; el.mockBtn.onclick=startMockExam; el.resetProgress.onclick=resetProgress;
   el.dashboard.onclick=goToDashboard; el.theme.onclick=toggleTheme; el.bookmark.onclick=toggleBookmark; el.check.onclick=checkCurrent; el.clear.onclick=clearCurrent; el.prev.onclick=()=>go(-1); el.next.onclick=()=>go(1); el.submit.onclick=()=>completeSession(false);
   el.export.onclick=exportResults; el.reset.onclick=resetSession; el.retryWrong.onclick=retryWrong; el.reviewWrong.onclick=()=>review('wrong'); el.reviewAll.onclick=()=>review('all'); el.newSession.onclick=resetSession; document.addEventListener('keydown',keyHandler);
