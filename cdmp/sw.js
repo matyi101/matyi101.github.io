@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cdmp-dmbok2-admin-v3-analytics';
+const CACHE_NAME = 'cdmp-dmbok2-admin-v4-compact-header';
 const CORE = ['./', './index.html', './firebase-config.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
