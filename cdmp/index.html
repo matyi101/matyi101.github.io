@@ -188,6 +188,15 @@
     @media(max-width:900px){.account-button-text{display:none}.account-button{width:42px;min-width:42px;padding:4px;justify-content:center}}
     @media(max-width:700px){.auth-gate{padding:16px}.auth-card{padding:22px 18px;border-radius:16px}.auth-card h1{font-size:23px}.account-button{width:42px;min-width:42px;height:42px}}
 
+    /* Owner-only admin dashboard */
+    .admin-entry{display:none}.admin-entry.show{display:inline-flex}
+    .admin-panel{width:min(1050px,96vw);max-height:90dvh}
+    .admin-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 16px 4px}
+    .admin-stat{border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:12px}.admin-stat small{display:block;color:var(--muted);margin-bottom:5px}.admin-stat b{font-size:20px}
+    .admin-toolbar{display:flex;gap:10px;align-items:center;padding:12px 16px}.admin-toolbar input{flex:1;min-width:0}.admin-status{font-size:12px;color:var(--muted)}
+    .admin-table-wrap{overflow:auto;margin:0 16px 16px;border:1px solid var(--line);border-radius:12px}.admin-table{width:100%;border-collapse:collapse;min-width:790px}.admin-table th,.admin-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.admin-table th{position:sticky;top:0;background:var(--panel);z-index:2;font-size:12px}.admin-table td{font-size:13px}.admin-user{display:flex;align-items:center;gap:9px}.admin-user img{width:30px;height:30px;border-radius:50%;object-fit:cover}.admin-user .mini-avatar{width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:700}.admin-empty{padding:30px;text-align:center;color:var(--muted)}
+    @media(max-width:700px){.admin-summary{grid-template-columns:1fr 1fr}.admin-toolbar{flex-wrap:wrap}.admin-toolbar input{flex-basis:100%}.admin-panel{width:100%;max-height:94dvh}}
+
   </style>
 </head>
 <body class="auth-pending">
@@ -209,6 +218,7 @@
       <div class="brand"><div class="logo">DM</div><div><h1>CDMP DMBOK2 Question Lab</h1><small>Private 694-question verified study bank</small></div></div>
       <div class="top-stats" id="topStats"></div>
       <button class="dashboard-link" id="dashboardBtn" type="button" title="Open dashboard" aria-label="Open dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-7h6v7"></path></svg><span>Dashboard</span></button>
+      <button class="dashboard-link admin-entry" id="adminBtn" type="button" title="Open owner admin dashboard" aria-label="Open admin dashboard"><span>Admin</span></button>
       <button class="account-button" id="accountBtn" type="button" title="Signed-in account" aria-label="Open signed-in account"><span class="account-avatar" id="accountAvatar">?</span><span class="account-button-text"><b id="accountName">Signed in</b><small id="accountEmail">Google account</small></span></button>
       <button class="profile-button" id="profileBtn" type="button" title="Open study profile"><span class="profile-avatar" id="profileTopAvatar">?</span><span class="profile-button-text"><b id="profileTopName">Create profile</b><small id="profileTopGoal">Local study profile</small></span></button>
       <button class="icon-btn install-btn hidden" id="installBtn" type="button" title="Install app" aria-label="Install app">⇩</button>
@@ -338,10 +348,36 @@
       <div class="account-row"><small>Name</small><b id="accountModalName">—</b></div>
       <div class="account-row"><small>Email</small><b id="accountModalEmail">—</b></div>
       <div class="account-row"><small>Sign-in provider</small><b id="accountModalProvider">Google</b></div>
+      <div class="account-row"><small>Firebase UID</small><b id="accountModalUid">—</b></div>
       <div class="account-row"><small>Access status</small><b id="accountAccessStatus">Authenticated</b></div>
+      <div class="account-row"><small>Admin status</small><b id="accountAdminStatus">Standard user</b></div>
       <p class="small-note">Signing out closes access to the Test Lab on this browser. Your local study progress is not deleted.</p>
     </div>
     <div class="modal-actions"><button class="secondary" id="accountCloseActionBtn" type="button">Close</button><button class="danger" id="signOutBtn" type="button">Sign out</button></div>
+  </div>
+</div>
+
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+  <div class="modal-panel admin-panel">
+    <div class="modal-head"><div><h2 id="adminModalTitle">Test Lab admin</h2><p>Owner-only view of registered Firebase users and access activity.</p></div><button class="modal-close" id="adminCloseBtn" type="button" aria-label="Close admin dashboard">×</button></div>
+    <div class="admin-summary">
+      <div class="admin-stat"><small>Registered users</small><b id="adminUserCount">0</b></div>
+      <div class="admin-stat"><small>Total recorded accesses</small><b id="adminAccessCount">0</b></div>
+      <div class="admin-stat"><small>Accessed today</small><b id="adminTodayCount">0</b></div>
+      <div class="admin-stat"><small>Verified emails</small><b id="adminVerifiedCount">0</b></div>
+    </div>
+    <div class="admin-toolbar">
+      <input id="adminSearch" type="search" placeholder="Search name or email…" aria-label="Search registered users">
+      <button class="secondary" id="adminRefreshBtn" type="button">Refresh</button>
+      <span class="admin-status" id="adminStatus">Ready</span>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>User</th><th>Email</th><th>Provider</th><th>First access</th><th>Last access</th><th>Accesses</th></tr></thead>
+        <tbody id="adminUsersBody"><tr><td colspan="6" class="admin-empty">Open Admin to load registered users.</td></tr></tbody>
+      </table>
+    </div>
+    <div class="modal-actions"><span class="small-note">Only accounts listed in the Firestore <code>admins</code> collection can open this dashboard.</span><span class="spacer"></span><button class="secondary" id="adminCloseActionBtn" type="button">Close</button></div>
   </div>
 </div>
 
@@ -847,7 +883,7 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
   import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, setPersistence, browserLocalPersistence } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, increment } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp, increment, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
 
   const config = window.CDMP_FIREBASE_CONFIG;
   const gate = document.getElementById('authGate');
@@ -864,7 +900,23 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   const modalName = document.getElementById('accountModalName');
   const modalEmail = document.getElementById('accountModalEmail');
   const modalProvider = document.getElementById('accountModalProvider');
+  const modalUid = document.getElementById('accountModalUid');
   const accessStatus = document.getElementById('accountAccessStatus');
+  const accountAdminStatus = document.getElementById('accountAdminStatus');
+  const adminBtn = document.getElementById('adminBtn');
+  const adminModal = document.getElementById('adminModal');
+  const adminCloseBtn = document.getElementById('adminCloseBtn');
+  const adminCloseActionBtn = document.getElementById('adminCloseActionBtn');
+  const adminRefreshBtn = document.getElementById('adminRefreshBtn');
+  const adminSearch = document.getElementById('adminSearch');
+  const adminUsersBody = document.getElementById('adminUsersBody');
+  const adminStatus = document.getElementById('adminStatus');
+  const adminUserCount = document.getElementById('adminUserCount');
+  const adminAccessCount = document.getElementById('adminAccessCount');
+  const adminTodayCount = document.getElementById('adminTodayCount');
+  const adminVerifiedCount = document.getElementById('adminVerifiedCount');
+  let adminUsers = [];
+  let isAdmin = false;
 
   function setGateState(state, message='', isError=false){
     document.body.classList.remove('auth-pending','auth-required','auth-ready');
@@ -875,6 +927,40 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
   function providerLabel(user){const id=user?.providerData?.[0]?.providerId||'google.com';return id==='google.com'?'Google':id;}
   function openAccount(){accountModal?.classList.add('show');}
   function closeAccount(){accountModal?.classList.remove('show');}
+  function closeAdmin(){adminModal?.classList.remove('show');}
+  function toDate(value){try{return value?.toDate?.()||null;}catch{return null;}}
+  function fmtDate(value){const d=toDate(value);return d?d.toLocaleString(): '—';}
+  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function renderAdminUsers(){
+    const term=(adminSearch?.value||'').trim().toLowerCase();
+    const rows=adminUsers.filter(u=>!term||String(u.name||'').toLowerCase().includes(term)||String(u.email||'').toLowerCase().includes(term));
+    adminUsersBody.innerHTML=rows.length?rows.map(u=>{
+      const avatar=u.photoURL?`<img src="${esc(u.photoURL)}" alt="">`:`<span class="mini-avatar">${esc(initials(u.name,u.email))}</span>`;
+      return `<tr><td><div class="admin-user">${avatar}<div><b>${esc(u.name||'Unnamed user')}</b><br><small>${esc(u.uid||'')}</small></div></div></td><td>${esc(u.email||'—')}</td><td>${esc(u.provider||'—')}</td><td>${esc(fmtDate(u.firstAccessAt))}</td><td>${esc(fmtDate(u.lastAccessAt))}</td><td>${Number(u.accessCount||0).toLocaleString()}</td></tr>`;
+    }).join(''):`<tr><td colspan="6" class="admin-empty">No users match this search.</td></tr>`;
+  }
+  async function checkAdmin(db,user){
+    if(!user){isAdmin=false;return false;}
+    try{const snap=await getDoc(doc(db,'admins',user.uid));isAdmin=snap.exists()&&snap.data()?.enabled!==false;}catch(err){console.warn('Admin check failed',err);isAdmin=false;}
+    adminBtn?.classList.toggle('show',isAdmin);
+    if(accountAdminStatus)accountAdminStatus.textContent=isAdmin?'Owner / administrator':'Standard user';
+    return isAdmin;
+  }
+  async function loadAdminUsers(db){
+    if(!isAdmin)return;
+    adminStatus.textContent='Loading users…';
+    try{
+      const snap=await getDocs(query(collection(db,'users'),orderBy('lastAccessAt','desc')));
+      adminUsers=snap.docs.map(d=>({uid:d.id,...d.data()}));
+      const now=new Date(), y=now.getFullYear(),m=now.getMonth(),day=now.getDate();
+      adminUserCount.textContent=adminUsers.length.toLocaleString();
+      adminAccessCount.textContent=adminUsers.reduce((a,u)=>a+Number(u.accessCount||0),0).toLocaleString();
+      adminTodayCount.textContent=adminUsers.filter(u=>{const d=toDate(u.lastAccessAt);return d&&d.getFullYear()===y&&d.getMonth()===m&&d.getDate()===day;}).length.toLocaleString();
+      adminVerifiedCount.textContent=adminUsers.filter(u=>u.emailVerified).length.toLocaleString();
+      renderAdminUsers();adminStatus.textContent=`Updated ${new Date().toLocaleTimeString()}`;
+    }catch(err){console.error('Admin user list failed',err);adminStatus.textContent='Could not load users';adminUsersBody.innerHTML=`<tr><td colspan="6" class="admin-empty">${esc(err?.message||'Firestore denied the admin query.')}</td></tr>`;}
+  }
+  async function openAdmin(db){if(!isAdmin)return;adminModal?.classList.add('show');await loadAdminUsers(db);}
 
   if(!config?.apiKey || !config?.projectId){
     setGateState('auth-required','Firebase configuration is missing. Check firebase-config.js.',true);
@@ -929,6 +1015,12 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
     accountClose?.addEventListener('click',closeAccount);
     accountCloseAction?.addEventListener('click',closeAccount);
     accountModal?.addEventListener('click',e=>{if(e.target===accountModal)closeAccount();});
+    adminBtn?.addEventListener('click',()=>openAdmin(db));
+    adminCloseBtn?.addEventListener('click',closeAdmin);
+    adminCloseActionBtn?.addEventListener('click',closeAdmin);
+    adminRefreshBtn?.addEventListener('click',()=>loadAdminUsers(db));
+    adminSearch?.addEventListener('input',renderAdminUsers);
+    adminModal?.addEventListener('click',e=>{if(e.target===adminModal)closeAdmin();});
     signOutBtn?.addEventListener('click',async()=>{
       const u=auth.currentUser;if(u)sessionStorage.removeItem('cdmp-access-logged-'+u.uid);
       closeAccount();await signOut(auth);
@@ -938,17 +1030,20 @@ window.CDMP_QUESTIONS = [{"section":"Chapter 1","number":1,"type":"multiple-choi
 
     onAuthStateChanged(auth,async user=>{
       if(!user){
+        isAdmin=false;adminBtn?.classList.remove('show');closeAdmin();
         accountAvatar.textContent='?';accountName.textContent='Signed out';accountEmail.textContent='Google account';
+        if(modalUid)modalUid.textContent='—';if(accountAdminStatus)accountAdminStatus.textContent='Standard user';
         setGateState('auth-required','Sign in with Google to continue.');
         return;
       }
       const name=user.displayName||'CDMP learner', email=user.email||'';
       if(user.photoURL)accountAvatar.innerHTML=`<img src="${user.photoURL.replace(/"/g,'&quot;')}" alt="">`; else accountAvatar.textContent=initials(name,email);
       accountName.textContent=name;accountEmail.textContent=email;
-      modalName.textContent=name;modalEmail.textContent=email;modalProvider.textContent=providerLabel(user);accessStatus.textContent='Authenticated';
+      modalName.textContent=name;modalEmail.textContent=email;modalProvider.textContent=providerLabel(user);modalUid.textContent=user.uid;accessStatus.textContent='Authenticated';
       setGateState('auth-ready','Access granted.');
       try{await recordAccess(user);accessStatus.textContent='Authenticated · access recorded';}
       catch(err){console.error('Could not record Firestore access',err);accessStatus.textContent='Authenticated · access log could not be written';}
+      await checkAdmin(db,user);
     });
   }
 </script>
